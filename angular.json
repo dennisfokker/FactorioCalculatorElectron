@@ -63,6 +63,10 @@
                             ]
                         },
                         "production": {
+                            "index": {
+                                "input": "src/index.production.html",
+                                "output": "src/index.html"
+                            },
                             "optimization": true,
                             "outputHashing": "all",
                             "sourceMap": false,

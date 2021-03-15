@@ -5,3 +5,4 @@ export class vector2D
                 public y: number = 0)
     {
     }
+}

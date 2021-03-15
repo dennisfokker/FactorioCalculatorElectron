@@ -2,15 +2,15 @@ import { vector2D } from './vector2D';
 
 export class IconData
 {
-    private _icon: string;
-    private _tint: string;
-    private _shift: vector2D;
-    private _scale: number;
-
-    constructor(icon: string,
-                tint: string = "#FFFFFFFF",
-                shift: vector2D = new vector2D(0, 0),
-                scale: number = 1)
+    constructor(public icon: string,
+                public tint: string = "#FFFFFFFF",
+                public shift: vector2D = new vector2D(0, 0),
+                public scale: number = 1)
     {
+    }
+
+    toString(): string
+    {
+        return this.icon;
     }
 }

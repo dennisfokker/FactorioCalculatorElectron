@@ -17,7 +17,8 @@ function createWindow() {
         webPreferences: {
             nodeIntegration: true,
             allowRunningInsecureContent: (serve) ? true : false,
-            contextIsolation: false,
+            worldSafeExecuteJavaScript: true,
+            contextIsolation: true,
             enableRemoteModule: true // true if you want to run 2e2 test  with Spectron or use remote module in renderer context (ie. Angular)
         },
     });
