@@ -2,7 +2,7 @@
 
 This tool is an Angular-based calculator, running in Electron for certain OS-level features (mainly the file system). A (for now discontinued) [web version](https://github.com/dennisfokker/FactorioCalculator) is also available.
 
-As I couldn't figure out how to actually run the lua scripts through JS/TS, I opted to use (this Factorio mod)[https://github.com/dennisfokker/Factorio-Json-Calculator-Exporter-mod] to spit out a JSON file I can use instead.
+As I couldn't figure out how to actually run the lua scripts through JS/TS, I opted to use [this Factorio mod](https://github.com/dennisfokker/Factorio-Json-Calculator-Exporter-mod) to spit out a JSON file I can use instead.
 
 ## Why Electron and file system access?
 
