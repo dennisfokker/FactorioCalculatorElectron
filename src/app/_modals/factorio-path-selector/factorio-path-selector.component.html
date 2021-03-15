@@ -1,0 +1,31 @@
+<div class="header">
+    <h1>Please provide the Factorio base files</h1>
+</div>
+
+<div class="button-group">
+    <label class="input">
+        <input #pathInput (change)="onDataFileChange($event)" type="file" accept=".json,.log,.lua">
+        <div class="fa fa-upload"></div> Choose data file path...
+    </label>
+    <div class="fa fa-question-circle info">
+        <div class="tooltip">
+            <div class="tooltip-content" [innerHTML]="dataHelpPath"> </div>
+        </div>
+    </div>
+</div>
+<div class="button-group">
+    <label class="input">
+        <input #pathInput (change)="onIconPathChange($event)" type="file" webkitdirectory directory>
+        <div class="fa fa-upload"></div> Choose icon path...
+    </label>
+    <div class="fa fa-question-circle info">
+        <div class="tooltip">
+            <div class="tooltip-content" [innerHTML]="iconHelpPath"> </div>
+        </div>
+    </div>
+</div>
+
+<div class="button-group modal-controls">
+    <div class="red button" (click)="onCancelClick()">Cancel</div>
+    <div class="green button" (click)="onOKClick()">Ok</div>
+</div>
