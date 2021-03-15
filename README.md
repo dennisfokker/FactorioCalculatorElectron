@@ -1,27 +1,18 @@
 # FactorioCalculator
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.3.
+This tool is an Angular-based calculator, running in Electron for certain OS-level features (mainly the file system). A (for now discontinued) [web version](https://github.com/dennisfokker/FactorioCalculator) is also available.
+
+As I couldn't figure out how to actually run the lua scripts through JS/TS, I opted to use (this Factorio mod)[https://github.com/dennisfokker/Factorio-Json-Calculator-Exporter-mod] to spit out a JSON file I can use instead.
+
+## Why Electron and file system access?
+
+The whole point of this tool is to support mods. Now, I won't require the code-portions of mods (as I use the JSON export mod for that), but for nice UI/UX I'd need to support the icons for all the mod items, recipes, etc. Here I *will* require file access, as I just can't be bothered to have users upload their entire mods folder and unzip them in-memory instead.
+Electron just makes it easy to keep (mostly) the same code base for both versions, might I decide to keep both running.
 
 ## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Run `npm start` for a dev server. This'll run an Angular server at `http://localhost:4200/` and open an Electron instance. The app will automatically reload if you change any of the source files.
 
 ## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+Run `npm build` to build the project. The build artifacts will be stored in the `dist/` directory. This has been configured to always create an optimised production build.
