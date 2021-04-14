@@ -28,5 +28,13 @@
     ],
     "exclude": [
         "node_modules"
-    ]
+    ],
+    "angularCompilerOptions": {
+        "strictTemplates": true
+    },
+    "experimentalDecorators": true,
+    "forceConsitentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "strict": true,
+    "noUnusedLocals": true,
 }
