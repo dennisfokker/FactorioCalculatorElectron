@@ -1,4 +1,3 @@
-import { RecipeCategory } from './../_models/factorio/recipeCategory';
 import { Component, OnInit } from '@angular/core';
 import { Recipe } from '../_models/factorio/recipe';
 import { Item } from '../_models/factorio/item';

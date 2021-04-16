@@ -48,6 +48,8 @@ export class ModelService
     {
         this.updateRecipesFromJSON(JSON.recipe);
         this.updateItemsFromJSON(JSON.item);
+
+        this.listsChanged();
     }
 
     public updateFactorioPath(path: string)
@@ -102,8 +104,6 @@ export class ModelService
 
             return new Recipe(elem.name, content.energy_required, elem.category, ingredients, results);
         });
-
-        this.listsChanged();
     }
 
     private updateItemsFromJSON(itemsJSON: any)
@@ -123,8 +123,6 @@ export class ModelService
                 return new Item(elem.name, icons, elem.subgroup);
             }
         });
-
-        this.listsChanged();
     }
     //#endregion
 

@@ -1,5 +1,6 @@
 import { ModelService } from './../../_services/model.service';
 import { Item } from './item';
+
 export class Result
 {
     constructor(private _item: string | Item = 'Unknown',
