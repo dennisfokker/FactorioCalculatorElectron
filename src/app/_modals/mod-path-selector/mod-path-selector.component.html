@@ -1,19 +1,20 @@
 <div class="header">
-    <h1>Please provide the mod files</h1>
+    <h1>Please provide the location of the mod files</h1>
 </div>
 
 <div class="button-group">
     <label class="input">
         <input #pathInput (change)="onModPathChange($event)" type="file" webkitdirectory directory>
-        <div class="fa fa-upload"></div> Choose mod path...
+        <div class="fa fa-upload"></div> Choose mods folder...
     </label>
     <div class="fa fa-question-circle info">
         <div class="tooltip">
-            <div class="tooltip-content" [innerHTML]=modHelpText></div>
+            <div class="tooltip-content" [innerHTML]="modHelpText"></div>
         </div>
     </div>
 </div>
+
 <div class="button-group modal-controls">
-    <div class="button" (click)="onCancelClick()">Cancel</div>
-    <div class="button" (click)="onOKClick()">Ok</div>
+    <div class="red button" (click)="onCancelClick()">Cancel</div>
+    <div class="green button" (click)="onOKClick()">Ok</div>
 </div>

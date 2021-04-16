@@ -3,7 +3,7 @@
 }
 
 :host:not(.ingredients-list-item):nth-child(n+2) > .recipe-block {
-    margin-top: 50px;
+    margin-top: 30px;
 }
 
 .recipe-block {
@@ -18,12 +18,13 @@
     border-radius: 10px;
 }
 
+.recipe-block .icon,
 .recipe-block img {
     height: 48px;
     width: 48px;
 
     margin: 5px;
-
+    
     float: left;
 
     filter: drop-shadow(0 0 5px black);
@@ -44,6 +45,7 @@
     vertical-align: middle;
 }
 
+.recipe-block .machines .icon,
 .recipe-block .machines img {
     height: 32px;
     width: 32px;

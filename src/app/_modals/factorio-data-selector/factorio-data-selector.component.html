@@ -1,15 +1,15 @@
 <div class="header">
-    <h1>Please provide the location of the Factorio base files</h1>
+    <h1>Please provide the Factorio log location</h1>
 </div>
 
 <div class="button-group">
     <label class="input">
-        <input #pathInput (change)="onFactorioPathChange($event)" type="file" webkitdirectory directory>
-        <div class="fa fa-upload"></div> Choose Factorio folder...
+        <input #pathInput (change)="onDataFileChange($event)" type="file" accept=".log">
+        <div class="fa fa-upload"></div> Choose data file...
     </label>
     <div class="fa fa-question-circle info">
         <div class="tooltip">
-            <div class="tooltip-content" [innerHTML]="factorioHelpText"> </div>
+            <div class="tooltip-content" [innerHTML]="dataHelpPath"> </div>
         </div>
     </div>
 </div>

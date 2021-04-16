@@ -1,5 +1,5 @@
 <div class="recipe-block">
-    <img src="assets/icons/{{ingredientItem.icon}}" onerror="this.onerror=null; this.src='assets/icons/__Unknown__.png';" />
+    <app-icon-renderer class="icon" [icon]="ingredient.item.icon"></app-icon-renderer>
     <span>{{ingredient.amount}}/s</span>
 
     <div class="machines">
@@ -11,11 +11,11 @@
         ×25
     </div>
 
-    <div class="header" *ngIf="ingredientRecipe && ingredientRecipe.ingredients.length > 0">
+    <div class="header" *ngIf="ingredient.recipe && ingredient.recipe.ingredients.length > 0">
         <div class="fa fa-chevron-circle-down collapser" (click)="recipeListContainerCollapseClick()" [ngClass]="collapsed ? 'collapsed' : ''"></div>
     </div>
     <div class="fa fa-cog settings" (click)="settingsClick($event)"></div>
 </div>
-<div #ingedientListContainer class="ingredients-list" *ngIf="ingredientRecipe && ingredientRecipe.ingredients.length > 0" [style.height]="getRecipeListContainerHeight()">
-    <app-recipe-node class="ingredients-list-item" [parentNode]="this" [ingredient]="ing" *ngFor="let ing of ingredientRecipe.ingredients"></app-recipe-node>
+<div #ingedientListContainer class="ingredients-list" *ngIf="ingredient.recipe && ingredient.recipe.ingredients.length > 0" [style.height]="getRecipeListContainerHeight()">
+    <app-recipe-node class="ingredients-list-item" [parentNode]="this" [ingredient]="ing" *ngFor="let ing of ingredient.recipe.ingredients"></app-recipe-node>
 </div>

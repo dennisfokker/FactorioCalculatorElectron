@@ -1,15 +1,94 @@
+import { ModelService } from './../../_services/model.service';
+import { Recipe } from './recipe';
 import { CraftingMachine } from './craftingMachine';
 import { Indexable } from '../../_interfaces/indexable';
-import { Recipe } from './recipe';
 
 export class RecipeCategory implements Indexable
 {
-    constructor(public name: string = 'Unknown',
-        public craftingMachines: (string|CraftingMachine)[] = [],
-        public recipes: (string | Recipe)[] = []) { }
+    constructor(private _name: string = 'Unknown',
+        private _craftingMachines: string[] | CraftingMachine[] = [],
+        private _recipes: string[] | Recipe[] = []) { }
 
     public toString(): string
     {
         return this.name;
+    }
+
+    //#region Getters and Setters
+    public get name(): string
+    {
+        return this._name;
+    }
+
+    public get craftingMachines(): CraftingMachine[]
+    {
+        if (this.isStringArray(this._craftingMachines)) {
+            return [];
+        }
+
+        return this._craftingMachines;
+    }
+
+    public get craftingMachineReferences(): string[]
+    {
+        if (!this.isStringArray(this._craftingMachines)) {
+            return this._craftingMachines = this._craftingMachines.map(elem =>
+            {
+                return elem.name;
+            })
+        }
+
+        return this._craftingMachines;
+    }
+
+    public loadCraftingMachines(modelService: ModelService)
+    {
+        if (this.isStringArray(this._craftingMachines)) {
+            this._craftingMachines = this._craftingMachines.map(elem =>
+            {
+                return modelService.machines[elem];
+            })
+        }
+    }
+
+    public get recipes(): Recipe[]
+    {
+        if (this.isStringArray(this._recipes)) {
+            return [];
+        }
+
+        return this._recipes;
+    }
+
+    public get recipeReferences(): string[]
+    {
+        if (!this.isStringArray(this._recipes)) {
+            return this._recipes = this._recipes.map(elem =>
+            {
+                return elem.name;
+            })
+        }
+
+        return this._recipes;
+    }
+
+    public loadRecipes(modelService: ModelService)
+    {
+        if (this.isStringArray(this._recipes)) {
+            this._recipes = this._recipes.map(elem =>
+            {
+                return modelService.recipes[elem];
+            })
+        }
+    }
+    //#endregion
+
+    private isStringArray<T>(array: string[] | T[]): array is string[]
+    {
+        if (array.length == 0) {
+            return false;
+        }
+
+        return array[0] instanceof String
     }
 }

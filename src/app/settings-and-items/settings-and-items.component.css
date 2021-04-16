@@ -33,16 +33,26 @@
     user-select: none;
 }
 
-.settings-container .button:hover {
+.settings-container .button:hover:not(.disabled) {
     background: #1576c0;
 }
 
-.settings-container .button:active {
+.settings-container .button:active:not(.disabled) {
     transform: translateY(2px);
 
     box-shadow: 0 3px #105a92;
 
     background: #1576c0;
+}
+
+.settings-container .disabled.button {
+    /*box-shadow: 0 5px #04355B;
+
+    background: #05508A;*/
+
+    pointer-events: none;
+
+    opacity: 0.54;
 }
 
 .items-container {

@@ -1,3 +1,4 @@
+import { ModelService } from '../_services/model.service';
 import { RecipeCategory } from '../_models/factorio/recipeCategory';
 import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 
@@ -14,7 +15,7 @@ export class CraftingCategoryOptionsComponent implements OnInit, AfterViewInit
     collapsed: boolean = false;
     listCalculatedHeight: string = null;
 
-    constructor() { }
+    constructor(public modelService: ModelService) { }
 
     ngOnInit(): void
     {

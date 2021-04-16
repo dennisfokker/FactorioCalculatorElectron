@@ -1,6 +1,8 @@
+import { Icon } from '../_models/Helpers/icon';
+import { ItemSubgroup } from './../_models/factorio/ItemSubgroup';
+import { RecipeCategory } from './../_models/factorio/recipeCategory';
 import { ItemGroup } from './../_models/factorio/ItemGroup';
 import { Result } from '../_models/factorio/result';
-import { RecipeCategory } from '../_models/factorio/recipeCategory';
 import { Ingredient } from '../_models/factorio/ingredient';
 import { Injectable } from '@angular/core';
 import { Item } from '../_models/factorio/item';
@@ -15,57 +17,37 @@ export class ModelService
     private machinesChangedSource: Subject<CraftingMachine[]> = new Subject<CraftingMachine[]>();
     private itemsChangedSource: Subject<Item[]> = new Subject<Item[]>();
     private itemGroupsChangedSource: Subject<ItemGroup[]> = new Subject<ItemGroup[]>();
+    private itemSubgroupsChangedSource: Subject<ItemSubgroup[]> = new Subject<ItemSubgroup[]>();
     private recipesChangedSource: Subject<Recipe[]> = new Subject<Recipe[]>();
-    private craftingCategoriesChangedSource: Subject<RecipeCategory[]> = new Subject<RecipeCategory[]>();
+    private recipeCategoriesChangedSource: Subject<RecipeCategory[]> = new Subject<RecipeCategory[]>();
 
     public machinesChanged: Observable<CraftingMachine[]> = this.machinesChangedSource.asObservable();
     public itemsChanged: Observable<Item[]> = this.itemsChangedSource.asObservable();
     public itemGroupsChanged: Observable<ItemGroup[]> = this.itemGroupsChangedSource.asObservable();
+    public itemSubgroupsChanged: Observable<ItemSubgroup[]> = this.itemSubgroupsChangedSource.asObservable();
     public recipesChanged: Observable<Recipe[]> = this.recipesChangedSource.asObservable();
-    public craftingCategoriesChanged: Observable<RecipeCategory[]> = this.craftingCategoriesChangedSource.asObservable();
+    public recipeCategoriesChanged: Observable<RecipeCategory[]> = this.recipeCategoriesChangedSource.asObservable();
 
     public machinesList: CraftingMachine[] = [];
     public itemsList: Item[] = [];
     public itemGroupsList: ItemGroup[] = [];
+    public itemSubgroupsList: ItemSubgroup[] = [];
     public recipesList: Recipe[] = [];
-    public craftingCategoriesList: RecipeCategory[] = [];
+    public recipeCategoriesList: RecipeCategory[] = [];
 
     public machines: { [name: string]: CraftingMachine } = {};
     public items: { [name: string]: Item } = {};
     public itemGroups: { [name: string]: ItemGroup } = {};
+    public itemSubgroups: { [name: string]: ItemSubgroup } = {};
     public recipes: { [name: string]: Recipe } = {};
-    public craftingCategories: { [name: string]: RecipeCategory } = {};
+    public recipeCategories: { [name: string]: RecipeCategory } = {};
 
     constructor() { }
 
-    //#region Model updating functions
-    public updateRecipesJSON(recipesJSON: any)
+    public updateDataFromJSON(JSON: any) : void
     {
-        this.recipesList = Object.values<any>(recipesJSON).map(elem =>
-        {
-            let ingredients: Ingredient[] = [];
-            if (elem.ingredients instanceof Array)
-            {
-                ingredients = elem.ingredients.map(ingredient =>
-                {
-                    return new Ingredient(ingredient.name, ingredient.amount, ingredient.type);
-                });
-            }
-
-            let results: Result[] = [];
-            if (elem.products instanceof Array)
-            {
-                results = elem.products.map(result =>
-                {
-                    const amount: number = result.hasOwnProperty('amount') ? result.amount : (result.amount_min + result.amount_max) / 2
-                    return new Result(result.name, result.type, amount, result.probability);
-                });
-            }
-
-            return new Recipe(elem.name, elem.energy, elem.category, ingredients, results);
-        });
-
-        this.listsChanged();
+        this.updateRecipesFromJSON(JSON.recipe);
+        this.updateItemsFromJSON(JSON.item);
     }
 
     public updateFactorioPath(path: string)
@@ -80,6 +62,88 @@ export class ModelService
         // Fill in later
 
         this.listsChanged();
+    }
+
+    //#region Model updating functions
+    private updateRecipesFromJSON(recipesJSON: any)
+    {
+        this.recipesList = Object.values<any>(recipesJSON).map(elem =>
+        {
+            const content: any = elem.hasOwnProperty('normal') ? elem.normal : elem;
+
+            let ingredients: Ingredient[] = [];
+            if (content.ingredients instanceof Array)
+            {
+                content.ingredients.map(ingredient =>
+                {
+                    if (ingredient instanceof Array) {
+                        return new Ingredient(ingredient[0], ingredient[1]);
+                    }
+                    return new Ingredient(ingredient.name, ingredient.amount, ingredient.type);
+                });
+            }
+
+            let results: Result[];
+            if (content.hasOwnProperty('result'))
+            {
+                results = [new Result(content.result, undefined, content.result_count)];
+            }
+            else
+            {
+                results = content.results.map(result =>
+                {
+                    let amount: number = content.amount;
+                    if (content.hasOwnProperty('amount_min') && content.hasOwnProperty('amount_max')) {
+                        amount = (content.amount_min + content.amount_max) / 2;
+                    }
+                    return new Result(result.name, result.type, amount, result.probability);
+                });
+            }
+
+            return new Recipe(elem.name, content.energy_required, elem.category, ingredients, results);
+        });
+
+        this.listsChanged();
+    }
+
+    private updateItemsFromJSON(itemsJSON: any)
+    {
+        this.itemsList = Object.values<any>(itemsJSON).map(elem =>
+        {
+            if (elem.hasOwnProperty('icon'))
+            {
+                return new Item(elem.name, this.parseIcon(elem.icon), elem.subgroup);
+            }
+            else
+            {
+                const icons: Icon[] = elem.icons.map(icon =>
+                {
+                    return this.parseIcon(icon);
+                })
+                return new Item(elem.name, icons, elem.subgroup);
+            }
+        });
+
+        this.listsChanged();
+    }
+    //#endregion
+
+    //#region Helper functions for models
+    private parseIcon(icon: any): Icon
+    {
+        let tint = undefined;
+        if (icon.hasOwnProperty('tint'))
+        {
+            const t = icon.tint;
+            tint = {r: t.r ?? 1, g: t.g ?? 1, b: t.b ?? 1, a: t.a ?? 1}
+        }
+
+        let shift = undefined;
+        if (icon.hasOwnProperty('shift')) {
+            shift = { h: icon.shift[0], v: icon.shift[1] }
+        }
+
+        return new Icon(icon.icon, icon.icon_size, icon.scale, tint, shift)
     }
     //#endregion
 
@@ -102,10 +166,12 @@ export class ModelService
         this.itemsChangedSource.next(this.itemsList);
         this.updateDictionary(this.itemGroups, this.itemGroupsList);
         this.itemGroupsChangedSource.next(this.itemGroupsList);
+        this.updateDictionary(this.itemSubgroups, this.itemSubgroupsList);
+        this.itemSubgroupsChangedSource.next(this.itemSubgroupsList);
         this.updateDictionary(this.recipes, this.recipesList);
         this.recipesChangedSource.next(this.recipesList);
-        this.updateDictionary(this.craftingCategories, this.craftingCategoriesList);
-        this.craftingCategoriesChangedSource.next(this.craftingCategoriesList);
+        this.updateDictionary(this.recipeCategories, this.recipeCategoriesList);
+        this.recipeCategoriesChangedSource.next(this.recipeCategoriesList);
     }
     //#endregion
 }

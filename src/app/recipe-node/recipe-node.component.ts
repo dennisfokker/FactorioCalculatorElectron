@@ -18,29 +18,13 @@ export class RecipeNodeComponent implements OnInit, AfterViewInit
     @Input() parentNode: RecipeNodeComponent;
     collapsed: boolean = false;
     listCalculatedHeight: string = null;
-    ingredientItem: Item;
-    ingredientRecipe: Recipe;
 
     constructor(private modalService: ModalService,
         private modelService: ModelService) { }
 
     ngOnInit()
     {
-        if (typeof this.ingredient.item === 'string')
-        {
-            this.ingredientItem = this.modelService.items[this.ingredient.item];
-        }
-        else
-        {
-            this.ingredientItem = this.ingredient.item;
-        }
-
-        if (typeof this.ingredient.recipe === 'string') {
-            this.ingredientRecipe = this.modelService.recipes[this.ingredient.recipe];
-        }
-        else {
-            this.ingredientRecipe = this.ingredient.recipe;
-        }
+        this.ingredient.loadRecipe(this.modelService);
     }
 
     ngAfterViewInit(): void
@@ -78,7 +62,7 @@ export class RecipeNodeComponent implements OnInit, AfterViewInit
 
     recipeListContainerCollapseClick()
     {
-        if (this.ingredientRecipe.ingredients.length <= 0)
+        if (this.ingredient.recipe.ingredients.length <= 0)
             return;
 
         this.collapsed = !this.collapsed;

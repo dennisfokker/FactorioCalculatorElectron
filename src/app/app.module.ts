@@ -14,12 +14,14 @@ import { ItemGroupOptionsComponent } from './item-group-options/item-group-optio
 import { ItemOptionsComponent } from './item-options/item-options.component';
 import { RecipeNodeComponent } from './recipe-node/recipe-node.component';
 import { ModelService } from './_services/model.service';
+import { FactorioDataSelectorComponent } from './_modals/factorio-data-selector/factorio-data-selector.component';
 import { FactorioPathSelectorComponent } from './_modals/factorio-path-selector/factorio-path-selector.component';
 import { ModalService } from './_services/modal.service';
 import { ModalContainerComponent } from './_modals/modal-container/modal-container.component';
 import { ModalDirective } from './_directives/modal.directive';
 import { ModPathSelectorComponent } from './_modals/mod-path-selector/mod-path-selector.component';
 import { NAComponent } from './_modals/na/na.component';
+import { IconRendererComponent } from './icon-renderer/icon-renderer.component';
 
 
 @NgModule({
@@ -34,10 +36,12 @@ import { NAComponent } from './_modals/na/na.component';
         ItemOptionsComponent,
         RecipeNodeComponent,
         FactorioPathSelectorComponent,
+        FactorioDataSelectorComponent,
         ModPathSelectorComponent,
         NAComponent,
         ModalContainerComponent,
-        ModalDirective
+        ModalDirective,
+        IconRendererComponent
     ],
     imports: [
         BrowserModule,
@@ -45,7 +49,7 @@ import { NAComponent } from './_modals/na/na.component';
         FormsModule,
         ReactiveFormsModule
     ],
-    entryComponents: [FactorioPathSelectorComponent, ModPathSelectorComponent, NAComponent],
+    entryComponents: [FactorioDataSelectorComponent, FactorioPathSelectorComponent, ModPathSelectorComponent, NAComponent],
     providers: [ModelService, ModalService],
     bootstrap: [AppComponent]
 })

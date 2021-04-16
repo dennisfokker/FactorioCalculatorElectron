@@ -15,7 +15,7 @@ export class ModPathSelectorComponent implements OnInit, ModalComponent
     private modalClosedSource: Subject<ModalResult> = new Subject<ModalResult>();
 
     modHelpText: string;
-    modFiles: File[];
+    modsPath: string;
     modalClosed: Observable<ModalResult> = this.modalClosedSource.asObservable();
     @Input() data: any;
 
@@ -52,12 +52,12 @@ export class ModPathSelectorComponent implements OnInit, ModalComponent
 
     onModPathChange(event)
     {
-        this.modFiles = event.target.files;
+        this.modsPath = event.target.files.length > 0 ? event.target.files[0].path : undefined;
     }
 
     onOKClick()
     {
-        this.modalClosedSource.next(new ModalResult(false, { modFiles: this.modFiles }));
+        this.modalClosedSource.next(new ModalResult(false, { modsPath: this.modsPath }));
         this.modalService.close();
     }
 

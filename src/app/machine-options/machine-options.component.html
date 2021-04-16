@@ -2,12 +2,7 @@
     <input type="checkbox" id="machine_option_displayed_{{id}}" [(ngModel)]="machineOption.displayedInRecipe" />
     <label for="machine_option_displayed_{{id}}"></label>
 </div>
-<ng-container *ngIf="machine.icon.length == 0">
-    <img src="assets/icons/__Unknown__.png" />
-</ng-container>
-<ng-container *ngFor="let icon of machine.icon; let i = index">
-    <img src="assets/icons/{{machine.icon[i]}}" />
-</ng-container>
+<app-icon-renderer class="icon" [icon]="machine.icon"></app-icon-renderer>
 <span>{{machine.name}}</span>
 <div class="statistics">
     Speed
