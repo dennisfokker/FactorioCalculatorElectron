@@ -15,7 +15,7 @@
     "electron:serve-tsc": "tsc -p tsconfig.serve.json",
     "electron:serve": "wait-on tcp:4200 && npm run electron:serve-tsc && npx electron . --serve",
     "electron:local": "npm run build:prod && npx electron .",
-    "electron:build": "npm run build:prod && electron-builder build",
+    "electron:build": "npm run build:prod && electron-builder build --windows",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

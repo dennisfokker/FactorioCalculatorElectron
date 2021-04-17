@@ -19,6 +19,8 @@
                         "assets": [
                             "src/assets",
                             "src/favicon.ico",
+                            "src/icons/favicon.png",
+                            "src/icons/favicon.ico",
                             "src/.nojekyll",
                             "src/_config.yml"
                         ],
@@ -63,7 +65,7 @@
                         "production": {
                             "index": {
                                 "input": "src/index.production.html",
-                                "output": "src/index.html"
+                                "output": "index.html"
                             },
                             "optimization": true,
                             "outputHashing": "all",
