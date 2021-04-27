@@ -1,19 +1,19 @@
 import { ModelService } from '../_services/model.service';
 import { RecipeCategory } from '../_models/factorio/recipeCategory';
-import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 
 @Component({
     selector: 'app-crafting-category-options',
     templateUrl: './crafting-category-options.component.html',
     styleUrls: ['./crafting-category-options.component.css']
 })
-export class CraftingCategoryOptionsComponent implements OnInit, AfterViewInit
+export class CraftingCategoryOptionsComponent implements OnInit
 {
     @ViewChild('categoryListContainer') categoryListContainer: ElementRef;
     @Input() id: number;
     @Input() craftingCategory: RecipeCategory;
-    collapsed: boolean = false;
-    listCalculatedHeight: string = null;
+    collapsed: boolean = true;
+    listCalculatedHeight: string = undefined;
 
     constructor(public modelService: ModelService) { }
 
@@ -21,14 +21,9 @@ export class CraftingCategoryOptionsComponent implements OnInit, AfterViewInit
     {
     }
 
-    ngAfterViewInit(): void
-    {
-        this.categoryListContainer.nativeElement.style.height = this.categoryListContainer.nativeElement.offsetHeight + 'px';
-    }
-
     getCategoryListContainerHeight(): string
     {
-        if (this.listCalculatedHeight == null)
+        if (this.listCalculatedHeight == null && !this.collapsed)
         {
             return 'auto';
         }
@@ -40,7 +35,7 @@ export class CraftingCategoryOptionsComponent implements OnInit, AfterViewInit
     {
         this.collapsed = !this.collapsed;
 
-        if (this.listCalculatedHeight == null)
+        if (this.listCalculatedHeight == undefined)
         {
             this.listCalculatedHeight = this.categoryListContainer.nativeElement.offsetHeight + 'px';
         }

@@ -12,7 +12,7 @@ export class ItemGroupOptionsComponent implements OnInit, AfterViewInit
     @Input() id: number;
     @Input() itemGroupOption: ItemGroupOption;
     collapsed: boolean = false;
-    listCalculatedHeight: string = null;
+    listCalculatedHeight: string = undefined;
 
     constructor() { }
 
@@ -27,14 +27,14 @@ export class ItemGroupOptionsComponent implements OnInit, AfterViewInit
         {
             setTimeout(() =>
             {
-                this.itemGroupContainer.nativeElement.style.height = this.itemGroupContainer.nativeElement.scrollHeight + 5 + 'px';
+                //this.itemGroupContainer.nativeElement.style.height = this.itemGroupContainer.nativeElement.scrollHeight + 5 + 'px';
             }, 0);
         }, 0);
     }
 
     getItemGroupContainerHeight(): string
     {
-        if (this.listCalculatedHeight == null) {
+        if (this.listCalculatedHeight == undefined && !this.collapsed) {
             return 'auto';
         }
 
@@ -45,7 +45,7 @@ export class ItemGroupOptionsComponent implements OnInit, AfterViewInit
     {
         this.collapsed = !this.collapsed;
 
-        if (this.listCalculatedHeight == null) {
+        if (this.listCalculatedHeight == undefined) {
             this.listCalculatedHeight = this.itemGroupContainer.nativeElement.scrollHeight + 5 + 'px';
         }
     }

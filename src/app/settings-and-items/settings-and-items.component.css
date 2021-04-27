@@ -61,6 +61,7 @@
     flex-flow: column;
 
     margin: 0;
+    overflow-y: auto;
 }
 
 .item-search-container {
@@ -71,7 +72,7 @@
     border-bottom: 2px solid rgba(255, 255, 255, 0.25);
 }
 
-.item-list-container {
+.item-group-list-container {
     flex: 1;
 
     margin: 0;
