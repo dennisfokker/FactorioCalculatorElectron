@@ -35,48 +35,114 @@ export class ModelService
     public recipesList: Recipe[] = [];
     public recipeCategoriesList: RecipeCategory[] = [];
 
-    public machines: { [name: string]: CraftingMachine } = {};
-    public items: { [name: string]: Item } = {};
-    public itemGroups: { [name: string]: ItemGroup } = {};
-    public itemSubgroups: { [name: string]: ItemSubgroup } = {};
-    public recipes: { [name: string]: Recipe } = {};
-    public recipeCategories: { [name: string]: RecipeCategory } = {};
+    public machines: Map<string, CraftingMachine> = new Map<string, CraftingMachine>();
+    public items: Map<string, Item> = new Map<string, Item>();
+    public itemGroups: Map<string, ItemGroup> = new Map<string, ItemGroup>();
+    public itemSubgroups: Map<string, ItemSubgroup> = new Map<string, ItemSubgroup>();
+    public recipes: Map<string, Recipe> = new Map<string, Recipe>();
+    public recipeCategories: Map<string, RecipeCategory> = new Map<string, RecipeCategory>();
 
     constructor() { }
 
     public updateDataFromJSON(JSON: any) : void
     {
-        this.updateRecipesFromJSON(JSON.recipe);
-        this.updateItemsFromJSON(JSON.item);
+        // First clear old data to make sure we don't have any left-overs
+        this.machines = new Map<string, CraftingMachine>();
+        this.items = new Map<string, Item>();
+        this.itemGroups = new Map<string, ItemGroup>();
+        this.itemSubgroups = new Map<string, ItemSubgroup>();
+        this.recipes = new Map<string, Recipe>();
+        this.recipeCategories = new Map<string, RecipeCategory>();
 
-        this.listsChanged();
+        this.updateItemGroupFromJSON(JSON['item-group'])
+        this.updateItemSubgroupFromJSON(JSON['item-subgroup'])
+        this.updateItemsFromJSON(JSON['item']);
+        this.updateRecipesFromJSON(JSON['recipe']);
+
+        this.purgeUnusedItems();
+
+        this.modelDataChanged();
     }
 
     public updateFactorioPath(path: string)
     {
         //const copperOreItem = new Item('Copper ore', 'copper-ore.png');
 
-        this.listsChanged();
+        this.modelDataChanged();
     }
 
     public updateModsPath(path: string)
     {
         // Fill in later
 
-        this.listsChanged();
+        this.modelDataChanged();
     }
 
     //#region Model updating functions
+    private updateItemGroupFromJSON(itemGroupsJSON: any)
+    {
+        this.itemGroups = new Map(Object.values<any>(itemGroupsJSON).map(elem => {
+            if (elem.hasOwnProperty('icon')) {
+                return [elem.name, new ItemGroup(elem.name, this.parseIcon(elem.icon))];
+            }
+            else {
+                const icons: Icon[] = elem.icons.map(icon =>
+                {
+                    return this.parseIcon(icon);
+                })
+                return [elem.name, new ItemGroup(elem.name, icons)];
+            }
+        }))
+    }
+
+    private updateItemSubgroupFromJSON(itemSubgroupsJSON: any)
+    {
+        this.itemSubgroups = new Map(Object.values<any>(itemSubgroupsJSON).map(elem =>
+        {
+            const subgroup = new ItemSubgroup(elem.name, elem.group);
+            this.registerItemSubgroupInItemGroup(subgroup);
+            return [elem.name, subgroup];
+        }))
+    }
+
+    private updateItemsFromJSON(itemsJSON: any)
+    {
+        // Can't use map() here since we need to filter out a single element
+        this.items = new Map(Object.values<any>(itemsJSON).reduce((result: Map<string, Item>, elem) =>
+        {
+            // item-unknown isn't an actual item, so skip it
+            if (elem.name === 'item-unknown') {
+                return result;
+            }
+
+            if (elem.hasOwnProperty('icon')) {
+                const item = new Item(elem.name, this.parseIcon(elem.icon), elem.subgroup);
+                this.registerItemInSubgroup(item);
+                result.set(elem.name, item);
+            }
+            else {
+                const icons: Icon[] = elem.icons.map(icon =>
+                {
+                    return this.parseIcon(icon);
+                })
+                const item = new Item(elem.name, icons, elem.subgroup);
+                this.registerItemInSubgroup(item);
+                result.set(elem.name, item);
+            }
+            return result;
+        }, new Map()));
+    }
+
     private updateRecipesFromJSON(recipesJSON: any)
     {
-        this.recipesList = Object.values<any>(recipesJSON).map(elem =>
+        this.recipes = new Map(Object.values<any>(recipesJSON).map(elem =>
         {
             const content: any = elem.hasOwnProperty('normal') ? elem.normal : elem;
 
-            let ingredients: Ingredient[] = [];
+            let ingredients: Ingredient[];
             if (content.ingredients instanceof Array)
             {
-                content.ingredients.map(ingredient =>
+                ingredients = content.ingredients.map(ingredient =>
                 {
                     if (ingredient instanceof Array) {
                         return new Ingredient(ingredient[0], ingredient[1]);
@@ -94,34 +160,116 @@ export class ModelService
             {
                 results = content.results.map(result =>
                 {
-                    let amount: number = content.amount;
-                    if (content.hasOwnProperty('amount_min') && content.hasOwnProperty('amount_max')) {
-                        amount = (content.amount_min + content.amount_max) / 2;
+                    if (result instanceof Array) {
+                        return new Result(result[0], undefined, result[1]);
                     }
-                    return new Result(result.name, result.type, amount, result.probability);
+                    else
+                    {
+                        let amount: number = content.amount;
+                        if (content.hasOwnProperty('amount_min') && content.hasOwnProperty('amount_max')) {
+                            amount = (content.amount_min + content.amount_max) / 2;
+                        }
+                        return new Result(result.name, result.type, amount, result.probability);
+                    }
                 });
             }
 
-            return new Recipe(elem.name, content.energy_required, elem.category, ingredients, results);
-        });
+            const recipe = new Recipe(elem.name, content.energy_required, elem.category, ingredients, results)
+            this.registerRecipeInCategory(recipe);
+            this.registerRecipeInItem(recipe);
+            return [elem.name, recipe];
+        }));
     }
 
-    private updateItemsFromJSON(itemsJSON: any)
+    private registerItemSubgroupInItemGroup(subgroup: ItemSubgroup)
     {
-        this.itemsList = Object.values<any>(itemsJSON).map(elem =>
+        // Check if group already exists or not
+        if (!this.itemGroups.has(subgroup.groupReference)) {
+            console.error('Item group "%s" for item subgroup "%s" doesn\'t exist yet, so item cannot be registered.', subgroup.groupReference, subgroup.name);
+            return;
+        }
+
+        // Already exists, so get it and update it in the two containers
+        const group: ItemGroup = this.itemGroups.get(subgroup.groupReference);
+        group.addSubgroup(subgroup);
+        this.itemGroups.set(subgroup.groupReference, group);
+    }
+
+    private registerItemInSubgroup(item: Item)
+    {
+        // Check if item already exists or not
+        if (!this.itemSubgroups.has(item.subgroupReference))
         {
-            if (elem.hasOwnProperty('icon'))
-            {
-                return new Item(elem.name, this.parseIcon(elem.icon), elem.subgroup);
+            console.error('Item subgroup "%s" for item "%s" doesn\'t exist yet, so item cannot be registered.', item.subgroupReference, item.name);
+            return;
+        }
+
+        // Already exists, so get it and update it in the two containers
+        const subgroup: ItemSubgroup = this.itemSubgroups.get(item.subgroupReference);
+        subgroup.addItem(item);
+        this.itemSubgroups.set(item.subgroupReference, subgroup);
+    }
+
+    private registerRecipeInCategory(recipe: Recipe)
+    {
+        // Check if category already exists or not
+        if (!this.recipeCategories.has(recipe.recipeCategoryReference)) {
+            const category = new RecipeCategory(recipe.recipeCategoryReference, [], [recipe.name])
+            this.recipeCategories.set(recipe.recipeCategoryReference, category);
+            return;
+        }
+
+        // Already exists, so get it and update it in the two containers
+        const category: RecipeCategory = this.recipeCategories.get(recipe.recipeCategoryReference);
+        category.addRecipe(recipe);
+        this.recipeCategories.set(recipe.recipeCategoryReference, category);
+    }
+
+    private registerRecipeInItem(recipe: Recipe)
+    {
+        for (const result of recipe.results)
+        {
+            // Check if item already exists or not
+            if (!this.items.has(result.itemReference)) {
+                console.error('Item "%s", which recipe "%s" uses as result, doesn\'t exist yet, so recipe cannot be registered.', result.itemReference, recipe.name);
+                return;
             }
-            else
-            {
-                const icons: Icon[] = elem.icons.map(icon =>
-                {
-                    return this.parseIcon(icon);
-                })
-                return new Item(elem.name, icons, elem.subgroup);
+
+            // Already exists, so get it and update it in the two containers
+            const item: Item = this.items.get(result.itemReference);
+            item.addCreationRecipe(recipe);
+            this.items.set(result.itemReference, item);
+        }
+        for (const ingredient of recipe.ingredients) {
+            // Check if item already exists or not
+            if (!this.items.has(ingredient.itemReference)) {
+                console.error('Item "%s", which recipe "%s" uses as ingredient, doesn\'t exist yet, so recipe cannot be registered.', ingredient.itemReference, recipe.name);
+                return;
             }
+
+            // Already exists, so get it and update it in the two containers
+            const item: Item = this.items.get(ingredient.itemReference);
+            item.addUsedInRecipe(recipe);
+            this.items.set(ingredient.itemReference, item);
+        }
+    }
+
+    private purgeUnusedItems()
+    {
+        // Keeps track of the keys to remove later
+        const itemsToPurge: string[] = [];
+        this.items.forEach((val: Item, key: string) =>
+        {
+            if (val.usedInRecipeReferences.length == 0 && val.creationRecipeReferences.length == 0)
+            {
+                itemsToPurge.push(key);
+            }
+        });
+
+        itemsToPurge.forEach(key =>
+        {
+            console.warn('Purging item "%s" as it has no recipes referenced (cannot be created and isn\'t used)', key)
+            this.items.delete(key);
         });
     }
     //#endregion
@@ -146,29 +294,24 @@ export class ModelService
     //#endregion
 
     //#region Internal updating functions
-    private updateDictionary<T extends Indexable>(dict: { [name: string]: T }, list: T[])
+    private updateList<T extends Indexable>(dict: Map<string, T>, list: T[])
     {
-        dict = {};
-
-        list.forEach(element =>
-        {
-            dict[element.name] = element;
-        });
+        list.push(...Array.from(dict.values()));
     }
 
-    private listsChanged()
+    private modelDataChanged()
     {
-        this.updateDictionary(this.machines, this.machinesList);
+        this.updateList(this.machines, this.machinesList);
         this.machinesChangedSource.next(this.machinesList);
-        this.updateDictionary(this.items, this.itemsList);
+        this.updateList(this.items, this.itemsList);
         this.itemsChangedSource.next(this.itemsList);
-        this.updateDictionary(this.itemGroups, this.itemGroupsList);
+        this.updateList(this.itemGroups, this.itemGroupsList);
         this.itemGroupsChangedSource.next(this.itemGroupsList);
-        this.updateDictionary(this.itemSubgroups, this.itemSubgroupsList);
+        this.updateList(this.itemSubgroups, this.itemSubgroupsList);
         this.itemSubgroupsChangedSource.next(this.itemSubgroupsList);
-        this.updateDictionary(this.recipes, this.recipesList);
+        this.updateList(this.recipes, this.recipesList);
         this.recipesChangedSource.next(this.recipesList);
-        this.updateDictionary(this.recipeCategories, this.recipeCategoriesList);
+        this.updateList(this.recipeCategories, this.recipeCategoriesList);
         this.recipeCategoriesChangedSource.next(this.recipeCategoriesList);
     }
     //#endregion

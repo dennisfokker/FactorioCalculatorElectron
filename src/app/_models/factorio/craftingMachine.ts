@@ -70,7 +70,7 @@ export class CraftingMachine implements Machine
         if (this.isStringArray(this._recipeCategories)) {
             this._recipeCategories = this._recipeCategories.map(elem =>
             {
-                return modelService.recipeCategories[elem];
+                return modelService.recipeCategories.get(elem);
             })
         }
     }

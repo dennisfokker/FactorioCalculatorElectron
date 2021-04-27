@@ -32,6 +32,16 @@ export class ItemGroup implements Indexable
         return this.name;
     }
 
+    public addSubgroup(subgroup: ItemSubgroup)
+    {
+        if (this.isStringArray(this._subgroups)) {
+            this._subgroups.push(subgroup.name);
+        }
+        else {
+            this._subgroups.push(subgroup)
+        }
+    }
+
     //#region Getters and Setters
     public get name(): string
     {
@@ -69,7 +79,7 @@ export class ItemGroup implements Indexable
         if (this.isStringArray(this._subgroups)) {
             this._subgroups = this._subgroups.map(elem =>
             {
-                return modelService.itemSubgroups[elem];
+                return modelService.itemSubgroups.get(elem);
             })
         }
     }

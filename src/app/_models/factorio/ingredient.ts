@@ -38,7 +38,7 @@ export class Ingredient
         if (this._item instanceof Item) {
             return;
         }
-        this._item = modelService.items[this._item];
+        this._item = modelService.items.get(this._item);
     }
 
     public get amount(): number
@@ -70,7 +70,7 @@ export class Ingredient
         if (this._recipe instanceof Recipe) {
             return;
         }
-        this._recipe = modelService.recipes[this._recipe];
+        this._recipe = modelService.recipes.get(this._recipe);
     }
     //#endregion
 }

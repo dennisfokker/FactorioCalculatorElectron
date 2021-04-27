@@ -24,7 +24,18 @@ export class SettingsAndItemsComponent implements OnInit
     constructor(public modelService: ModelService,
                 public modalService: ModalService)
     {
-        modelService.itemGroupsChanged.subscribe((itemGroups) => this.itemGroupOptions = itemGroups.map((itemGroup) => itemGroup.toOption(modelService)));
+        modelService.itemGroupsChanged.subscribe((itemGroups) =>
+        {
+            this.itemGroupOptions = itemGroups.reduce((result: ItemGroupOption[], itemGroup) =>
+            {
+                const itemGroupOption = itemGroup.toOption(modelService);
+                if (itemGroupOption.items.length > 0)
+                {
+                    result.push(itemGroupOption);
+                }
+                return result;
+            }, []);
+        });
     }
 
     ngOnInit()
@@ -33,9 +44,9 @@ export class SettingsAndItemsComponent implements OnInit
         const copperCableItem = new Item('Copper cable', new Icon('copper-cable.png'), 'Intermediates');
         const aluminumPlateItem = new Item('Aluminum plate', new Icon('__Unknown__.png'), 'Bob\'s intermediates');
         this.modelService.itemsList.push(ironPlateItem, copperCableItem, aluminumPlateItem);
-        this, this.modelService.items[ironPlateItem.name] = ironPlateItem;
-        this, this.modelService.items[copperCableItem.name] = copperCableItem;
-        this, this.modelService.items[aluminumPlateItem.name] = aluminumPlateItem;
+        this, this.modelService.items.set(ironPlateItem.name, ironPlateItem);
+        this, this.modelService.items.set(copperCableItem.name, copperCableItem);
+        this, this.modelService.items.set(aluminumPlateItem.name, aluminumPlateItem);
 
         this.itemGroupOptions.push(new ItemGroup('Intermediates',
                                    undefined,

@@ -27,10 +27,10 @@ export class DefaultUsageComponent implements OnInit
         const bobMachine = new CraftingMachine('Assembly machine 4', new Icon('__Unknown__.png'));
 
         this.modelService.machinesList.push(machine1, machine2, electricmine, bobMachine);
-        this.modelService.machines[machine1.name] = machine1;
-        this.modelService.machines[machine2.name] = machine2;
-        this.modelService.machines[electricmine.name] = electricmine;
-        this.modelService.machines[bobMachine.name] = bobMachine;
+        this.modelService.machines.set(machine1.name, machine1);
+        this.modelService.machines.set(machine2.name, machine2);
+        this.modelService.machines.set(electricmine.name, electricmine);
+        this.modelService.machines.set(bobMachine.name, bobMachine);
 
         this.craftingCategories.push(new RecipeCategory('Base Factorio', [machine1.name, machine2.name, electricmine.name]));
         this.craftingCategories.push(new RecipeCategory('Bob\'s assembling machines', [bobMachine.name]));

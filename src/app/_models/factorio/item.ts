@@ -10,7 +10,8 @@ export class Item implements Indexable
     constructor(private _name: string,
         private _icon: Icon | Icon[],
         private _subgroup: string | ItemSubgroup,
-        private _recipes: string[] | Recipe[] = []) { }
+        private _creationRecipes: string[] | Recipe[] = [],
+        private _usedInRecipes: string[] | Recipe[] = []) { }
 
     public toOption(shared?: boolean, amount?: number): ItemOption
     {
@@ -20,6 +21,26 @@ export class Item implements Indexable
     public toString(): string
     {
         return this.name;
+    }
+
+    public addCreationRecipe(recipe: Recipe)
+    {
+        if (this.isStringArray(this._creationRecipes)) {
+            this._creationRecipes.push(recipe.name);
+        }
+        else {
+            this._creationRecipes.push(recipe)
+        }
+    }
+
+    public addUsedInRecipe(recipe: Recipe)
+    {
+        if (this.isStringArray(this._usedInRecipes)) {
+            this._usedInRecipes.push(recipe.name);
+        }
+        else {
+            this._usedInRecipes.push(recipe)
+        }
     }
 
     //#region Getters and Setters
@@ -52,36 +73,67 @@ export class Item implements Indexable
         if (this._subgroup instanceof ItemSubgroup) {
             return;
         }
-        this._subgroup = modelService.itemSubgroups[this._subgroup];
+        this._subgroup = modelService.itemSubgroups.get(this._subgroup);
     }
 
-    public get recipes(): Recipe[]
+    public get creationRecipes(): Recipe[]
     {
-        if (this.isStringArray(this._recipes)) {
+        if (this.isStringArray(this._creationRecipes)) {
             return [];
         }
 
-        return this._recipes;
+        return this._creationRecipes;
     }
 
-    public get recipeReferences(): string[]
+    public get creationRecipeReferences(): string[]
     {
-        if (!this.isStringArray(this._recipes)) {
-            return this._recipes = this._recipes.map(elem =>
+        if (!this.isStringArray(this._creationRecipes)) {
+            return this._creationRecipes = this._creationRecipes.map(elem =>
             {
                 return elem.name;
             })
         }
 
-        return this._recipes;
+        return this._creationRecipes;
     }
 
-    public loadRecipes(modelService: ModelService)
+    public loadCreationRecipes(modelService: ModelService)
     {
-        if (this.isStringArray(this._recipes)) {
-            this._recipes = this._recipes.map(elem =>
+        if (this.isStringArray(this._creationRecipes)) {
+            this._creationRecipes = this._creationRecipes.map(elem =>
             {
-                return modelService.recipes[elem];
+                return modelService.recipes.get(elem);
+            })
+        }
+    }
+
+    public get usedInRecipes(): Recipe[]
+    {
+        if (this.isStringArray(this._usedInRecipes)) {
+            return [];
+        }
+
+        return this._usedInRecipes;
+    }
+
+    public get usedInRecipeReferences(): string[]
+    {
+        if (!this.isStringArray(this._usedInRecipes)) {
+            return this._usedInRecipes = this._usedInRecipes.map(elem =>
+            {
+                return elem.name;
+            })
+        }
+
+        return this._usedInRecipes;
+    }
+
+    public loadUsedInRecipes(modelService: ModelService)
+    {
+        if (this.isStringArray(this._usedInRecipes)) {
+            this._usedInRecipes = this._usedInRecipes.map(elem =>
+            {
+                return modelService.recipes.get(elem);
             })
         }
     }

@@ -36,7 +36,7 @@ export class Result
         if (this._item instanceof Item) {
             return;
         }
-        this._item = modelService.items[this._item];
+        this._item = modelService.items.get(this._item);
     }
 
     public get type(): string

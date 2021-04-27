@@ -15,6 +15,16 @@ export class ItemSubgroup implements Indexable
         return this.name;
     }
 
+    public addItem(item: Item)
+    {
+        if (this.isStringArray(this._items)) {
+            this._items.push(item.name);
+        }
+        else {
+            this._items.push(item)
+        }
+    }
+
     //#region Getters and Setters
     public get name(): string
     {
@@ -40,7 +50,7 @@ export class ItemSubgroup implements Indexable
         if (this._group instanceof ItemGroup) {
             return;
         }
-        this._group = modelService.itemGroups[this._group];
+        this._group = modelService.itemGroups.get(this._group);
     }
 
     public get items(): Item[]
@@ -69,7 +79,7 @@ export class ItemSubgroup implements Indexable
         if (this.isStringArray(this._items)) {
             this._items = this._items.map(elem =>
             {
-                return modelService.items[elem];
+                return modelService.items.get(elem);
             })
         }
     }

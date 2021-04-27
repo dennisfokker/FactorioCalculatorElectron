@@ -14,6 +14,27 @@ export class RecipeCategory implements Indexable
         return this.name;
     }
 
+    public addCraftingMachine(craftingMachine: CraftingMachine)
+    {
+        if (this.isStringArray(this._craftingMachines)) {
+            this._craftingMachines.push(craftingMachine.name);
+        }
+        else
+        {
+            this._craftingMachines.push(craftingMachine)
+        }
+    }
+
+    public addRecipe(recipe: Recipe)
+    {
+        if (this.isStringArray(this._recipes)) {
+            this._recipes.push(recipe.name);
+        }
+        else {
+            this._recipes.push(recipe)
+        }
+    }
+
     //#region Getters and Setters
     public get name(): string
     {
@@ -46,7 +67,7 @@ export class RecipeCategory implements Indexable
         if (this.isStringArray(this._craftingMachines)) {
             this._craftingMachines = this._craftingMachines.map(elem =>
             {
-                return modelService.machines[elem];
+                return modelService.machines.get(elem);
             })
         }
     }
@@ -77,7 +98,7 @@ export class RecipeCategory implements Indexable
         if (this.isStringArray(this._recipes)) {
             this._recipes = this._recipes.map(elem =>
             {
-                return modelService.recipes[elem];
+                return modelService.recipes.get(elem);
             })
         }
     }

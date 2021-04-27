@@ -8,7 +8,7 @@ export class Recipe implements Indexable
 {
     constructor(private _name: string = 'Unknown',
         private _energyRequired: number = 0.5,
-        private _recipeCategory: string | RecipeCategory,
+        private _recipeCategory: string | RecipeCategory = "crafting",
         private _ingredients: Ingredient[] = [],
         private _results: Result[] = []) { }
 
@@ -47,7 +47,7 @@ export class Recipe implements Indexable
         if (this._recipeCategory instanceof RecipeCategory) {
             return;
         }
-        this._recipeCategory = modelService.recipeCategories[this._recipeCategory];
+        this._recipeCategory = modelService.recipeCategories.get(this._recipeCategory);
     }
 
     public get ingredients(): Ingredient[]
