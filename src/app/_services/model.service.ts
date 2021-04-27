@@ -53,13 +53,21 @@ export class ModelService
         this.itemSubgroups = new Map<string, ItemSubgroup>();
         this.recipes = new Map<string, Recipe>();
         this.recipeCategories = new Map<string, RecipeCategory>();
+        
+        // Create and store object's given data
+        this.addItemGroupsFromJSON(JSON['item-group'])
+        this.addItemSubgroupsFromJSON(JSON['item-subgroup'])
+        this.addItemsFromJSON(JSON['item']);
+        this.addRecipesFromJSON(JSON['recipe']);
 
-        this.updateItemGroupFromJSON(JSON['item-group'])
-        this.updateItemSubgroupFromJSON(JSON['item-subgroup'])
-        this.updateItemsFromJSON(JSON['item']);
-        this.updateRecipesFromJSON(JSON['recipe']);
-
+        // Make sure items know of their recipes and purge any that aren't used anywhere
+        this.recipes.forEach(this.registerRecipeInItem, this);
         this.purgeUnusedItems();
+
+        // Now we can finish off with the other register functions
+        this.recipes.forEach(this.registerRecipeInCategory, this);
+        this.items.forEach(this.registerItemInSubgroup, this);
+        this.itemSubgroups.forEach(this.registerItemSubgroupInItemGroup, this);
 
         this.modelDataChanged();
     }
@@ -79,7 +87,7 @@ export class ModelService
     }
 
     //#region Model updating functions
-    private updateItemGroupFromJSON(itemGroupsJSON: any)
+    private addItemGroupsFromJSON(itemGroupsJSON: any)
     {
         this.itemGroups = new Map(Object.values<any>(itemGroupsJSON).map(elem => {
             if (elem.hasOwnProperty('icon')) {
@@ -95,17 +103,16 @@ export class ModelService
         }))
     }
 
-    private updateItemSubgroupFromJSON(itemSubgroupsJSON: any)
+    private addItemSubgroupsFromJSON(itemSubgroupsJSON: any)
     {
         this.itemSubgroups = new Map(Object.values<any>(itemSubgroupsJSON).map(elem =>
         {
             const subgroup = new ItemSubgroup(elem.name, elem.group);
-            this.registerItemSubgroupInItemGroup(subgroup);
             return [elem.name, subgroup];
         }))
     }
 
-    private updateItemsFromJSON(itemsJSON: any)
+    private addItemsFromJSON(itemsJSON: any)
     {
         // Can't use map() here since we need to filter out a single element
         this.items = new Map(Object.values<any>(itemsJSON).reduce((result: Map<string, Item>, elem) =>
@@ -117,7 +124,6 @@ export class ModelService
 
             if (elem.hasOwnProperty('icon')) {
                 const item = new Item(elem.name, this.parseIcon(elem.icon), elem.subgroup);
-                this.registerItemInSubgroup(item);
                 result.set(elem.name, item);
             }
             else {
@@ -126,14 +132,13 @@ export class ModelService
                     return this.parseIcon(icon);
                 })
                 const item = new Item(elem.name, icons, elem.subgroup);
-                this.registerItemInSubgroup(item);
                 result.set(elem.name, item);
             }
             return result;
         }, new Map()));
     }
 
-    private updateRecipesFromJSON(recipesJSON: any)
+    private addRecipesFromJSON(recipesJSON: any)
     {
         this.recipes = new Map(Object.values<any>(recipesJSON).map(elem =>
         {
@@ -175,8 +180,6 @@ export class ModelService
             }
 
             const recipe = new Recipe(elem.name, content.energy_required, elem.category, ingredients, results)
-            this.registerRecipeInCategory(recipe);
-            this.registerRecipeInItem(recipe);
             return [elem.name, recipe];
         }));
     }
@@ -270,6 +273,7 @@ export class ModelService
         {
             console.warn('Purging item "%s" as it has no recipes referenced (cannot be created and isn\'t used)', key)
             this.items.delete(key);
+            // NEEDS TO DO MORE BECAUSE IT'S STILL IN OTHER LISTS
         });
     }
     //#endregion
@@ -301,16 +305,27 @@ export class ModelService
 
     private modelDataChanged()
     {
+        this.machinesList = [];
         this.updateList(this.machines, this.machinesList);
         this.machinesChangedSource.next(this.machinesList);
+
+        this.itemsList = [];
         this.updateList(this.items, this.itemsList);
         this.itemsChangedSource.next(this.itemsList);
+
+        this.itemGroupsList = [];
         this.updateList(this.itemGroups, this.itemGroupsList);
         this.itemGroupsChangedSource.next(this.itemGroupsList);
+
+        this.itemSubgroupsList = [];
         this.updateList(this.itemSubgroups, this.itemSubgroupsList);
         this.itemSubgroupsChangedSource.next(this.itemSubgroupsList);
+
+        this.recipesList = [];
         this.updateList(this.recipes, this.recipesList);
         this.recipesChangedSource.next(this.recipesList);
+
+        this.recipeCategoriesList = [];
         this.updateList(this.recipeCategories, this.recipeCategoriesList);
         this.recipeCategoriesChangedSource.next(this.recipeCategoriesList);
     }
