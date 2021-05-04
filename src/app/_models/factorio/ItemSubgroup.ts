@@ -1,6 +1,6 @@
 import { ModelService } from './../../_services/model.service';
 import { ItemGroup } from './ItemGroup';
-import { Indexable } from 'app/_interfaces/indexable';
+import { Indexable } from './../../_interfaces/indexable';
 import { Item } from './item';
 
 
