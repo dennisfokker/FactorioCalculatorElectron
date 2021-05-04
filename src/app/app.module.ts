@@ -23,6 +23,8 @@ import { ModPathSelectorComponent } from './_modals/mod-path-selector/mod-path-s
 import { NAComponent } from './_modals/na/na.component';
 import { IconRendererComponent } from './icon-renderer/icon-renderer.component';
 
+import { NgxElectronModule } from 'ngx-electron';
+
 
 @NgModule({
     declarations: [
@@ -47,7 +49,8 @@ import { IconRendererComponent } from './icon-renderer/icon-renderer.component';
         BrowserModule,
         AppRoutingModule,
         FormsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        NgxElectronModule
     ],
     entryComponents: [FactorioDataSelectorComponent, FactorioPathSelectorComponent, ModPathSelectorComponent, NAComponent],
     providers: [ModelService, ModalService],
