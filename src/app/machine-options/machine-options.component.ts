@@ -1,3 +1,4 @@
+import { Icon } from './../_models/Helpers/icon';
 import { MachineOption } from './../_models/options/machineOption';
 import { Component, OnInit, Input } from '@angular/core';
 import { CraftingMachine } from '../_models/factorio/craftingMachine';
@@ -18,5 +19,6 @@ export class MachineOptionsComponent implements OnInit
     ngOnInit()
     {
         this.machineOption = new MachineOption(this.machine);
+        console.log(this.machine);
     }
 }

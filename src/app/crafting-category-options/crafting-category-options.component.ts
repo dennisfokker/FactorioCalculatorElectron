@@ -12,13 +12,14 @@ export class CraftingCategoryOptionsComponent implements OnInit
     @ViewChild('categoryListContainer') categoryListContainer: ElementRef;
     @Input() id: number;
     @Input() craftingCategory: RecipeCategory;
-    collapsed: boolean = true;
+    collapsed: boolean = false;
     listCalculatedHeight: string = undefined;
 
     constructor(public modelService: ModelService) { }
 
     ngOnInit(): void
     {
+        this.craftingCategory.loadCraftingMachines(this.modelService);
     }
 
     getCategoryListContainerHeight(): string

@@ -28,13 +28,6 @@ export class ModelService
     public recipesChanged: Observable<Recipe[]> = this.recipesChangedSource.asObservable();
     public recipeCategoriesChanged: Observable<RecipeCategory[]> = this.recipeCategoriesChangedSource.asObservable();
 
-    public machinesList: CraftingMachine[] = [];
-    public itemsList: Item[] = [];
-    public itemGroupsList: ItemGroup[] = [];
-    public itemSubgroupsList: ItemSubgroup[] = [];
-    public recipesList: Recipe[] = [];
-    public recipeCategoriesList: RecipeCategory[] = [];
-
     public machines: Map<string, CraftingMachine> = new Map<string, CraftingMachine>();
     public items: Map<string, Item> = new Map<string, Item>();
     public itemGroups: Map<string, ItemGroup> = new Map<string, ItemGroup>();
@@ -74,7 +67,7 @@ export class ModelService
 
     public updateFactorioPath(path: string)
     {
-        //const copperOreItem = new Item('Copper ore', 'copper-ore.png');
+
 
         this.modelDataChanged();
     }
@@ -298,36 +291,14 @@ export class ModelService
     //#endregion
 
     //#region Internal updating functions
-    private updateList<T extends Indexable>(dict: Map<string, T>, list: T[])
-    {
-        list.push(...Array.from(dict.values()));
-    }
-
     private modelDataChanged()
     {
-        this.machinesList = [];
-        this.updateList(this.machines, this.machinesList);
-        this.machinesChangedSource.next(this.machinesList);
-
-        this.itemsList = [];
-        this.updateList(this.items, this.itemsList);
-        this.itemsChangedSource.next(this.itemsList);
-
-        this.itemGroupsList = [];
-        this.updateList(this.itemGroups, this.itemGroupsList);
-        this.itemGroupsChangedSource.next(this.itemGroupsList);
-
-        this.itemSubgroupsList = [];
-        this.updateList(this.itemSubgroups, this.itemSubgroupsList);
-        this.itemSubgroupsChangedSource.next(this.itemSubgroupsList);
-
-        this.recipesList = [];
-        this.updateList(this.recipes, this.recipesList);
-        this.recipesChangedSource.next(this.recipesList);
-
-        this.recipeCategoriesList = [];
-        this.updateList(this.recipeCategories, this.recipeCategoriesList);
-        this.recipeCategoriesChangedSource.next(this.recipeCategoriesList);
+        this.machinesChangedSource.next(Array.from(this.machines.values()));
+        this.itemsChangedSource.next(Array.from(this.items.values()));
+        this.itemGroupsChangedSource.next(Array.from(this.itemGroups.values()));
+        this.itemSubgroupsChangedSource.next(Array.from(this.itemSubgroups.values()));
+        this.recipesChangedSource.next(Array.from(this.recipes.values()));
+        this.recipeCategoriesChangedSource.next(Array.from(this.recipeCategories.values()));
     }
     //#endregion
 }
