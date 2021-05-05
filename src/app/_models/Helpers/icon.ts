@@ -1,6 +1,6 @@
 export class Icon
 {
-    constructor(public iconPath: string = '__Unknown__.png',
+    constructor(public iconPath: string = '__internal__/__Unknown__.png',
         public size: number = 32,
         public scale: number = 1,
         public tint: { r: number, g: number, b: number, a: number } = { r: 1, g: 1, b: 1, a: 1 },

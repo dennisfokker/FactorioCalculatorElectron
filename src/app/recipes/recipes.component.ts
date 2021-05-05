@@ -23,7 +23,7 @@ export class RecipesComponent implements OnInit
         const ironOreResult = new Result('Iron ore');
         const ironOreRecipe = new Recipe('Iron ore', 1, undefined, [], [ironOreResult])
         this.modelService.recipes.set(ironOreRecipe.name, ironOreRecipe);
-        const ironOreItem = new Item('Iron ore', new Icon('iron-ore.png'), undefined);
+        const ironOreItem = new Item('Iron ore', new Icon('__internal__/iron-ore.png'), undefined);
         this.modelService.items.set(ironOreItem.name, ironOreItem);
 
         const ironResult = new Result('Iron plate');
@@ -32,7 +32,7 @@ export class RecipesComponent implements OnInit
                 new Ingredient(this.modelService.items.get(ironOreResult.itemReference), 1, undefined, ironOreRecipe.name)
             ], [ironResult])
         this.modelService.recipes.set(ironRecipe.name, ironRecipe);
-        const ironItem = new Item('Iron plate', new Icon('iron-plate.png'), undefined);
+        const ironItem = new Item('Iron plate', new Icon('__internal__/iron-plate.png'), undefined);
         this.modelService.items.set(ironItem.name, ironItem);
 
         const ironStorageBoxResult = new Result('Iron storage box');
@@ -42,14 +42,14 @@ export class RecipesComponent implements OnInit
                 new Ingredient(this.modelService.items.get(ironResult.itemReference), 1, undefined, ironRecipe.name)
             ], [ironStorageBoxResult]);
         this.modelService.recipes.set(ironStorageBoxRecipe.name, ironStorageBoxRecipe);
-        const ironStorageBoxItem = new Item('Iron storage box', new Icon('iron-storage-box.png'), undefined);
+        const ironStorageBoxItem = new Item('Iron storage box', new Icon('__internal__/iron-storage-box.png'), undefined);
         this.modelService.items.set(ironStorageBoxItem.name, ironStorageBoxItem);
 
 
         const copperOreResult = new Result('Copper ore');
         const copperOreRecipe = new Recipe('Copper ore', 1, undefined, [], [copperOreResult]);
         this.modelService.recipes.set(copperOreRecipe.name, copperOreRecipe);
-        const copperOreItem = new Item('Copper ore', new Icon('copper-ore.png'), undefined);
+        const copperOreItem = new Item('Copper ore', new Icon('__internal__/copper-ore.png'), undefined);
         this.modelService.items.set(copperOreItem.name, copperOreItem);
 
         const copperResult = new Result('Copper plate');
@@ -58,7 +58,7 @@ export class RecipesComponent implements OnInit
                 new Ingredient(this.modelService.items.get(copperOreResult.itemReference), 1, undefined, copperOreRecipe.name)
             ], [copperResult]);
         this.modelService.recipes.set(copperRecipe.name, copperRecipe);
-        const copperItem = new Item('Copper plate', new Icon('copper-plate.png'), undefined);
+        const copperItem = new Item('Copper plate', new Icon('__internal__/copper-plate.png'), undefined);
         this.modelService.items.set(copperItem.name, copperItem);
 
         const copperCableResult = new Result('Copper cable');
@@ -67,7 +67,7 @@ export class RecipesComponent implements OnInit
                 new Ingredient(this.modelService.items.get(copperResult.itemReference), 2, undefined, copperRecipe.name)
             ], [copperCableResult])
         this.modelService.recipes.set(copperCableRecipe.name, copperCableRecipe);
-        const copperCableItem = new Item('Copper cable', new Icon('copper-cable.png'), undefined);
+        const copperCableItem = new Item('Copper cable', new Icon('__internal__/copper-cable.png'), undefined);
         this.modelService.items.set(copperCableItem.name, copperCableItem);
         
         const circuitResult = new Result('Electronic circuit');
@@ -77,7 +77,7 @@ export class RecipesComponent implements OnInit
                 new Ingredient(this.modelService.items.get(copperCableResult.itemReference), 3, undefined, copperCableRecipe.name)
             ], [circuitResult]);
         this.modelService.recipes.set(circuitRecipe.name, circuitRecipe);
-        const circuitItem = new Item('Electronic circuit', new Icon('electronic-circuit.png'), undefined);
+        const circuitItem = new Item('Electronic circuit', new Icon('__internal__/electronic-circuit.png'), undefined);
         this.modelService.items.set(circuitItem.name, circuitItem);
 
         this.ingredients =  [

@@ -40,9 +40,9 @@ export class SettingsAndItemsComponent implements OnInit
 
     ngOnInit()
     {
-        const ironPlateItem = new Item('Iron plate', new Icon('iron-plate.png'), 'Intermediates');
-        const copperCableItem = new Item('Copper cable', new Icon('copper-cable.png'), 'Intermediates');
-        const aluminumPlateItem = new Item('Aluminum plate', new Icon('__Unknown__.png'), 'Bob\'s intermediates');
+        const ironPlateItem = new Item('Iron plate', new Icon('__internal__/iron-plate.png'), 'Intermediates');
+        const copperCableItem = new Item('Copper cable', new Icon('__internal__/copper-cable.png'), 'Intermediates');
+        const aluminumPlateItem = new Item('Aluminum plate', new Icon('__internal__/__Unknown__.png'), 'Bob\'s intermediates');
         this, this.modelService.items.set(ironPlateItem.name, ironPlateItem);
         this, this.modelService.items.set(copperCableItem.name, copperCableItem);
         this, this.modelService.items.set(aluminumPlateItem.name, aluminumPlateItem);

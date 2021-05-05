@@ -21,10 +21,10 @@ export class DefaultUsageComponent implements OnInit
 
     ngOnInit()
     {
-        const machine1 = new CraftingMachine('Assembling machine 1', new Icon('assembling-machine-1.png'));
-        const machine2 = new CraftingMachine('Assembling machine 2', new Icon('assembling-machine-2.png'));
-        const electricmine = new CraftingMachine('Electric mining drill', new Icon('electric-mining-drill.png'));
-        const bobMachine = new CraftingMachine('Assembly machine 4', new Icon('__Unknown__.png'));
+        const machine1 = new CraftingMachine('Assembling machine 1', new Icon('__internal__/assembling-machine-1.png'));
+        const machine2 = new CraftingMachine('Assembling machine 2', new Icon('__internal__/assembling-machine-2.png'));
+        const electricmine = new CraftingMachine('Electric mining drill', new Icon('__internal__/electric-mining-drill.png'));
+        const bobMachine = new CraftingMachine('Assembly machine 4', new Icon('__internal__/__Unknown__.png'));
 
         this.modelService.machines.set(machine1.name, machine1);
         this.modelService.machines.set(machine2.name, machine2);

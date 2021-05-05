@@ -19,6 +19,5 @@ export class MachineOptionsComponent implements OnInit
     ngOnInit()
     {
         this.machineOption = new MachineOption(this.machine);
-        console.log(this.machine);
     }
 }

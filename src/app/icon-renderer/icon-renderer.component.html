@@ -2,9 +2,9 @@
 </ng-container>
 <ng-template #multiIcon>
     <ng-container *ngFor="let iconLayer of icons; let i = index">
-        <img src="assets/icons/{{iconLayer}}" onerror="this.src = 'assets/icons/__Unknown__.png'" />
+        <img [src]="sanitize('factorio-icon://' + iconLayer)" onerror="this.src = 'assets/icons/__Unknown__.png'" />
     </ng-container>
 </ng-template>
 <ng-template #singleIcon>
-    <img src="assets/icons/{{icon}}" onerror="this.src = 'assets/icons/__Unknown__.png'" />
+    <img [src]="sanitize('factorio-icon://' + icon)" onerror="this.src = 'assets/icons/__Unknown__.png'" />
 </ng-template>
