@@ -145,6 +145,6 @@ export class Item implements Indexable
             return false;
         }
 
-        return array[0] instanceof String
+        return typeof (array[0]) === 'string'
     }
 }
