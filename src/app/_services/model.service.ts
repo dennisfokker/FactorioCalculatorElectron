@@ -9,7 +9,6 @@ import { Item } from '../_models/factorio/item';
 import { CraftingMachine } from '../_models/factorio/craftingMachine';
 import { Recipe } from '../_models/factorio/recipe';
 import { Subject ,  Observable } from 'rxjs';
-import { Indexable } from '../_interfaces/indexable';
 
 @Injectable()
 export class ModelService
@@ -274,6 +273,11 @@ export class ModelService
     //#region Helper functions for models
     private parseIcon(icon: any): Icon
     {
+        if (typeof(icon) === 'string')
+        {
+            return new Icon(icon);
+        }
+
         let tint = undefined;
         if (icon.hasOwnProperty('tint'))
         {
