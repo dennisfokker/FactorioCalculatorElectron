@@ -1,6 +1,8 @@
-import { IconFileProtocol } from './src/iconFileProtocol';
+import { FactorioModsPathChannel } from './src/ipcs/factorioModsPathChannel';
+import { FactorioBasePathChannel } from './src/ipcs/factorioBasePathChannel';
+import { IconFileProtocol } from './src/protocols/iconFileProtocol';
 
-import { app, BrowserWindow, CustomScheme, protocol, screen } from 'electron';
+import { app, BrowserWindow, CustomScheme, ipcMain, protocol, screen } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 import { ProtocolRequest, ProtocolResponse } from 'electron/main';
@@ -9,7 +11,11 @@ let win: BrowserWindow = null;
 const args = process.argv.slice(1),
     serve = args.some(val => val === '--serve');
 
-const iconFileProtocol: IconFileProtocol = new IconFileProtocol();
+function registerIpcChannels()
+{
+    ipcMain.on(FactorioBasePathChannel.channelName, FactorioBasePathChannel.handle);
+    ipcMain.on(FactorioModsPathChannel.channelName, FactorioModsPathChannel.handle);
+}
 
 function createWindow(): BrowserWindow
 {
@@ -18,12 +24,14 @@ function createWindow(): BrowserWindow
     const size = electronScreen.getPrimaryDisplay().workAreaSize;
 
     // Create the browser window.
-    win = new BrowserWindow({
+    win = new BrowserWindow(
+    {
         x: 0,
         y: 0,
         width: size.width,
         height: size.height,
-        webPreferences: {
+        webPreferences:
+        {
             nodeIntegration: true,
             nodeIntegrationInWorker: true,
             backgroundThrottling: false,
@@ -34,17 +42,22 @@ function createWindow(): BrowserWindow
         },
     });
 
-    if (serve) {
+    if (serve)
+    {
 
         win.webContents.openDevTools();
 
-        require('electron-reload')(__dirname, {
+        require('electron-reload')(__dirname,
+        {
             electron: require(`${__dirname}/node_modules/electron`)
         });
         win.loadURL('http://localhost:4200');
 
-    } else {
-        win.loadURL(url.format({
+    }
+    else
+    {
+        win.loadURL(url.format(
+        {
             pathname: path.join(__dirname, 'dist/index.html'),
             protocol: 'file:',
             slashes: true
@@ -63,18 +76,20 @@ function createWindow(): BrowserWindow
     return win;
 }
 
-try {
-    const factorioIconScheme: CustomScheme = { scheme: iconFileProtocol.protocolName, privileges: { standard: true } };
+try
+{
+    const factorioIconScheme: CustomScheme = { scheme: IconFileProtocol.protocolName, privileges: { standard: true } };
     protocol.registerSchemesAsPrivileged([factorioIconScheme]);
     
     // This method will be called when Electron has finished
     // initialization and is ready to create browser windows.
     // Some APIs can only be used after this event occurs.
     // Added 400 ms to fix the black background issue while using transparent window. More detais at https://github.com/electron/electron/issues/15947
-    app.on('ready', () => {
-        protocol.registerFileProtocol(iconFileProtocol.protocolName, (request: ProtocolRequest, callback: (response: string | ProtocolResponse) => void) =>
+    app.on('ready', () =>
+    {
+        protocol.registerFileProtocol(IconFileProtocol.protocolName, (request: ProtocolRequest, callback: (response: string | ProtocolResponse) => void) =>
         {
-            iconFileProtocol.iconProtocolHandler(request, callback);
+            IconFileProtocol.iconProtocolHandler(request, callback);
         });
         setTimeout(createWindow, 400);
     });
@@ -84,7 +99,8 @@ try {
     {
         // On OS X it is common for applications and their menu bar
         // to stay active until the user quits explicitly with Cmd + Q
-        if (process.platform !== 'darwin') {
+        if (process.platform !== 'darwin')
+        {
             app.quit();
         }
     });
@@ -93,12 +109,16 @@ try {
     {
         // On OS X it's common to re-create a window in the app when the
         // dock icon is clicked and there are no other windows open.
-        if (win === null) {
+        if (win === null)
+        {
             createWindow();
         }
     });
 
-} catch (e) {
+    registerIpcChannels();
+}
+catch (e)
+{
     // Catch Error
     // throw e;
 }

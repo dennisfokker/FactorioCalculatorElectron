@@ -1,3 +1,4 @@
+import { IpcRequest } from './../../ipcs/ipcRequest';
 import { Icon } from '../_models/Helpers/icon';
 import { ItemSubgroup } from './../_models/factorio/ItemSubgroup';
 import { RecipeCategory } from './../_models/factorio/recipeCategory';
@@ -9,6 +10,7 @@ import { Item } from '../_models/factorio/item';
 import { CraftingMachine } from '../_models/factorio/craftingMachine';
 import { Recipe } from '../_models/factorio/recipe';
 import { Subject ,  Observable } from 'rxjs';
+import { ElectronService } from 'ngx-electron';
 
 @Injectable()
 export class ModelService
@@ -34,7 +36,7 @@ export class ModelService
     public recipes: Map<string, Recipe> = new Map<string, Recipe>();
     public recipeCategories: Map<string, RecipeCategory> = new Map<string, RecipeCategory>();
 
-    constructor() { }
+    constructor(private electron: ElectronService) { }
 
     public updateDataFromJSON(JSON: any) : void
     {
@@ -66,14 +68,16 @@ export class ModelService
 
     public updateFactorioPath(path: string)
     {
-
+        const request: IpcRequest = { params: [path] }
+        this.electron.ipcRenderer.sendSync('base-path', request);
 
         this.modelDataChanged();
     }
 
     public updateModsPath(path: string)
     {
-        // Fill in later
+        const request: IpcRequest = { params: [path] }
+        this.electron.ipcRenderer.sendSync('mods-path', request);
 
         this.modelDataChanged();
     }

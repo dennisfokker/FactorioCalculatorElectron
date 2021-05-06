@@ -1,12 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var iconFileProtocol_1 = require("./src/iconFileProtocol");
+var factorioModsPathChannel_1 = require("./src/ipcs/factorioModsPathChannel");
+var factorioBasePathChannel_1 = require("./src/ipcs/factorioBasePathChannel");
+var iconFileProtocol_1 = require("./src/protocols/iconFileProtocol");
 var electron_1 = require("electron");
 var path = require("path");
 var url = require("url");
 var win = null;
 var args = process.argv.slice(1), serve = args.some(function (val) { return val === '--serve'; });
-var iconFileProtocol = new iconFileProtocol_1.IconFileProtocol();
+function registerIpcChannels() {
+    electron_1.ipcMain.on(factorioBasePathChannel_1.FactorioBasePathChannel.channelName, factorioBasePathChannel_1.FactorioBasePathChannel.handle);
+    electron_1.ipcMain.on(factorioModsPathChannel_1.FactorioModsPathChannel.channelName, factorioModsPathChannel_1.FactorioModsPathChannel.handle);
+}
 function createWindow() {
     var electronScreen = electron_1.screen;
     var size = electronScreen.getPrimaryDisplay().workAreaSize;
@@ -50,15 +55,15 @@ function createWindow() {
     return win;
 }
 try {
-    var factorioIconScheme = { scheme: iconFileProtocol.protocolName, privileges: { standard: true } };
+    var factorioIconScheme = { scheme: iconFileProtocol_1.IconFileProtocol.protocolName, privileges: { standard: true } };
     electron_1.protocol.registerSchemesAsPrivileged([factorioIconScheme]);
     // This method will be called when Electron has finished
     // initialization and is ready to create browser windows.
     // Some APIs can only be used after this event occurs.
     // Added 400 ms to fix the black background issue while using transparent window. More detais at https://github.com/electron/electron/issues/15947
     electron_1.app.on('ready', function () {
-        electron_1.protocol.registerFileProtocol(iconFileProtocol.protocolName, function (request, callback) {
-            iconFileProtocol.iconProtocolHandler(request, callback);
+        electron_1.protocol.registerFileProtocol(iconFileProtocol_1.IconFileProtocol.protocolName, function (request, callback) {
+            iconFileProtocol_1.IconFileProtocol.iconProtocolHandler(request, callback);
         });
         setTimeout(createWindow, 400);
     });
@@ -77,6 +82,7 @@ try {
             createWindow();
         }
     });
+    registerIpcChannels();
 }
 catch (e) {
     // Catch Error
