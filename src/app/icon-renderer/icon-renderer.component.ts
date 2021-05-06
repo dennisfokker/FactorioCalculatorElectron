@@ -1,11 +1,12 @@
 import { Icon } from '../_models/Helpers/icon';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-icon-renderer',
   templateUrl: './icon-renderer.component.html',
-  styleUrls: ['./icon-renderer.component.css']
+  styleUrls: ['./icon-renderer.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class IconRendererComponent implements OnInit {
 
