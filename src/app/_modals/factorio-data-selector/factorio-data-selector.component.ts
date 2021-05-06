@@ -57,19 +57,9 @@ export class FactorioDataSelectorComponent implements OnInit, ModalComponent
         this.dataFile = event.target.files.length > 0 ? event.target.files[0] : null;
     }
 
-    onPrototypePathChange(event)
-    {
-        this.prototypeFiles = event.target.files;
-    }
-
-    onIconPathChange(event)
-    {
-        this.iconFiles = event.target.files;
-    }
-
     onOKClick()
     {
-        this.modalClosedSource.next(new ModalResult(false, { dataFile: this.dataFile, prototypeFiles: this.prototypeFiles, iconFiles: this.iconFiles }));
+        this.modalClosedSource.next(new ModalResult(false, this.dataFile));
         this.modalService.close();
     }
 

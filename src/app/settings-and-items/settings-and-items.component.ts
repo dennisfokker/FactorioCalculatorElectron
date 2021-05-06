@@ -106,18 +106,32 @@ export class SettingsAndItemsComponent implements OnInit
                     this.modelService.updateDataFromJSON(JSON.parse(rawData));
                 }
             };
-            reader.readAsText(result.result.dataFile);
+            reader.readAsText(result.result);
         });
     }
 
     setFactorioPath()
     {
-        this.modalService.openModal(FactorioPathSelectorComponent, {});
+        this.modalService.openModal(FactorioPathSelectorComponent, {}).subscribe((result) =>
+        {
+            if (result.canceled) {
+                return;
+            }
+            
+            this.modelService.updateFactorioPath(result.result);
+        });
     }
 
     setModPath()
     {
-        this.modalService.openModal(ModPathSelectorComponent, {});
+        this.modalService.openModal(ModPathSelectorComponent, {}).subscribe((result) =>
+        {
+            if (result.canceled) {
+                return;
+            }
+
+            this.modelService.updateModsPath(result.result);
+        });
     }
 
     importSettings()

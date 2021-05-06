@@ -52,12 +52,18 @@ export class FactorioPathSelectorComponent implements OnInit, ModalComponent
 
     onFactorioPathChange(event)
     {
-        this.factorioPath = event.target.files.length > 0 ? event.target.files[0].path : undefined;
+        this.factorioPath = undefined;
+        if (event.target.files.length > 0)
+        {
+            const fullPath: string = event.target.files[0].path.replaceAll('\\', '/');
+            const relativePath: string = event.target.files[0].webkitRelativePath.replaceAll('\\', '/');
+            this.factorioPath = fullPath.substring(0, fullPath.length - relativePath.length + relativePath.indexOf('/'));
+        }
     }
 
     onOKClick()
     {
-        this.modalClosedSource.next(new ModalResult(false, { dataFile: this.factorioPath }));
+        this.modalClosedSource.next(new ModalResult(false, this.factorioPath));
         this.modalService.close();
     }
 

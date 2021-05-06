@@ -52,12 +52,18 @@ export class ModPathSelectorComponent implements OnInit, ModalComponent
 
     onModPathChange(event)
     {
-        this.modsPath = event.target.files.length > 0 ? event.target.files[0].path : undefined;
+        this.modsPath = undefined;
+        if (event.target.files.length > 0)
+        {
+            const fullPath: string = event.target.files[0].path.replaceAll('\\', '/');
+            const relativePath: string = event.target.files[0].webkitRelativePath.replaceAll('\\', '/');
+            this.modsPath = fullPath.substring(0, fullPath.length - relativePath.length + relativePath.indexOf('/'));
+        }
     }
 
     onOKClick()
     {
-        this.modalClosedSource.next(new ModalResult(false, { modsPath: this.modsPath }));
+        this.modalClosedSource.next(new ModalResult(false, this.modsPath));
         this.modalService.close();
     }
 
