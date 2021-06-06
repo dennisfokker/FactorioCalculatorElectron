@@ -1,13 +1,13 @@
 import { ModelService } from '../_services/model.service';
 import { RecipeCategory } from '../_models/factorio/recipeCategory';
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 
 @Component({
     selector: 'app-crafting-category-options',
     templateUrl: './crafting-category-options.component.html',
     styleUrls: ['./crafting-category-options.component.css']
 })
-export class CraftingCategoryOptionsComponent implements OnInit
+export class CraftingCategoryOptionsComponent implements OnInit, AfterViewInit
 {
     @ViewChild('categoryListContainer') categoryListContainer: ElementRef;
     @Input() id: number;
@@ -20,6 +20,11 @@ export class CraftingCategoryOptionsComponent implements OnInit
     ngOnInit(): void
     {
         this.craftingCategory.loadCraftingMachines(this.modelService);
+    }
+
+    ngAfterViewInit(): void
+    {
+        this.categoryListContainer.nativeElement.style.height = this.categoryListContainer.nativeElement.offsetHeight + 'px';
     }
 
     getCategoryListContainerHeight(): string
