@@ -13,8 +13,8 @@ const args = process.argv.slice(1),
 
 function registerIpcChannels()
 {
-    ipcMain.on(FactorioBasePathChannel.channelName, FactorioBasePathChannel.handle);
-    ipcMain.on(FactorioModsPathChannel.channelName, FactorioModsPathChannel.handle);
+    ipcMain.handle(FactorioBasePathChannel.channelName, FactorioBasePathChannel.handle);
+    ipcMain.handle(FactorioModsPathChannel.channelName, FactorioModsPathChannel.handle);
 }
 
 function createWindow(): BrowserWindow

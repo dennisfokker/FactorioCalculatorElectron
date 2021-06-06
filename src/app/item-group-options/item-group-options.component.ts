@@ -23,14 +23,6 @@ export class ItemGroupOptionsComponent implements OnInit, AfterViewInit
 
     ngAfterViewInit()
     {
-        // That moment you have to wait for two frames. FeelsGoodMan.
-        // setTimeout(() =>
-        // {
-        //     setTimeout(() =>
-        //     {
-        //         this.itemGroupContainer.nativeElement.style.height = this.itemGroupContainer.nativeElement.scrollHeight + 5 + 'px';
-        //     }, 0);
-        // }, 0);
         this.itemGroupContainer.nativeElement.style.height = this.getItemGroupContainerHeight();
     }
 

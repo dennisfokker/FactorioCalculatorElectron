@@ -1,15 +1,15 @@
 import { IconFileProtocol } from '../protocols/iconFileProtocol';
-import { IpcMainEvent } from 'electron';
+import { IpcMainInvokeEvent } from 'electron';
 import { IpcRequest } from './ipcRequest';
 
 export class FactorioBasePathChannel
 {
     public static readonly channelName: string = 'base-path';
 
-    public static handle(event: IpcMainEvent, request: IpcRequest): void
+    public static async handle(event: IpcMainInvokeEvent, request: IpcRequest): Promise<void>
     {
         IconFileProtocol.basePath = request.params[0];
 
-        event.returnValue = 'success';
+        return;
     }
 }

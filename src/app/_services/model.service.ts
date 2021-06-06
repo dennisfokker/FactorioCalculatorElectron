@@ -69,17 +69,19 @@ export class ModelService
     public updateFactorioPath(path: string)
     {
         const request: IpcRequest = { params: [path] }
-        this.electron.ipcRenderer.sendSync('base-path', request);
-
-        this.modelDataChanged();
+        this.electron.ipcRenderer.invoke('base-path', request).then(() =>
+        {
+            this.modelDataChanged();
+        });
     }
 
     public updateModsPath(path: string)
     {
         const request: IpcRequest = { params: [path] }
-        this.electron.ipcRenderer.sendSync('mods-path', request);
-
-        this.modelDataChanged();
+        this.electron.ipcRenderer.invoke('mods-path', request).then(() =>
+        {
+            this.modelDataChanged();
+        });
     }
 
     //#region Model updating functions

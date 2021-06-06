@@ -23,7 +23,8 @@
   "private": true,
   "dependencies": {
     "@types/electron": "^1.6.10",
-    "decompress-zip": "^0.3.3",
+    "extract-zip": "^2.0.1",
+    "fs-extra": "^10.0.0",
     "ngx-device-detector": "^2.0.6",
     "ngx-electron": "^2.2.0"
   },

@@ -9,8 +9,8 @@ var url = require("url");
 var win = null;
 var args = process.argv.slice(1), serve = args.some(function (val) { return val === '--serve'; });
 function registerIpcChannels() {
-    electron_1.ipcMain.on(factorioBasePathChannel_1.FactorioBasePathChannel.channelName, factorioBasePathChannel_1.FactorioBasePathChannel.handle);
-    electron_1.ipcMain.on(factorioModsPathChannel_1.FactorioModsPathChannel.channelName, factorioModsPathChannel_1.FactorioModsPathChannel.handle);
+    electron_1.ipcMain.handle(factorioBasePathChannel_1.FactorioBasePathChannel.channelName, factorioBasePathChannel_1.FactorioBasePathChannel.handle);
+    electron_1.ipcMain.handle(factorioModsPathChannel_1.FactorioModsPathChannel.channelName, factorioModsPathChannel_1.FactorioModsPathChannel.handle);
 }
 function createWindow() {
     var electronScreen = electron_1.screen;

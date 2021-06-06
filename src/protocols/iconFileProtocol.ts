@@ -4,6 +4,7 @@ import { join } from 'path';
 export class IconFileProtocol
 {
     public static readonly protocolName: string = 'factorio-icon';
+    public static readonly modsCacheFolder: string = 'mods cache';
     public static basePath: string = undefined;
     public static modsPath: string = undefined;
 
@@ -46,10 +47,16 @@ export class IconFileProtocol
     {
         // Remove protocol
         let url = request.url.replace(this.protocolName + '://', '')
+        url = decodeURI(url);
 
         // Fix folder prefixes (__base__ or __my_mod_name__)
         url = url.replace('__base__', join(this.basePath, 'data', 'base'));
         url = url.replace('__core__', join(this.basePath, 'data', 'core'));
+        const matches = url.match(/__(.+)__/);
+        if (matches)
+        {
+            url = url.replace(/__(.+)__/, join(app.getPath('userData'), this.modsCacheFolder, matches[1].toLowerCase()));
+        }
 
         try {
             callback(url)

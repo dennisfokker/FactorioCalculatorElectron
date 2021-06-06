@@ -91,7 +91,7 @@ export class SettingsAndItemsComponent implements OnInit
                     //rawData = rawData.replace(/nil/g, 'null'); // Fix nil to null
                     //rawData = rawData.replace(/(,\n(\s+))\{\s*\}/g, '$1{\n$2}'); // Fix empty objects (expand them)
                     //rawData = rawData.replace(/-?1\/0 --\[\[-?math\.huge\]\]/g, '-1'); // Fix math operations
-                    rawData = rawData.replace(/-?inf/g, 'null'); // Fix math operations
+                    rawData = rawData.replace(/ -?inf/g, 'null'); // Fix math operations
                     //rawData = rawData.replace(/(\s+\{\n^(\s+))\{((?:(?!\n\2\})\n^.+)+?\n\2\},\n(?=\s+"))/gm, '$1"anonymous": {$3'); // Fix objects inside objects (nested object brackets are called "anonymous")
                     //rawData = rawData.replace(/^((\s+)\{(\n(?!\2\}).+)+?\n\2\}),\n\s+(?!\{|\s|null)[^{\s].*/gm, '$1'); // Fix arrays with loose property at the end
                     //rawData = rawData.replace(/\{(\n\s*(\{|null))/g, '[$1'); // Fix array starts
