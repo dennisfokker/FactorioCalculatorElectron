@@ -3,7 +3,7 @@ img {
     height: 100%;
     margin: 0px;
     padding: 0px;
-    position: absolute;
+    /*position: absolute;*/
 
     /* Crop image to the left, to make sure lower mipmaps are removes */
     object-fit: cover;

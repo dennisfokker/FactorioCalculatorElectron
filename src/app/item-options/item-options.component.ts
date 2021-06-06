@@ -1,10 +1,11 @@
-import { Component, OnInit, Input, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ChangeDetectionStrategy } from '@angular/core';
 import { ItemOption } from 'app/_models/options/itemOption';
 
 @Component({
     selector: 'app-item-options',
     templateUrl: './item-options.component.html',
-    styleUrls: ['./item-options.component.css']
+    styleUrls: ['./item-options.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ItemOptionsComponent implements OnInit
 {
