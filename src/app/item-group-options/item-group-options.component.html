@@ -3,7 +3,6 @@
     <div class="fa fa-chevron-circle-down collapser" [ngClass]="collapsed ? 'collapsed' : ''"></div>
 </div>
 
-<!-- [style.height]="getItemGroupContainerHeight()"  -->
 <div #itemGroupContainer class="item-group-container collapsable" (transitionstart)="itemGroupContainer.style.visibility = 'visible'" (transitionend)="itemGroupContainer.style.visibility = collapsed ? 'hidden' : 'visible'">
     <div class="item-group collapsable">
         <div class="item-group-item" *ngFor="let item of itemGroupOption.items; let i = index">

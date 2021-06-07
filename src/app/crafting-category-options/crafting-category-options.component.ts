@@ -1,18 +1,19 @@
 import { ModelService } from '../_services/model.service';
 import { RecipeCategory } from '../_models/factorio/recipeCategory';
-import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     selector: 'app-crafting-category-options',
     templateUrl: './crafting-category-options.component.html',
-    styleUrls: ['./crafting-category-options.component.css']
+    styleUrls: ['./crafting-category-options.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CraftingCategoryOptionsComponent implements OnInit, AfterViewInit
 {
     @ViewChild('categoryListContainer') categoryListContainer: ElementRef;
     @Input() id: number;
     @Input() craftingCategory: RecipeCategory;
-    collapsed: boolean = false;
+    collapsed: boolean = true;
     listCalculatedHeight: string = undefined;
 
     constructor(public modelService: ModelService) { }
@@ -24,12 +25,12 @@ export class CraftingCategoryOptionsComponent implements OnInit, AfterViewInit
 
     ngAfterViewInit(): void
     {
-        this.categoryListContainer.nativeElement.style.height = this.categoryListContainer.nativeElement.offsetHeight + 'px';
+        this.categoryListContainer.nativeElement.style.height = this.getCategoryListContainerHeight();
     }
 
     getCategoryListContainerHeight(): string
     {
-        if (this.listCalculatedHeight == null && !this.collapsed)
+        if (this.listCalculatedHeight == undefined && !this.collapsed)
         {
             return 'auto';
         }
@@ -41,9 +42,11 @@ export class CraftingCategoryOptionsComponent implements OnInit, AfterViewInit
     {
         this.collapsed = !this.collapsed;
 
-        if (this.listCalculatedHeight == undefined)
+        if (this.listCalculatedHeight == undefined && !this.collapsed)
         {
-            this.listCalculatedHeight = this.categoryListContainer.nativeElement.offsetHeight + 'px';
+            this.listCalculatedHeight = this.categoryListContainer.nativeElement.scrollHeight + 5 + 'px';
         }
+        
+        this.categoryListContainer.nativeElement.style.height = this.getCategoryListContainerHeight();
     }
 }

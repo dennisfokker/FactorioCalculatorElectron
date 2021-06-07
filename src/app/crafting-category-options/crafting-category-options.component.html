@@ -3,7 +3,7 @@
     <div class="fa fa-chevron-circle-down collapser" [ngClass]="collapsed ? 'collapsed' : ''"></div>
 </div>
 
-<div #categoryListContainer class="category-list-container collapsable" [style.height]="getCategoryListContainerHeight()">
+<div #categoryListContainer class="category-list-container collapsable" (transitionstart)="categoryListContainer.style.visibility = 'visible'" (transitionend)="categoryListContainer.style.visibility = collapsed ? 'hidden' : 'visible'">
     <div class="category-list collapsable">
         <div class="category-list-item" *ngFor="let m of craftingCategory.craftingMachines; let i = index">
             <app-machine-options [id]="craftingCategory.name + id + i" [machine]="m"></app-machine-options>

@@ -21,6 +21,7 @@
 .item-group-container {
     /* Current causes too much lag due to amount of items. Maybe a redesign can resolve this.*/
     transition: height 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+    
     overflow: hidden;
     will-change: transform, height;
 }

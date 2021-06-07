@@ -28,7 +28,8 @@ export class ItemGroupOptionsComponent implements OnInit, AfterViewInit
 
     getItemGroupContainerHeight(): string
     {
-        if (this.listCalculatedHeight == undefined && !this.collapsed) {
+        if (this.listCalculatedHeight == undefined && !this.collapsed)
+        {
             return 'auto';
         }
 
@@ -39,7 +40,8 @@ export class ItemGroupOptionsComponent implements OnInit, AfterViewInit
     {
         this.collapsed = !this.collapsed;
 
-        if (this.listCalculatedHeight == undefined && !this.collapsed) {
+        if (this.listCalculatedHeight == undefined && !this.collapsed)
+        {
             this.listCalculatedHeight = this.itemGroupContainer.nativeElement.scrollHeight + 5 + 'px';
         }
         
