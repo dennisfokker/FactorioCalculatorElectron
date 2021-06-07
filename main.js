@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var factorioModsPathChannel_1 = require("./src/ipcs/factorioModsPathChannel");
-var factorioBasePathChannel_1 = require("./src/ipcs/factorioBasePathChannel");
-var iconFileProtocol_1 = require("./src/protocols/iconFileProtocol");
+var factorioModsPathChannel_1 = require("./src-electron/ipcs/factorioModsPathChannel");
+var factorioBasePathChannel_1 = require("./src-electron/ipcs/factorioBasePathChannel");
+var iconFileProtocol_1 = require("./src-electron/protocols/iconFileProtocol");
 var electron_1 = require("electron");
 var path = require("path");
 var url = require("url");
@@ -19,8 +19,8 @@ function createWindow() {
     win = new electron_1.BrowserWindow({
         x: 0,
         y: 0,
-        width: size.width,
-        height: size.height,
+        width: 1280,
+        height: 720,
         webPreferences: {
             nodeIntegration: true,
             nodeIntegrationInWorker: true,

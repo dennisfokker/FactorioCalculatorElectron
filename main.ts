@@ -1,6 +1,6 @@
-import { FactorioModsPathChannel } from './src/ipcs/factorioModsPathChannel';
-import { FactorioBasePathChannel } from './src/ipcs/factorioBasePathChannel';
-import { IconFileProtocol } from './src/protocols/iconFileProtocol';
+import { FactorioModsPathChannel } from './src-electron/ipcs/factorioModsPathChannel';
+import { FactorioBasePathChannel } from './src-electron/ipcs/factorioBasePathChannel';
+import { IconFileProtocol } from './src-electron/protocols/iconFileProtocol';
 
 import { app, BrowserWindow, CustomScheme, ipcMain, protocol, screen } from 'electron';
 import * as path from 'path';
@@ -26,10 +26,10 @@ function createWindow(): BrowserWindow
     // Create the browser window.
     win = new BrowserWindow(
     {
-        x: 0,
-        y: 0,
-        width: size.width,
-        height: size.height,
+        x: 300,
+        y: 300,
+        width: 1280,
+        height: 720,
         webPreferences:
         {
             nodeIntegration: true,

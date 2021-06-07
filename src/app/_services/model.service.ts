@@ -1,4 +1,4 @@
-import { IpcRequest } from './../../ipcs/ipcRequest';
+import { IpcRequest } from '../_interfaces/ipcRequest';
 import { Icon } from '../_models/Helpers/icon';
 import { ItemSubgroup } from './../_models/factorio/ItemSubgroup';
 import { RecipeCategory } from './../_models/factorio/recipeCategory';
