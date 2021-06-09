@@ -112,11 +112,11 @@ export class ModelService
 
     private addItemsFromJSON(itemsJSON: any)
     {
-        // Can't use map() here since we need to filter out a single element
+        // Can't use map() here since we need to filter out invalid elements
         this.items = new Map(Object.values<any>(itemsJSON).reduce((result: Map<string, Item>, elem) =>
         {
-            // item-unknown isn't an actual item, so skip it
-            if (elem.name === 'item-unknown') {
+            // item/fluid-unknown isn't an actual item, so skip it
+            if (elem.name === 'item-unknown' || elem.name === 'fluid-unknown') {
                 return result;
             }
 
