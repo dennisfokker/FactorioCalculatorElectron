@@ -1,6 +1,6 @@
-import { ModelService } from './../../_services/model.service';
+import { ModelService } from '../../_services/model.service';
 import { Icon } from '../Helpers/icon';
-import { EffectType } from './../../_types/effectType';
+import { EffectType } from '../../_types/effectType';
 import { RecipeCategory } from './recipeCategory';
 import { Machine } from '../../_interfaces/machine';
 

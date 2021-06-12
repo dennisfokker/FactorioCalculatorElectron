@@ -6,7 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { RecipesComponent } from './recipes/recipes.component';
-import { DefaultUsageComponent } from './default-usage/default-usage.component';
+import { DefaultMachineUsageComponent } from './default-machine-usage/default-machine-usage.component';
 import { SettingsAndItemsComponent } from './settings-and-items/settings-and-items.component';
 import { MachineOptionsComponent } from './machine-options/machine-options.component';
 import { CraftingCategoryOptionsComponent } from './crafting-category-options/crafting-category-options.component';
@@ -30,7 +30,7 @@ import { NgxElectronModule } from 'ngx-electron';
     declarations: [
         AppComponent,
         RecipesComponent,
-        DefaultUsageComponent,
+        DefaultMachineUsageComponent,
         SettingsAndItemsComponent,
         MachineOptionsComponent,
         CraftingCategoryOptionsComponent,

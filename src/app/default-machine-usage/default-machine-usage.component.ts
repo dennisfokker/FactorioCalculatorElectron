@@ -1,15 +1,15 @@
-import { ModelService } from './../_services/model.service';
+import { ModelService } from '../_services/model.service';
 import { CraftingMachine } from '../_models/factorio/craftingMachine';
 import { RecipeCategory } from '../_models/factorio/recipeCategory';
 import { Component, OnInit } from '@angular/core';
 import { Icon } from '../_models/Helpers/icon';
 
 @Component({
-    selector: 'app-default-usage',
-    templateUrl: './default-usage.component.html',
-    styleUrls: ['./default-usage.component.css']
+    selector: 'app-default-machine-usage',
+    templateUrl: './default-machine-usage.component.html',
+    styleUrls: ['./default-machine-usage.component.css']
 })
-export class DefaultUsageComponent implements OnInit
+export class DefaultMachineUsageComponent implements OnInit
 {
     craftingCategories: RecipeCategory[] = [];
     collapsed = false;
