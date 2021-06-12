@@ -16,11 +16,13 @@ export class RecipeNodeComponent implements OnInit, AfterViewInit
     @ViewChild('ingedientListContainer') ingedientListContainer: ElementRef;
     @Input() ingredient: Ingredient;
     @Input() parentNode: RecipeNodeComponent;
-    collapsed: boolean = false;
-    listCalculatedHeight: string = null;
+
+    protected collapsed: boolean = false;
+    protected listCalculatedHeight: string = null;
 
     constructor(private modalService: ModalService,
-        private modelService: ModelService) { }
+                private modelService: ModelService)
+    { }
 
     ngOnInit()
     {
@@ -31,7 +33,8 @@ export class RecipeNodeComponent implements OnInit, AfterViewInit
     {
         setTimeout(() =>
         {
-            if (this.ingedientListContainer) {
+            if (this.ingedientListContainer)
+            {
                 this.listCalculatedHeight = this.ingedientListContainer.nativeElement.offsetHeight + 'px';
             }
         }, 0);
@@ -39,7 +42,8 @@ export class RecipeNodeComponent implements OnInit, AfterViewInit
 
     getRecipeListContainerHeight(): string
     {
-        if (this.listCalculatedHeight == null) {
+        if (this.listCalculatedHeight == null)
+        {
             return 'auto';
         }
 
@@ -55,7 +59,8 @@ export class RecipeNodeComponent implements OnInit, AfterViewInit
             this.listCalculatedHeight = current + 'px';
         }
 
-        if (this.parentNode !== undefined) {
+        if (this.parentNode !== undefined)
+        {
             this.parentNode.adjustCalculatedListHeight(offset);
         }
     }
@@ -63,15 +68,19 @@ export class RecipeNodeComponent implements OnInit, AfterViewInit
     recipeListContainerCollapseClick()
     {
         if (this.ingredient.recipe.ingredients.length <= 0)
+        {
             return;
+        }
 
         this.collapsed = !this.collapsed;
 
-        if (this.listCalculatedHeight == null) {
+        if (this.listCalculatedHeight == null)
+        {
             this.listCalculatedHeight = this.ingedientListContainer.nativeElement.offsetHeight + 'px';
         }
 
-        if (this.parentNode !== undefined) {
+        if (this.parentNode !== undefined)
+        {
             const offset: number = +this.listCalculatedHeight.substring(0, this.listCalculatedHeight.length - 2);
             this.parentNode.adjustCalculatedListHeight(this.collapsed ? -offset : offset);
         }

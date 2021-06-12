@@ -5,11 +5,12 @@ import { Machine } from '../../_interfaces/machine';
 export class MiningDrillMachine implements Machine
 {
     constructor(private _name: string,
-        private _icon: Icon | Icon[],
-        private _speed: number = 1,
-        private _production: number = 0,
-        private _allowedEffects: EffectType[] = ['speed', 'productivity', 'consumption', 'pollution'],
-        private _resourceCategories: string[] = []) { }
+                private _icon: Icon | Icon[],
+                private _speed: number = 1,
+                private _production: number = 0,
+                private _allowedEffects: EffectType[] = ['speed', 'productivity', 'consumption', 'pollution'],
+                private _resourceCategories: string[] = [])
+    { }
 
     public toString(): string
     {

@@ -12,12 +12,15 @@ import { DeviceDetectorService } from 'ngx-device-detector';
 })
 export class NAComponent implements OnInit, ModalComponent
 {
-    private modalClosedSource: Subject<ModalResult> = new Subject<ModalResult>();
-
-    modalClosed: Observable<ModalResult> = this.modalClosedSource.asObservable();
     @Input() data: any;
+    modalClosed: Observable<ModalResult>;
 
-    constructor(public modalService: ModalService, private deviceService: DeviceDetectorService) { }
+    protected modalClosedSource: Subject<ModalResult> = new Subject<ModalResult>();
+
+    constructor(public modalService: ModalService, private deviceService: DeviceDetectorService)
+    {
+        this.modalClosed = this.modalClosedSource.asObservable();
+    }
 
     ngOnInit()
     {

@@ -6,16 +6,19 @@ import { Observable } from 'rxjs';
 import { ModalResult } from './../../_models/modalResult';
 
 @Component({
-  selector: 'app-modal-container',
-  templateUrl: './modal-container.component.html',
-  styleUrls: ['./modal-container.component.css']
+    selector: 'app-modal-container',
+    templateUrl: './modal-container.component.html',
+    styleUrls: ['./modal-container.component.css']
 })
-export class ModalContainerComponent implements OnInit {
-    componentRef: ComponentRef<ModalComponent>;
+export class ModalContainerComponent implements OnInit
+{
     @ViewChild(ModalDirective, {}) modalContainer: ModalDirective;
 
+    protected componentRef: ComponentRef<ModalComponent>;
+
     constructor(private resolver: ComponentFactoryResolver,
-                public modalService: ModalService) { }
+                public modalService: ModalService)
+    { }
 
     ngOnInit()
     {

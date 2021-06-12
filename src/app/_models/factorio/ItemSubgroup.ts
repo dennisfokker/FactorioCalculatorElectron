@@ -7,8 +7,9 @@ import { Item } from './item';
 export class ItemSubgroup implements Indexable
 {
     constructor(private _name: string,
-        private _group: string | ItemGroup,
-        private _items: string[] | Item[] = []) { }
+                private _group: string | ItemGroup,
+                private _items: string[] | Item[] = [])
+    { }
 
     public toString(): string
     {
@@ -17,11 +18,13 @@ export class ItemSubgroup implements Indexable
 
     public addItem(item: Item)
     {
-        if (this.isStringArray(this._items)) {
+        if (this.isStringArray(this._items))
+        {
             this._items.push(item.name);
         }
-        else {
-            this._items.push(item)
+        else
+        {
+            this._items.push(item);
         }
     }
 
@@ -33,7 +36,8 @@ export class ItemSubgroup implements Indexable
 
     public get group(): ItemGroup
     {
-        if (this._group instanceof ItemGroup) {
+        if (this._group instanceof ItemGroup)
+        {
             return this._group;
         }
 
@@ -47,7 +51,8 @@ export class ItemSubgroup implements Indexable
 
     public loadGroup(modelService: ModelService)
     {
-        if (this._group instanceof ItemGroup) {
+        if (this._group instanceof ItemGroup)
+        {
             return;
         }
         this._group = modelService.itemGroups.get(this._group);
@@ -55,7 +60,8 @@ export class ItemSubgroup implements Indexable
 
     public get items(): Item[]
     {
-        if (this.isStringArray(this._items)) {
+        if (this.isStringArray(this._items))
+        {
             return [];
         }
 
@@ -64,11 +70,9 @@ export class ItemSubgroup implements Indexable
 
     public get itemReferences(): string[]
     {
-        if (!this.isStringArray(this._items)) {
-            return this._items = this._items.map(elem =>
-            {
-                return elem.name;
-            })
+        if (!this.isStringArray(this._items))
+        {
+            return this._items = this._items.map(elem => elem.name);
         }
 
         return this._items;
@@ -76,21 +80,20 @@ export class ItemSubgroup implements Indexable
 
     public loadItems(modelService: ModelService)
     {
-        if (this.isStringArray(this._items)) {
-            this._items = this._items.map(elem =>
-            {
-                return modelService.items.get(elem);
-            })
+        if (this.isStringArray(this._items))
+        {
+            this._items = this._items.map(elem => modelService.items.get(elem));
         }
     }
     //#endregion
 
     private isStringArray<T>(array: string[] | T[]): array is string[]
     {
-        if (array.length == 0) {
+        if (array.length === 0)
+        {
             return false;
         }
 
-        return typeof (array[0]) === 'string'
+        return typeof (array[0]) === 'string';
     }
 }

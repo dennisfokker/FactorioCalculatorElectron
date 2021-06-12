@@ -6,8 +6,9 @@ import { Indexable } from '../../_interfaces/indexable';
 export class RecipeCategory implements Indexable
 {
     constructor(private _name: string = 'Unknown',
-        private _craftingMachines: string[] | CraftingMachine[] = [],
-        private _recipes: string[] | Recipe[] = []) { }
+                private _craftingMachines: string[] | CraftingMachine[] = [],
+                private _recipes: string[] | Recipe[] = [])
+    { }
 
     public toString(): string
     {
@@ -16,22 +17,25 @@ export class RecipeCategory implements Indexable
 
     public addCraftingMachine(craftingMachine: CraftingMachine)
     {
-        if (this.isStringArray(this._craftingMachines)) {
+        if (this.isStringArray(this._craftingMachines))
+        {
             this._craftingMachines.push(craftingMachine.name);
         }
         else
         {
-            this._craftingMachines.push(craftingMachine)
+            this._craftingMachines.push(craftingMachine);
         }
     }
 
     public addRecipe(recipe: Recipe)
     {
-        if (this.isStringArray(this._recipes)) {
+        if (this.isStringArray(this._recipes))
+        {
             this._recipes.push(recipe.name);
         }
-        else {
-            this._recipes.push(recipe)
+        else
+        {
+            this._recipes.push(recipe);
         }
     }
 
@@ -43,7 +47,8 @@ export class RecipeCategory implements Indexable
 
     public get craftingMachines(): CraftingMachine[]
     {
-        if (this.isStringArray(this._craftingMachines)) {
+        if (this.isStringArray(this._craftingMachines))
+        {
             return [];
         }
 
@@ -52,11 +57,9 @@ export class RecipeCategory implements Indexable
 
     public get craftingMachineReferences(): string[]
     {
-        if (!this.isStringArray(this._craftingMachines)) {
-            return this._craftingMachines = this._craftingMachines.map(elem =>
-            {
-                return elem.name;
-            })
+        if (!this.isStringArray(this._craftingMachines))
+        {
+            return this._craftingMachines = this._craftingMachines.map(elem => elem.name);
         }
 
         return this._craftingMachines;
@@ -64,17 +67,16 @@ export class RecipeCategory implements Indexable
 
     public loadCraftingMachines(modelService: ModelService)
     {
-        if (this.isStringArray(this._craftingMachines)) {
-            this._craftingMachines = this._craftingMachines.map(elem =>
-            {
-                return modelService.machines.get(elem);
-            })
+        if (this.isStringArray(this._craftingMachines))
+        {
+            this._craftingMachines = this._craftingMachines.map(elem => modelService.machines.get(elem));
         }
     }
 
     public get recipes(): Recipe[]
     {
-        if (this.isStringArray(this._recipes)) {
+        if (this.isStringArray(this._recipes))
+        {
             return [];
         }
 
@@ -83,11 +85,9 @@ export class RecipeCategory implements Indexable
 
     public get recipeReferences(): string[]
     {
-        if (!this.isStringArray(this._recipes)) {
-            return this._recipes = this._recipes.map(elem =>
-            {
-                return elem.name;
-            })
+        if (!this.isStringArray(this._recipes))
+        {
+            return this._recipes = this._recipes.map(elem => elem.name);
         }
 
         return this._recipes;
@@ -95,21 +95,20 @@ export class RecipeCategory implements Indexable
 
     public loadRecipes(modelService: ModelService)
     {
-        if (this.isStringArray(this._recipes)) {
-            this._recipes = this._recipes.map(elem =>
-            {
-                return modelService.recipes.get(elem);
-            })
+        if (this.isStringArray(this._recipes))
+        {
+            this._recipes = this._recipes.map(elem => modelService.recipes.get(elem));
         }
     }
     //#endregion
 
     private isStringArray<T>(array: string[] | T[]): array is string[]
     {
-        if (array.length == 0) {
+        if (array.length === 0)
+        {
             return false;
         }
 
-        return typeof (array[0]) === 'string'
+        return typeof (array[0]) === 'string';
     }
 }

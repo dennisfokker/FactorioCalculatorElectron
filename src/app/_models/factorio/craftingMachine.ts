@@ -7,11 +7,12 @@ import { Machine } from '../../_interfaces/machine';
 export class CraftingMachine implements Machine
 {
     constructor(private _name: string,
-        private _icon: Icon | Icon[],
-        private _speed: number = 1,
-        private _production: number = 0,
-        private _allowedEffects: EffectType[] = ['speed', 'productivity', 'consumption', 'pollution'],
-        private _recipeCategories: string[] | RecipeCategory[] = []) { }
+                private _icon: Icon | Icon[],
+                private _speed: number = 1,
+                private _production: number = 0,
+                private _allowedEffects: EffectType[] = ['speed', 'productivity', 'consumption', 'pollution'],
+                private _recipeCategories: string[] | RecipeCategory[] = [])
+    { }
 
     public toString(): string
     {
@@ -46,7 +47,8 @@ export class CraftingMachine implements Machine
 
     public get recipeCategories(): RecipeCategory[]
     {
-        if (this.isStringArray(this._recipeCategories)) {
+        if (this.isStringArray(this._recipeCategories))
+        {
             return [];
         }
 
@@ -55,11 +57,9 @@ export class CraftingMachine implements Machine
 
     public get recipeCategorieReferences(): string[]
     {
-        if (!this.isStringArray(this._recipeCategories)) {
-            return this._recipeCategories = this._recipeCategories.map(elem =>
-            {
-                return elem.name;
-            })
+        if (!this.isStringArray(this._recipeCategories))
+        {
+            return this._recipeCategories = this._recipeCategories.map(elem => elem.name);
         }
 
         return this._recipeCategories;
@@ -67,22 +67,20 @@ export class CraftingMachine implements Machine
 
     public loadRecipeCategories(modelService: ModelService)
     {
-        if (this.isStringArray(this._recipeCategories)) {
-            this._recipeCategories = this._recipeCategories.map(elem =>
-            {
-                return modelService.recipeCategories.get(elem);
-            })
+        if (this.isStringArray(this._recipeCategories))
+        {
+            this._recipeCategories = this._recipeCategories.map(elem => modelService.recipeCategories.get(elem));
         }
     }
     //#endregion
 
     private isStringArray<T>(array: string[] | T[]): array is string[]
     {
-        if (array.length == 0)
+        if (array.length === 0)
         {
             return false;
         }
 
-        return typeof(array[0]) === 'string'
+        return typeof(array[0]) === 'string';
     }
 }

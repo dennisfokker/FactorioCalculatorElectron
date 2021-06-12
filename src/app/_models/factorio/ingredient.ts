@@ -5,9 +5,10 @@ import { Item } from './item';
 export class Ingredient
 {
     constructor(private _item: string | Item,
-        private _amount: number = 1,
-        private _type: string = 'item',
-        private _recipe?: string | Recipe) { }
+                private _amount: number = 1,
+                private _type: string = 'item',
+                private _recipe?: string | Recipe)
+    { }
 
     public toString(): string
     {
@@ -21,7 +22,8 @@ export class Ingredient
     //#region Getters and Setters
     public get item(): Item
     {
-        if (this._item instanceof Item) {
+        if (this._item instanceof Item)
+        {
             return this._item;
         }
 
@@ -35,7 +37,8 @@ export class Ingredient
 
     public loadItem(modelService: ModelService)
     {
-        if (this._item instanceof Item) {
+        if (this._item instanceof Item)
+        {
             return;
         }
         this._item = modelService.items.get(this._item);
@@ -53,7 +56,8 @@ export class Ingredient
 
     public get recipe(): Recipe
     {
-        if (this._recipe instanceof Recipe) {
+        if (this._recipe instanceof Recipe)
+        {
             return this._recipe;
         }
 
@@ -67,7 +71,8 @@ export class Ingredient
 
     public loadRecipe(modelService: ModelService)
     {
-        if (this._recipe instanceof Recipe) {
+        if (this._recipe instanceof Recipe)
+        {
             return;
         }
         this._recipe = modelService.recipes.get(this._recipe);

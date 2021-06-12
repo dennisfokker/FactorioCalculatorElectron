@@ -3,17 +3,19 @@ import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
-  selector: 'app-icon-renderer',
-  templateUrl: './icon-renderer.component.html',
-  styleUrls: ['./icon-renderer.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-icon-renderer',
+    templateUrl: './icon-renderer.component.html',
+    styleUrls: ['./icon-renderer.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class IconRendererComponent implements OnInit {
-
+export class IconRendererComponent implements OnInit
+{
     @Input() icon: Icon | Icon[];
-    icons: Icon[];
 
-    constructor(private sanitizer: DomSanitizer) { }
+    protected icons: Icon[];
+
+    constructor(private sanitizer: DomSanitizer)
+    { }
 
     ngOnInit(): void
     {

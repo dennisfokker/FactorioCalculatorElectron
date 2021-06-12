@@ -7,10 +7,11 @@ import { Indexable } from '../../_interfaces/indexable';
 export class Recipe implements Indexable
 {
     constructor(private _name: string = 'Unknown',
-        private _energyRequired: number = 0.5,
-        private _recipeCategory: string | RecipeCategory = "crafting",
-        private _ingredients: Ingredient[] = [],
-        private _results: Result[] = []) { }
+                private _energyRequired: number = 0.5,
+                private _recipeCategory: string | RecipeCategory = 'crafting',
+                private _ingredients: Ingredient[] = [],
+                private _results: Result[] = [])
+    { }
 
     public toString(): string
     {
@@ -30,7 +31,8 @@ export class Recipe implements Indexable
 
     public get recipeCategory(): RecipeCategory
     {
-        if (this._recipeCategory instanceof RecipeCategory) {
+        if (this._recipeCategory instanceof RecipeCategory)
+        {
             return this._recipeCategory;
         }
 
@@ -44,7 +46,8 @@ export class Recipe implements Indexable
 
     public loadRecipeCategories(modelService: ModelService)
     {
-        if (this._recipeCategory instanceof RecipeCategory) {
+        if (this._recipeCategory instanceof RecipeCategory)
+        {
             return;
         }
         this._recipeCategory = modelService.recipeCategories.get(this._recipeCategory);

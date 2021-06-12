@@ -43,20 +43,20 @@ export class SettingsAndItemsComponent implements OnInit
         const ironPlateItem = new Item('Iron plate', new Icon('__internal__/iron-plate.png'), 'Intermediates');
         const copperCableItem = new Item('Copper cable', new Icon('__internal__/copper-cable.png'), 'Intermediates');
         const aluminumPlateItem = new Item('Aluminum plate', new Icon('__internal__/__Unknown__.png'), 'Bob\'s intermediates');
-        this, this.modelService.items.set(ironPlateItem.name, ironPlateItem);
-        this, this.modelService.items.set(copperCableItem.name, copperCableItem);
-        this, this.modelService.items.set(aluminumPlateItem.name, aluminumPlateItem);
+        this.modelService.items.set(ironPlateItem.name, ironPlateItem);
+        this.modelService.items.set(copperCableItem.name, copperCableItem);
+        this.modelService.items.set(aluminumPlateItem.name, aluminumPlateItem);
 
         this.itemGroupOptions.push(new ItemGroup('Intermediates',
-                                   undefined,
-                                   [
-                                        new ItemSubgroup('temp1', 'Intermediates', [ironPlateItem, copperCableItem])
-                                   ]).toOption(this.modelService));
+                                                 undefined,
+                                                 [
+                                                     new ItemSubgroup('temp1', 'Intermediates', [ironPlateItem, copperCableItem])
+                                                 ]).toOption(this.modelService));
         this.itemGroupOptions.push(new ItemGroup('Bob\'s intermediates',
-                                   undefined,
-                                   [
-                                       new ItemSubgroup('temp2', 'Bob\'s intermediates', [aluminumPlateItem])
-                                   ]).toOption(this.modelService));
+                                                 undefined,
+                                                 [
+                                                     new ItemSubgroup('temp2', 'Bob\'s intermediates', [aluminumPlateItem])
+                                                 ]).toOption(this.modelService));
     }
 
     importFactorioData()
@@ -114,10 +114,11 @@ export class SettingsAndItemsComponent implements OnInit
     {
         this.modalService.openModal(FactorioPathSelectorComponent, {}).subscribe((result) =>
         {
-            if (result.canceled) {
+            if (result.canceled)
+            {
                 return;
             }
-            
+
             this.modelService.updateFactorioPath(result.result);
         });
     }
@@ -126,7 +127,8 @@ export class SettingsAndItemsComponent implements OnInit
     {
         this.modalService.openModal(ModPathSelectorComponent, {}).subscribe((result) =>
         {
-            if (result.canceled) {
+            if (result.canceled)
+            {
                 return;
             }
 

@@ -8,10 +8,11 @@ import { Indexable } from '../../_interfaces/indexable';
 export class Item implements Indexable
 {
     constructor(private _name: string,
-        private _icon: Icon | Icon[],
-        private _subgroup: string | ItemSubgroup,
-        private _creationRecipes: string[] | Recipe[] = [],
-        private _usedInRecipes: string[] | Recipe[] = []) { }
+                private _icon: Icon | Icon[],
+                private _subgroup: string | ItemSubgroup,
+                private _creationRecipes: string[] | Recipe[] = [],
+                private _usedInRecipes: string[] | Recipe[] = [])
+    { }
 
     public toOption(shared?: boolean, amount?: number): ItemOption
     {
@@ -25,21 +26,25 @@ export class Item implements Indexable
 
     public addCreationRecipe(recipe: Recipe)
     {
-        if (this.isStringArray(this._creationRecipes)) {
+        if (this.isStringArray(this._creationRecipes))
+        {
             this._creationRecipes.push(recipe.name);
         }
-        else {
-            this._creationRecipes.push(recipe)
+        else
+        {
+            this._creationRecipes.push(recipe);
         }
     }
 
     public addUsedInRecipe(recipe: Recipe)
     {
-        if (this.isStringArray(this._usedInRecipes)) {
+        if (this.isStringArray(this._usedInRecipes))
+        {
             this._usedInRecipes.push(recipe.name);
         }
-        else {
-            this._usedInRecipes.push(recipe)
+        else
+        {
+            this._usedInRecipes.push(recipe);
         }
     }
 
@@ -56,7 +61,8 @@ export class Item implements Indexable
 
     public get subgroup(): ItemSubgroup
     {
-        if (this._subgroup instanceof ItemSubgroup) {
+        if (this._subgroup instanceof ItemSubgroup)
+        {
             return this._subgroup;
         }
 
@@ -70,7 +76,8 @@ export class Item implements Indexable
 
     public loadSubgroup(modelService: ModelService)
     {
-        if (this._subgroup instanceof ItemSubgroup) {
+        if (this._subgroup instanceof ItemSubgroup)
+        {
             return;
         }
         this._subgroup = modelService.itemSubgroups.get(this._subgroup);
@@ -78,7 +85,8 @@ export class Item implements Indexable
 
     public get creationRecipes(): Recipe[]
     {
-        if (this.isStringArray(this._creationRecipes)) {
+        if (this.isStringArray(this._creationRecipes))
+        {
             return [];
         }
 
@@ -87,11 +95,9 @@ export class Item implements Indexable
 
     public get creationRecipeReferences(): string[]
     {
-        if (!this.isStringArray(this._creationRecipes)) {
-            return this._creationRecipes = this._creationRecipes.map(elem =>
-            {
-                return elem.name;
-            })
+        if (!this.isStringArray(this._creationRecipes))
+        {
+            return this._creationRecipes = this._creationRecipes.map(elem => elem.name);
         }
 
         return this._creationRecipes;
@@ -99,17 +105,16 @@ export class Item implements Indexable
 
     public loadCreationRecipes(modelService: ModelService)
     {
-        if (this.isStringArray(this._creationRecipes)) {
-            this._creationRecipes = this._creationRecipes.map(elem =>
-            {
-                return modelService.recipes.get(elem);
-            })
+        if (this.isStringArray(this._creationRecipes))
+        {
+            this._creationRecipes = this._creationRecipes.map(elem => modelService.recipes.get(elem));
         }
     }
 
     public get usedInRecipes(): Recipe[]
     {
-        if (this.isStringArray(this._usedInRecipes)) {
+        if (this.isStringArray(this._usedInRecipes))
+        {
             return [];
         }
 
@@ -118,11 +123,9 @@ export class Item implements Indexable
 
     public get usedInRecipeReferences(): string[]
     {
-        if (!this.isStringArray(this._usedInRecipes)) {
-            return this._usedInRecipes = this._usedInRecipes.map(elem =>
-            {
-                return elem.name;
-            })
+        if (!this.isStringArray(this._usedInRecipes))
+        {
+            return this._usedInRecipes = this._usedInRecipes.map(elem => elem.name);
         }
 
         return this._usedInRecipes;
@@ -130,21 +133,20 @@ export class Item implements Indexable
 
     public loadUsedInRecipes(modelService: ModelService)
     {
-        if (this.isStringArray(this._usedInRecipes)) {
-            this._usedInRecipes = this._usedInRecipes.map(elem =>
-            {
-                return modelService.recipes.get(elem);
-            })
+        if (this.isStringArray(this._usedInRecipes))
+        {
+            this._usedInRecipes = this._usedInRecipes.map(elem => modelService.recipes.get(elem));
         }
     }
     //#endregion
 
     private isStringArray<T>(array: string[] | T[]): array is string[]
     {
-        if (array.length == 0) {
+        if (array.length === 0)
+        {
             return false;
         }
 
-        return typeof (array[0]) === 'string'
+        return typeof (array[0]) === 'string';
     }
 }

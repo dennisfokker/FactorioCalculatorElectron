@@ -6,9 +6,10 @@ import { Machine } from '../../_interfaces/machine';
 export class OffshorePumpMachine implements Machine
 {
     constructor(private _name: string,
-        private _icon: Icon | Icon[],
-        private _speed: number = 1,
-        private _output: string | Item = 'Unknown') { }
+                private _icon: Icon | Icon[],
+                private _speed: number = 1,
+                private _output: string | Item = 'Unknown')
+    { }
 
     public toString(): string
     {
@@ -33,7 +34,8 @@ export class OffshorePumpMachine implements Machine
 
     public get output(): Item
     {
-        if (this._output instanceof Item) {
+        if (this._output instanceof Item)
+        {
             return this._output;
         }
 
@@ -47,7 +49,8 @@ export class OffshorePumpMachine implements Machine
 
     public loadOutput(modelService: ModelService)
     {
-        if (this._output instanceof Item) {
+        if (this._output instanceof Item)
+        {
             return;
         }
         this._output = modelService.items.get(this._output);

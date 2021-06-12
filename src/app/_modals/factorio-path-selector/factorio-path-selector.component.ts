@@ -12,28 +12,31 @@ import { DeviceDetectorService } from 'ngx-device-detector';
 })
 export class FactorioPathSelectorComponent implements OnInit, ModalComponent
 {
-    private modalClosedSource: Subject<ModalResult> = new Subject<ModalResult>();
-
-    factorioHelpText: string;
-    factorioPath: string;
-    modalClosed: Observable<ModalResult> = this.modalClosedSource.asObservable();
     @Input() data: any;
+    modalClosed: Observable<ModalResult>;
 
-    constructor(public modalService: ModalService, private deviceService: DeviceDetectorService) { }
+    protected modalClosedSource: Subject<ModalResult> = new Subject<ModalResult>();
+    protected factorioHelpText: string;
+    protected factorioPath: string;
+
+    constructor(public modalService: ModalService, private deviceService: DeviceDetectorService)
+    {
+        this.modalClosed = this.modalClosedSource.asObservable();
+    }
 
     ngOnInit()
     {
-        // Use Bilka's "Data Raw Serpent" mod: https://mods.factorio.com/mod/DataRawSerpent
-
         this.factorioHelpText = 'Folder which contains the base Factorio files. Required for getting the game\'s images.<br>';
 
-        if (!this.deviceService.isDesktop) {
+        if (!this.deviceService.isDesktop)
+        {
             this.factorioHelpText += 'Example path: C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio<br>' +
                                      'or C:\\Program Files\\Factorio';
         }
         else
         {
-            switch (this.deviceService.os) {
+            switch (this.deviceService.os)
+            {
                 default:
                 case 'UNKNOWN':
                 case 'Windows': this.factorioHelpText += 'Example path: C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio<br>' +

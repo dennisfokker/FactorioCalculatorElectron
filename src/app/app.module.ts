@@ -56,4 +56,5 @@ import { NgxElectronModule } from 'ngx-electron';
     providers: [ModelService, ModalService],
     bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule
+{ }

@@ -57,16 +57,16 @@ export class FactorioModsPathChannel
                             // Directory, just copy the whole thing.
                             fs.copySync(fileName, cachePath);
                         }
-                        catch (err)
+                        catch (fsErr)
                         {
-                            console.error('Hit error for entry "%s" with error "%s"', entry, err);
+                            console.error('Hit error for entry "%s" with error "%s"', entry, fsErr);
                         }
                     }
                     else if (entry.endsWith('.zip'))
                     {
                         try
                         {
-                            await extractZip(fileName, { dir: cachePath })
+                            await extractZip(fileName, { dir: cachePath });
 
                             // Internal folder name of the mod is inconsistent, but always starts with a root folder. Find this folder (alongside potential clutter)
                             let rawModFolder: string;
@@ -83,9 +83,9 @@ export class FactorioModsPathChannel
                             // Remove the now duplicate folder
                             fs.removeSync(path.join(cachePath, rawModFolder));
                         }
-                        catch (err)
+                        catch (fsErr)
                         {
-                            console.error('Hit error for entry "%s" with error "%s"', entry, err);
+                            console.error('Hit error for entry "%s" with error "%s"', entry, fsErr);
                         }
                     }
                 }

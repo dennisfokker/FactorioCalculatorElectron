@@ -4,13 +4,15 @@ import { Item } from './item';
 export class Result
 {
     constructor(private _item: string | Item = 'Unknown',
-        private _type: string = 'item',
-        private _amount: number = 1,
-        private _probability: number = 1) { }
+                private _type: string = 'item',
+                private _amount: number = 1,
+                private _probability: number = 1)
+    { }
 
     public toString(): string
     {
-        if (this.item instanceof Item) {
+        if (this.item instanceof Item)
+        {
             return this.item.name;
         }
         return this.item;
@@ -19,7 +21,8 @@ export class Result
     //#region Getters and Setters
     public get item(): Item
     {
-        if (this._item instanceof Item) {
+        if (this._item instanceof Item)
+        {
             return this._item;
         }
 
@@ -33,7 +36,8 @@ export class Result
 
     public loadItem(modelService: ModelService)
     {
-        if (this._item instanceof Item) {
+        if (this._item instanceof Item)
+        {
             return;
         }
         this._item = modelService.items.get(this._item);

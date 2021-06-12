@@ -12,17 +12,20 @@ import { DeviceDetectorService } from 'ngx-device-detector';
 })
 export class FactorioDataSelectorComponent implements OnInit, ModalComponent
 {
-    private modalClosedSource: Subject<ModalResult> = new Subject<ModalResult>();
-
-    dataHelpPath: string;
-    iconHelpPath: string;
-    dataFile: File;
-    prototypeFiles: File[];
-    iconFiles: File[];
-    modalClosed: Observable<ModalResult> = this.modalClosedSource.asObservable();
     @Input() data: any;
+    modalClosed: Observable<ModalResult>;
 
-    constructor(public modalService: ModalService, private deviceService: DeviceDetectorService) { }
+    protected dataHelpPath: string;
+    protected iconHelpPath: string;
+    protected dataFile: File;
+    protected prototypeFiles: File[];
+    protected iconFiles: File[];
+    protected modalClosedSource: Subject<ModalResult> = new Subject<ModalResult>();
+
+    constructor(public modalService: ModalService, private deviceService: DeviceDetectorService)
+    {
+        this.modalClosed = this.modalClosedSource.asObservable();
+    }
 
     ngOnInit()
     {
@@ -30,13 +33,15 @@ export class FactorioDataSelectorComponent implements OnInit, ModalComponent
 
         this.dataHelpPath = 'Location of the log file which contains the information about all available machines, items and recipes.<br>';
 
-        if (!this.deviceService.isDesktop) {
+        if (!this.deviceService.isDesktop)
+        {
             this.dataHelpPath += 'Example path: %Appdata%\\Factorio\\factorio-current.log<br>' +
                                  'or C:\\Users\\username\\AppData\\Roaming\\Factorio\\factorio-current.log';
         }
         else
         {
-            switch (this.deviceService.os) {
+            switch (this.deviceService.os)
+            {
                 default:
                 case 'UNKNOWN':
                 case 'Windows': this.dataHelpPath += 'Example path: %Appdata%\\Factorio\\factorio-current.log<br>' +

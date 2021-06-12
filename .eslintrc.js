@@ -21,9 +21,12 @@ module.exports = {
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
-        "project": ["tsconfig.json", "./src/tsconfig.app.json"],
+        "project": ["tsconfig.eslint.json", "./src/tsconfig.app.json"],
         "sourceType": "module"
     },
+    "ignorePatterns": [
+        "./*.ts"
+    ],
     "plugins": [
         "eslint-plugin-import",
         "@angular-eslint/eslint-plugin",
@@ -61,17 +64,43 @@ module.exports = {
                 "accessibility": "explicit"
             }
         ],
-        "@typescript-eslint/indent": "error",
+        "@typescript-eslint/indent": [
+            "error",
+            4,
+            {
+                "SwitchCase": 1,
+                "FunctionDeclaration":
+                {
+                    "parameters": "first"
+                },
+                "FunctionExpression":
+                {
+                    "parameters": "first"
+                },
+                "CallExpression":
+                {
+                    "arguments": "first"
+                }
+            }
+        ],
         "@typescript-eslint/member-delimiter-style": [
             "error",
             {
                 "multiline": {
-                    "delimiter": "semi",
+                    "delimiter": "comma",
                     "requireLast": true
                 },
                 "singleline": {
-                    "delimiter": "semi",
+                    "delimiter": "comma",
                     "requireLast": false
+                },
+                "overrides": {
+                    "interface": {
+                        "multiline": {
+                            "delimiter": "semi",
+                            "requireLast": true
+                        }
+                    }
                 }
             }
         ],
@@ -103,8 +132,8 @@ module.exports = {
         "@typescript-eslint/unified-signatures": "error",
         "arrow-body-style": "error",
         "brace-style": [
-            "off",
-            "1tbs"
+            "error",
+            "allman"
         ],
         "constructor-super": "error",
         "curly": "error",
@@ -118,7 +147,7 @@ module.exports = {
         "id-blacklist": "off",
         "id-match": "off",
         "import/no-deprecated": "warn",
-        "indent": "error",
+        "indent": "off",
         "max-len": "off",
         "no-bitwise": "off",
         "no-caller": "error",
@@ -197,7 +226,7 @@ module.exports = {
         "object-curly-newline": [
             "error",
             {
-                "ObjectExpression": "always",
+                "ObjectExpression": { "multiline": true },
                 "ObjectPattern": { "multiline": true },
                 "ImportDeclaration": "never",
                 "ExportDeclaration": { "multiline": true }

@@ -12,10 +12,12 @@ export class ItemGroupOptionsComponent implements OnInit, AfterViewInit
     @ViewChild('itemGroupContainer') itemGroupContainer: ElementRef;
     @Input() id: number;
     @Input() itemGroupOption: ItemGroupOption;
-    collapsed: boolean = true;
-    listCalculatedHeight: string = undefined;
 
-    constructor() { }
+    protected collapsed: boolean = true;
+    protected listCalculatedHeight: string = undefined;
+
+    constructor()
+    { }
 
     ngOnInit()
     {
@@ -28,7 +30,7 @@ export class ItemGroupOptionsComponent implements OnInit, AfterViewInit
 
     getItemGroupContainerHeight(): string
     {
-        if (this.listCalculatedHeight == undefined && !this.collapsed)
+        if (this.listCalculatedHeight === undefined && !this.collapsed)
         {
             return 'auto';
         }
@@ -40,11 +42,11 @@ export class ItemGroupOptionsComponent implements OnInit, AfterViewInit
     {
         this.collapsed = !this.collapsed;
 
-        if (this.listCalculatedHeight == undefined && !this.collapsed)
+        if (this.listCalculatedHeight === undefined && !this.collapsed)
         {
             this.listCalculatedHeight = this.itemGroupContainer.nativeElement.scrollHeight + 5 + 'px';
         }
-        
+
         this.itemGroupContainer.nativeElement.style.height = this.getItemGroupContainerHeight();
     }
 }

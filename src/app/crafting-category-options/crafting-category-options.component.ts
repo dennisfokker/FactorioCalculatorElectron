@@ -13,10 +13,12 @@ export class CraftingCategoryOptionsComponent implements OnInit, AfterViewInit
     @ViewChild('categoryListContainer') categoryListContainer: ElementRef;
     @Input() id: number;
     @Input() craftingCategory: RecipeCategory;
-    collapsed: boolean = true;
-    listCalculatedHeight: string = undefined;
 
-    constructor(public modelService: ModelService) { }
+    protected collapsed: boolean = true;
+    protected listCalculatedHeight: string = undefined;
+
+    constructor(public modelService: ModelService)
+    { }
 
     ngOnInit(): void
     {
@@ -30,7 +32,7 @@ export class CraftingCategoryOptionsComponent implements OnInit, AfterViewInit
 
     getCategoryListContainerHeight(): string
     {
-        if (this.listCalculatedHeight == undefined && !this.collapsed)
+        if (this.listCalculatedHeight === undefined && !this.collapsed)
         {
             return 'auto';
         }
@@ -42,11 +44,11 @@ export class CraftingCategoryOptionsComponent implements OnInit, AfterViewInit
     {
         this.collapsed = !this.collapsed;
 
-        if (this.listCalculatedHeight == undefined && !this.collapsed)
+        if (this.listCalculatedHeight === undefined && !this.collapsed)
         {
             this.listCalculatedHeight = this.categoryListContainer.nativeElement.scrollHeight + 5 + 'px';
         }
-        
+
         this.categoryListContainer.nativeElement.style.height = this.getCategoryListContainerHeight();
     }
 }

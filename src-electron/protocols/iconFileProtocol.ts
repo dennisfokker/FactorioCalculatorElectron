@@ -12,8 +12,10 @@ export class IconFileProtocol
     private static _initialize = (() =>
     {
         // Set default values based on platform if not already set (should always be the case)
-        if (!IconFileProtocol.basePath) {
-            switch (process.platform) {
+        if (!IconFileProtocol.basePath)
+        {
+            switch (process.platform)
+            {
                 case 'win32': IconFileProtocol.basePath = 'C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio';
                     break;
                 case 'darwin': IconFileProtocol.basePath = '~/Library/Application Support/Steam/steamapps/common/Factorio/factorio.app/Contents';
@@ -27,8 +29,10 @@ export class IconFileProtocol
             }
         }
 
-        if (!IconFileProtocol.modsPath) {
-            switch (process.platform) {
+        if (!IconFileProtocol.modsPath)
+        {
+            switch (process.platform)
+            {
                 case 'win32': IconFileProtocol.modsPath = join(app.getPath('appData'), 'Factorio', 'mods'); // C:\\Users\\username\\AppData\\Roaming\\Factorio\\mods
                     break;
                 case 'darwin': IconFileProtocol.modsPath = join(app.getPath('appData'), 'factorio', 'mods'); // ~/Library/Application Support/factorio/mods
@@ -46,7 +50,7 @@ export class IconFileProtocol
     public static iconProtocolHandler(request: ProtocolRequest, callback: (response: string | ProtocolResponse) => void): Boolean
     {
         // Remove protocol
-        let url = request.url.replace(this.protocolName + '://', '')
+        let url = request.url.replace(this.protocolName + '://', '');
         url = decodeURI(url);
 
         // Fix folder prefixes (__base__ or __my_mod_name__)
@@ -58,12 +62,14 @@ export class IconFileProtocol
             url = url.replace(/__(.+)__/, join(app.getPath('userData'), this.modsCacheFolder, matches[1].toLowerCase()));
         }
 
-        try {
-            callback(url)
+        try
+        {
+            callback(url);
             return true;
         }
-        catch (error) {
-            console.error(error)
+        catch (error)
+        {
+            console.error(error);
             callback({ statusCode: 404});
             return false;
         }
