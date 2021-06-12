@@ -7,7 +7,7 @@
         "callable-types": true,
         "class-name": true,
         "comment-format": false,
-        "curly": false,
+        "curly": true,
         "deprecation": {
             "severity": "warn"
         },
@@ -70,7 +70,8 @@
             false,
             "check-catch",
             "check-else",
-            "check-whitespace"
+            "check-whitespace",
+            "check-open-brace"
         ],
         "prefer-const": true,
         "quotemark": [
