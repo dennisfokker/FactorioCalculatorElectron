@@ -12,7 +12,7 @@ export class IconRendererComponent implements OnInit
 {
     @Input() icon: Icon | Icon[];
 
-    protected icons: Icon[];
+    icons: Icon[];
 
     constructor(private sanitizer: DomSanitizer)
     { }

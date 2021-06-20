@@ -14,7 +14,8 @@ export class CraftingCategoryOptionsComponent implements OnInit, AfterViewInit
     @Input() id: number;
     @Input() craftingCategory: RecipeCategory;
 
-    protected collapsed: boolean = true;
+    collapsed: boolean = true;
+
     protected listCalculatedHeight: string = undefined;
 
     constructor(public modelService: ModelService)

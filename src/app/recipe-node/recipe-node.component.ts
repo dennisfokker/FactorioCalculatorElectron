@@ -17,7 +17,8 @@ export class RecipeNodeComponent implements OnInit, AfterViewInit
     @Input() ingredient: Ingredient;
     @Input() parentNode: RecipeNodeComponent;
 
-    protected collapsed: boolean = false;
+    collapsed: boolean = false;
+
     protected listCalculatedHeight: string = null;
 
     constructor(private modalService: ModalService,

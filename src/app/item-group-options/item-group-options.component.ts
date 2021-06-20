@@ -13,7 +13,8 @@ export class ItemGroupOptionsComponent implements OnInit, AfterViewInit
     @Input() id: number;
     @Input() itemGroupOption: ItemGroupOption;
 
-    protected collapsed: boolean = true;
+    collapsed: boolean = true;
+
     protected listCalculatedHeight: string = undefined;
 
     constructor()

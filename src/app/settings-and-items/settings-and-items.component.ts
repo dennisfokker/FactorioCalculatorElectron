@@ -18,7 +18,6 @@ import { Icon } from '../_models/Helpers/icon';
 })
 export class SettingsAndItemsComponent implements OnInit
 {
-    path: string;
     itemGroupOptions: ItemGroupOption[] = [];
 
     constructor(public modelService: ModelService,
