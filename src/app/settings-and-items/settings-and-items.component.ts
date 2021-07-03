@@ -73,7 +73,7 @@ export class SettingsAndItemsComponent implements OnInit
                 if (typeof reader.result === 'string')
                 {
                     // First extract the needed data:
-                    const filterMatch: RegExpMatchArray = reader.result.match(/\@__JsonCalculatorExporter__\/data-final-fixes\.lua\:\d+\: ({.+})\n\r?\s+\d+\.\d+ \w/s);
+                    const filterMatch: RegExpMatchArray = reader.result.match(/\@__JsonCalculatorExporter__\/data-final-fixes\.lua\:\d+\: ({.+})\r?\n\s+\d+\.\d+ \w/s);
                     let rawData: string;
                     if (filterMatch.length > 0)
                     {
