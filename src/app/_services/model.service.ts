@@ -1,3 +1,7 @@
+import { CraftingMachine } from './../_models/factorio/craftingMachine';
+import { Resource } from './../_models/factorio/resource';
+import { OffshorePumpMachine } from './../_models/factorio/offshorePumpMachine';
+import { MiningDrillMachine } from './../_models/factorio/miningDrillMachine';
 import { IpcRequest } from '../_interfaces/ipcRequest';
 import { Icon } from '../_models/Helpers/icon';
 import { ItemSubgroup } from './../_models/factorio/ItemSubgroup';
@@ -7,7 +11,6 @@ import { Result } from '../_models/factorio/result';
 import { Ingredient } from '../_models/factorio/ingredient';
 import { Injectable } from '@angular/core';
 import { Item } from '../_models/factorio/item';
-import { CraftingMachine } from '../_models/factorio/craftingMachine';
 import { Recipe } from '../_models/factorio/recipe';
 import { Subject ,  Observable } from 'rxjs';
 import { ElectronService } from 'ngx-electron';
@@ -21,6 +24,9 @@ export class ModelService
     public itemSubgroupsChanged: Observable<ItemSubgroup[]>;
     public recipesChanged: Observable<Recipe[]>;
     public recipeCategoriesChanged: Observable<RecipeCategory[]>;
+    public miningDrillsChanged: Observable<MiningDrillMachine[]>;
+    public offshorePumpsChanged: Observable<OffshorePumpMachine[]>;
+    public resourcesChanged: Observable<Resource[]>;
 
     public machines: Map<string, CraftingMachine> = new Map<string, CraftingMachine>();
     public items: Map<string, Item> = new Map<string, Item>();
@@ -28,6 +34,9 @@ export class ModelService
     public itemSubgroups: Map<string, ItemSubgroup> = new Map<string, ItemSubgroup>();
     public recipes: Map<string, Recipe> = new Map<string, Recipe>();
     public recipeCategories: Map<string, RecipeCategory> = new Map<string, RecipeCategory>();
+    public miningDrills: Map<string, MiningDrillMachine> = new Map<string, MiningDrillMachine>();
+    public offshorePumps: Map<string, OffshorePumpMachine> = new Map<string, OffshorePumpMachine>();
+    public resources: Map<string, Resource> = new Map<string, Resource>();
 
     private machinesChangedSource: Subject<CraftingMachine[]> = new Subject<CraftingMachine[]>();
     private itemsChangedSource: Subject<Item[]> = new Subject<Item[]>();
@@ -35,6 +44,13 @@ export class ModelService
     private itemSubgroupsChangedSource: Subject<ItemSubgroup[]> = new Subject<ItemSubgroup[]>();
     private recipesChangedSource: Subject<Recipe[]> = new Subject<Recipe[]>();
     private recipeCategoriesChangedSource: Subject<RecipeCategory[]> = new Subject<RecipeCategory[]>();
+    private miningDrillsChangedSource: Subject<MiningDrillMachine[]> = new Subject<MiningDrillMachine[]>();
+    private offshorePumpsChangedSource: Subject<OffshorePumpMachine[]> = new Subject<OffshorePumpMachine[]>();
+    private resourcesChangedSource: Subject<Resource[]> = new Subject<Resource[]>();
+
+    // Only used internally to link drills to resources
+    private resourceCategoriesToDrills: Map<string, MiningDrillMachine[]> = new Map<string, MiningDrillMachine[]>();
+    private resourceCategoriesToResources: Map<string, Resource[]> = new Map<string, Resource[]>();
 
     constructor(private electron: ElectronService)
     {
@@ -44,6 +60,9 @@ export class ModelService
         this.itemSubgroupsChanged = this.itemSubgroupsChangedSource.asObservable();
         this.recipesChanged = this.recipesChangedSource.asObservable();
         this.recipeCategoriesChanged = this.recipeCategoriesChangedSource.asObservable();
+        this.miningDrillsChanged = this.miningDrillsChangedSource.asObservable();
+        this.offshorePumpsChanged = this.offshorePumpsChangedSource.asObservable();
+        this.resourcesChanged = this.resourcesChangedSource.asObservable();
     }
 
     public updateDataFromJSON(json: any): void
@@ -61,6 +80,10 @@ export class ModelService
         this.addItemSubgroupsFromJSON(json['item-subgroup']);
         this.addItemsFromJSON(json['item']);
         this.addRecipesFromJSON(json['recipe']);
+        this.addCraftingMachinesFromJSON({ ...json['assembling-machine'], ...json['furnace']}); // join the 2 parts of the JSON that create the full set of machine data
+        this.addMiningDrillsFromJSON(json['mining-drill']);
+        this.addOffshorePumpsFromJSON(json['offshore-pump']);
+        this.addResourcesFromJSON(json['resource']);
 
         // Make sure items know of their recipes and purge any that aren't used anywhere
         this.recipes.forEach(this.registerRecipeInItem, this);
@@ -70,6 +93,10 @@ export class ModelService
         this.recipes.forEach(this.registerRecipeInCategory, this);
         this.items.forEach(this.registerItemInSubgroup, this);
         this.itemSubgroups.forEach(this.registerItemSubgroupInItemGroup, this);
+        this.itemSubgroups.forEach(this.registerItemSubgroupInItemGroup, this);
+        this.machines.forEach(this.registerCraftingMachineInRecipeCategory, this);
+        this.miningDrills.forEach(this.registerMiningDrillsInResources, this);
+        this.resources.forEach(this.registerResourcesInMiningDrills, this);
 
         this.modelDataChanged();
     }
@@ -93,6 +120,7 @@ export class ModelService
     }
 
     //#region Model updating functions
+    //#region adding functions
     private addItemGroupsFromJSON(itemGroupsJSON: any)
     {
         this.itemGroups = new Map(Object.values<any>(itemGroupsJSON).map(elem =>
@@ -193,6 +221,138 @@ export class ModelService
         }));
     }
 
+    private addCraftingMachinesFromJSON(craftingMachinesJSON: any)
+    {
+        this.machines = new Map(Object.values<any>(craftingMachinesJSON).map(elem =>
+        {
+            if (elem.hasOwnProperty('icon'))
+            {
+                return [elem.name, new CraftingMachine(elem.name, this.parseIcon(elem.icon), elem.crafting_speed, elem.base_productivity, elem.allowed_effects, elem.crafting_categories)];
+            }
+            else
+            {
+                const icons: Icon[] = elem.icons.map(icon => this.parseIcon(icon));
+                return [elem.name, new CraftingMachine(elem.name, icons, elem.crafting_speed, elem.base_productivity, elem.allowed_effects, elem.crafting_categories)];
+            }
+        }));
+    }
+
+    private addMiningDrillsFromJSON(miningDrillsJSON: any)
+    {
+        this.miningDrills = new Map(Object.values<any>(miningDrillsJSON).map(elem =>
+        {
+            let iconData: Icon | Icon[];
+            if (elem.hasOwnProperty('icon'))
+            {
+                iconData = this.parseIcon(elem.icon);
+            }
+            else
+            {
+                iconData = elem.icons.map(icon => this.parseIcon(icon));
+            }
+
+            const miningDrill = new MiningDrillMachine(elem.name, iconData, elem.mining_speed, elem.base_productivity, elem.allowed_effects, elem.resource_categories);
+
+            // Register in resource category
+            for (const resourceCategory of miningDrill.resourceCategories)
+            {
+                const resourceCategoryMiningDrills: MiningDrillMachine[] = this.resourceCategoriesToDrills.get(resourceCategory);
+                if (resourceCategoryMiningDrills)
+                {
+                    resourceCategoryMiningDrills.push(miningDrill);
+                    this.resourceCategoriesToDrills.set(resourceCategory, resourceCategoryMiningDrills);
+                }
+                else
+                {
+                    this.resourceCategoriesToDrills.set(resourceCategory, [ miningDrill ]);
+                }
+            }
+
+            return [elem.name, miningDrill];
+        }));
+    }
+
+    private addOffshorePumpsFromJSON(offshorePumpsJSON: any)
+    {
+        this.offshorePumps = new Map(Object.values<any>(offshorePumpsJSON).map(elem =>
+        {
+            if (elem.hasOwnProperty('icon'))
+            {
+                return [elem.name, new OffshorePumpMachine(elem.name, this.parseIcon(elem.icon), elem.mining_speed, elem.fluid)];
+            }
+            else
+            {
+                const icons: Icon[] = elem.icons.map(icon => this.parseIcon(icon));
+                return [elem.name, new OffshorePumpMachine(elem.name, icons, elem.crafting_speed, elem.fluid)];
+            }
+        }));
+    }
+
+    private addResourcesFromJSON(resourcessJSON: any)
+    {
+        this.resources = new Map(Object.values<any>(resourcessJSON).map(elem =>
+        {
+            let iconData: Icon | Icon[];
+            if (elem.hasOwnProperty('icon'))
+            {
+                iconData = this.parseIcon(elem.icon);
+            }
+            else
+            {
+                iconData = elem.icons.map(icon => this.parseIcon(icon));
+            }
+
+            let requiredFluid: Ingredient;
+            if (elem.hasOwnProperty('required_fluid'))
+            {
+                requiredFluid = new Ingredient(elem.required_fluid, elem.fluid_amount, 'fluid');
+            }
+
+            let results: Result[];
+            if (elem.hasOwnProperty('result'))
+            {
+                results = [new Result(elem.result, undefined, elem.result_count)];
+            }
+            else
+            {
+                results = elem.results.map(result =>
+                {
+                    if (result instanceof Array)
+                    {
+                        return new Result(result[0], undefined, result[1]);
+                    }
+                    else
+                    {
+                        let amount: number = elem.amount;
+                        if (elem.hasOwnProperty('amount_min') && elem.hasOwnProperty('amount_max'))
+                        {
+                            amount = (elem.amount_min + elem.amount_max) / 2;
+                        }
+                        return new Result(result.name, result.type, amount, result.probability);
+                    }
+                });
+            }
+
+            const resource = new Resource(elem.name, iconData, elem.minable, elem.category, elem.mining_time, requiredFluid, elem.result);
+
+            // Register in resource category
+            const resourceCategoryResources: Resource[] = this.resourceCategoriesToResources.get(resource.resourceCategory);
+            if (resourceCategoryResources)
+            {
+                resourceCategoryResources.push(resource);
+                this.resourceCategoriesToResources.set(resource.resourceCategory, resourceCategoryResources);
+            }
+            else
+            {
+                this.resourceCategoriesToResources.set(resource.resourceCategory, [ resource ]);
+            }
+
+            return [elem.name, resource];
+        }));
+    }
+    //#endregion
+
+    //#region register functions
     private registerItemSubgroupInItemGroup(subgroup: ItemSubgroup)
     {
         // Check if group already exists or not
@@ -271,8 +431,68 @@ export class ModelService
         }
     }
 
+    private registerCraftingMachineInRecipeCategory(machine: CraftingMachine)
+    {
+        for (const filter of machine.recipeCategories)
+        {
+            // Check if item already exists or not
+            if (!this.recipeCategories.has(filter.name))
+            {
+                console.error('Recipe category "%s", which crafting machine "%s" uses as filter, doesn\'t exist yet, so crafting machine cannot be registered.', filter.name, machine.name);
+                return;
+            }
+
+            // Already exists, so get it and update it in the two containers
+            const category: RecipeCategory = this.recipeCategories.get(filter.name);
+            category.addCraftingMachine(machine);
+            this.recipeCategories.set(filter.name, category);
+        }
+    }
+
+    private registerMiningDrillsInResources(miningDrill: MiningDrillMachine)
+    {
+        for (const resourceCategory of miningDrill.resourceCategories)
+        {
+            // Check if resource already exists or not
+            if (!this.resourceCategoriesToResources.has(resourceCategory))
+            {
+                console.error('Resource category "%s", which mining drill "%s" uses as filter, doesn\'t exist yet, so mining drill cannot be registered.', resourceCategory, miningDrill.name);
+                return;
+            }
+
+            // Already exists, so get it and update it in the two containers
+            const recources: Resource[] = this.resourceCategoriesToResources.get(resourceCategory);
+            for (const resource of recources)
+            {
+                resource.addMiningDrill(miningDrill);
+            }
+            this.resourceCategoriesToResources.set(resourceCategory, recources);
+        }
+    }
+
+    private registerResourcesInMiningDrills(resource: Resource)
+    {
+        // Check if mining drill already exists or not
+        if (!this.resourceCategoriesToDrills.has(resource.resourceCategory))
+        {
+            console.error('Resource category "%s", which resource "%s" uses as filter, doesn\'t exist yet, so resource cannot be registered.', resource.resourceCategory, resource.name);
+            return;
+        }
+
+        // Already exists, so get it and update it in the two containers
+        const miningDrills: MiningDrillMachine[] = this.resourceCategoriesToDrills.get(resource.resourceCategory);
+        for (const miningDrill of miningDrills)
+        {
+            miningDrill.addMinableResource(resource);
+        }
+        this.resourceCategoriesToDrills.set(resource.resourceCategory, miningDrills);
+    }
+    //#endregion
+
     private purgeUnusedItems()
     {
+        console.groupCollapsed('Purged items');
+
         // Keeps track of the keys to remove later
         const itemsToPurge: string[] = [];
         this.items.forEach((val: Item, key: string) =>
@@ -289,6 +509,8 @@ export class ModelService
             this.items.delete(key);
             // NEEDS TO DO MORE BECAUSE IT'S STILL IN OTHER LISTS
         });
+
+        console.groupEnd();
     }
     //#endregion
 
