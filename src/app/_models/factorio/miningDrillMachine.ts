@@ -1,6 +1,8 @@
+import { Resource } from './resource';
 import { Icon } from '../Helpers/icon';
 import { EffectType } from '../../_types/effectType';
 import { Machine } from '../../_interfaces/machine';
+import { ModelService } from 'app/_services/model.service';
 
 export class MiningDrillMachine implements Machine
 {
@@ -9,12 +11,25 @@ export class MiningDrillMachine implements Machine
                 private _speed: number = 1,
                 private _production: number = 0,
                 private _allowedEffects: EffectType[] = ['speed', 'productivity', 'consumption', 'pollution'],
-                private _resourceCategories: string[] = [])
+                private _resourceCategories: string[] = [],
+                private _minableResources: string[] | Resource[] = [])
     { }
 
     public toString(): string
     {
         return this.name;
+    }
+
+    public addMinableResource(resource: Resource)
+    {
+        if (this.isStringArray(this._minableResources))
+        {
+            this._minableResources.push(resource.name);
+        }
+        else
+        {
+            this._minableResources.push(resource);
+        }
     }
 
     //#region Getters and Setters
@@ -47,5 +62,43 @@ export class MiningDrillMachine implements Machine
     {
         return this._resourceCategories;
     }
+
+    public get mineableResources(): Resource[]
+    {
+        if (this.isStringArray(this._minableResources))
+        {
+            return [];
+        }
+
+        return this._minableResources;
+    }
+
+    public get mineableResourceReferences(): string[]
+    {
+        if (!this.isStringArray(this._minableResources))
+        {
+            return this._minableResources = this._minableResources.map(elem => elem.name);
+        }
+
+        return this._minableResources;
+    }
+
+    public loadMineableResources(modelService: ModelService)
+    {
+        if (this.isStringArray(this._minableResources))
+        {
+            this._minableResources = this._minableResources.map(elem => modelService.resources.get(elem));
+        }
+    }
     //#endregion
+
+    private isStringArray<T>(array: string[] | T[]): array is string[]
+    {
+        if (array.length === 0)
+        {
+            return false;
+        }
+
+        return typeof(array[0]) === 'string';
+    }
 }

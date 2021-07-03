@@ -55,7 +55,7 @@ export class CraftingMachine implements Machine
         return this._recipeCategories;
     }
 
-    public get recipeCategorieReferences(): string[]
+    public get recipeCategoryReferences(): string[]
     {
         if (!this.isStringArray(this._recipeCategories))
         {
