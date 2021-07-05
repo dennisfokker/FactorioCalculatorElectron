@@ -2,7 +2,8 @@
     "extends": "./tsconfig.json",
     "include": [
       "src",
-      "src-electron"
+      "src-electron",
+      "main.ts"
     ],
     "exclude": [
         "node_modules",
