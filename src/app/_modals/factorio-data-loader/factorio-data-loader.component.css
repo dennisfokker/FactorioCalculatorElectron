@@ -1,0 +1,48 @@
+.header {
+    margin-bottom: 20px;
+
+    border: none;
+}
+
+.content {
+    padding: 7px 10px;
+    text-align: center;
+}
+
+.spinner {
+    animation: rotate 2s linear infinite;
+    display: block;
+    margin: auto;
+    width: 50px;
+    height: 50px;
+    stroke: #1784d7
+}
+
+.path {
+    stroke: hsl(210, 70, 75);
+    stroke-linecap: round;
+    animation: dash 1.5s ease-in-out infinite
+}
+
+@keyframes rotate {
+    100% {
+        transform: rotate(360deg)
+    }
+}
+
+@keyframes dash {
+    0% {
+        stroke-dasharray: 1, 150;
+        stroke-dashoffset: 0
+    }
+
+    50% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -35
+    }
+
+    100% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -124
+    }
+}

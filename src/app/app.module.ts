@@ -14,7 +14,7 @@ import { ItemGroupOptionsComponent } from './item-group-options/item-group-optio
 import { ItemOptionsComponent } from './item-options/item-options.component';
 import { RecipeNodeComponent } from './recipe-node/recipe-node.component';
 import { ModelService } from './_services/model.service';
-import { FactorioDataSelectorComponent } from './_modals/factorio-data-selector/factorio-data-selector.component';
+import { FactorioDataLoaderComponent } from './_modals/factorio-data-loader/factorio-data-loader.component';
 import { FactorioPathSelectorComponent } from './_modals/factorio-path-selector/factorio-path-selector.component';
 import { ModalService } from './_services/modal.service';
 import { ModalContainerComponent } from './_modals/modal-container/modal-container.component';
@@ -38,7 +38,7 @@ import { NgxElectronModule } from 'ngx-electron';
         ItemOptionsComponent,
         RecipeNodeComponent,
         FactorioPathSelectorComponent,
-        FactorioDataSelectorComponent,
+        FactorioDataLoaderComponent,
         ModPathSelectorComponent,
         NAComponent,
         ModalContainerComponent,
@@ -52,7 +52,7 @@ import { NgxElectronModule } from 'ngx-electron';
         ReactiveFormsModule,
         NgxElectronModule
     ],
-    entryComponents: [FactorioDataSelectorComponent, FactorioPathSelectorComponent, ModPathSelectorComponent, NAComponent],
+    entryComponents: [FactorioDataLoaderComponent, FactorioPathSelectorComponent, ModPathSelectorComponent, NAComponent],
     providers: [ModelService, ModalService],
     bootstrap: [AppComponent]
 })

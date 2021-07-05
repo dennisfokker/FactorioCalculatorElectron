@@ -8,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 import { ModalService } from './../_services/modal.service';
 import { FactorioPathSelectorComponent } from '../_modals/factorio-path-selector/factorio-path-selector.component';
 import { NAComponent } from '../_modals/na/na.component';
-import { FactorioDataSelectorComponent } from 'app/_modals/factorio-data-selector/factorio-data-selector.component';
+import { FactorioDataLoaderComponent } from 'app/_modals/factorio-data-loader/factorio-data-loader.component';
 import { Icon } from '../_models/Helpers/icon';
 
 @Component({
@@ -20,8 +20,8 @@ export class SettingsAndItemsComponent implements OnInit
 {
     itemGroupOptions: ItemGroupOption[] = [];
 
-    constructor(public modelService: ModelService,
-                public modalService: ModalService)
+    constructor(private modelService: ModelService,
+                private modalService: ModalService)
     {
         modelService.itemGroupsChanged.subscribe((itemGroups) =>
         {
@@ -60,52 +60,14 @@ export class SettingsAndItemsComponent implements OnInit
 
     importFactorioData()
     {
-        this.modalService.openModal(FactorioDataSelectorComponent, {}).subscribe((result) =>
+        this.modalService.openModal(FactorioDataLoaderComponent, {}).subscribe((result) =>
         {
             if (result.canceled)
             {
                 return;
             }
 
-            const reader = new FileReader();
-            reader.onload = (e) =>
-            {
-                if (typeof reader.result === 'string')
-                {
-                    // First extract the needed data:
-                    const filterMatch: RegExpMatchArray = reader.result.match(/\@__JsonCalculatorExporter__\/data-final-fixes\.lua\:\d+\: ({.+})\r?\n\s+\d+\.\d+ \w/s);
-                    let rawData: string;
-                    if (filterMatch.length > 0)
-                    {
-                        rawData = filterMatch[1];
-                    }
-                    else
-                    {
-                        rawData = reader.result;
-                    }
-
-                    // Now it's time for some cleanup. Turn the lua export into valid JSON.
-                    // Since the calculator requires a mod that already outputs mostly JSON, we don't need to do most of this cleanup
-                    //rawData = rawData.replace(/(?:\[")?(\S+)(?<!"\])(?:"\])? =/g, '"$1":'); // Fix key definitions
-                    //rawData = rawData.replace(/nil/g, 'null'); // Fix nil to null
-                    //rawData = rawData.replace(/(,\n(\s+))\{\s*\}/g, '$1{\n$2}'); // Fix empty objects (expand them)
-                    //rawData = rawData.replace(/-?1\/0 --\[\[-?math\.huge\]\]/g, '-1'); // Fix math operations
-                    rawData = rawData.replace(/ -?inf/g, 'null'); // Fix math operations
-                    //rawData = rawData.replace(/(\s+\{\n^(\s+))\{((?:(?!\n\2\})\n^.+)+?\n\2\},\n(?=\s+"))/gm, '$1"anonymous": {$3'); // Fix objects inside objects (nested object brackets are called "anonymous")
-                    //rawData = rawData.replace(/^((\s+)\{(\n(?!\2\}).+)+?\n\2\}),\n\s+(?!\{|\s|null)[^{\s].*/gm, '$1'); // Fix arrays with loose property at the end
-                    //rawData = rawData.replace(/\{(\n\s*(\{|null))/g, '[$1'); // Fix array starts
-                    //while (rawData.search(/(^(\s+)\{(?:(?!\n\2(?:[\}\]]\n|null\n))\n.*)+\n\2(?:[\}\]]|null)\n\s+)\}(?=\n|,\n\s+")/gm) !== -1) {
-                    //    rawData = rawData.replace(/(^(\s+)\{(?:(?!\n\2(?:[\}\]]\n|null\n))\n.*)+\n\2(?:[\}\]]|null)\n\s+)\}(?=\n|,\n\s+")/gm, '$1]'); // Fix array ends
-                    //}
-                    //while (rawData.search(/^(\s+)(\S.+)?(?:\{((?:\n(?!\1\}|.+:).+$)+?\n\1)[\}\]]|[\{\[]((?:\n(?!\1\}|.+:).+$)+?\n\1)\})/gm) !== -1) {
-                    //    rawData = rawData.replace(/^(\s+)(\S.+)?(?:\{((?:\n(?!\1\}|.+:).+$)+?\n\1)[\}\]]|[\{\[]((?:\n(?!\1\}|.+:).+$)+?\n\1)\})/gm, '$1$2[$3$4]'); // Fix non-object arrays
-                    //}
-                    //rawData = rawData.replace(/^(\s+)\}(\n\1\{)/gm, '$1},$2'); // Fix missing commas
-
-                    this.modelService.updateDataFromJSON(JSON.parse(rawData));
-                }
-            };
-            reader.readAsText(result.result);
+            this.modelService.updateDataFromJSON(result.result);
         });
     }
 
