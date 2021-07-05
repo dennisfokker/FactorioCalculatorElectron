@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var factorioDataExportChannel_1 = require("./src-electron/ipcs/factorioDataExportChannel");
 var factorioModsPathChannel_1 = require("./src-electron/ipcs/factorioModsPathChannel");
 var factorioBasePathChannel_1 = require("./src-electron/ipcs/factorioBasePathChannel");
 var iconFileProtocol_1 = require("./src-electron/protocols/iconFileProtocol");
@@ -11,6 +12,7 @@ var args = process.argv.slice(1), serve = args.some(function (val) { return val 
 function registerIpcChannels() {
     electron_1.ipcMain.handle(factorioBasePathChannel_1.FactorioBasePathChannel.channelName, factorioBasePathChannel_1.FactorioBasePathChannel.handle);
     electron_1.ipcMain.handle(factorioModsPathChannel_1.FactorioModsPathChannel.channelName, factorioModsPathChannel_1.FactorioModsPathChannel.handle);
+    electron_1.ipcMain.handle(factorioDataExportChannel_1.FactorioDataExportChannel.channelName, factorioDataExportChannel_1.FactorioDataExportChannel.handle);
 }
 function createWindow() {
     var electronScreen = electron_1.screen;
@@ -35,9 +37,7 @@ function createWindow() {
     });
     if (serve) {
         win.webContents.openDevTools();
-        require('electron-reload')(__dirname, {
-            electron: require(__dirname + "/node_modules/electron")
-        });
+        require('electron-reload')(__dirname, { electron: require(__dirname + "/node_modules/electron") });
         win.loadURL('http://localhost:4200');
     }
     else {

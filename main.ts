@@ -1,3 +1,4 @@
+import { FactorioDataExportChannel } from './src-electron/ipcs/factorioDataExportChannel';
 import { FactorioModsPathChannel } from './src-electron/ipcs/factorioModsPathChannel';
 import { FactorioBasePathChannel } from './src-electron/ipcs/factorioBasePathChannel';
 import { IconFileProtocol } from './src-electron/protocols/iconFileProtocol';
@@ -15,6 +16,7 @@ function registerIpcChannels()
 {
     ipcMain.handle(FactorioBasePathChannel.channelName, FactorioBasePathChannel.handle);
     ipcMain.handle(FactorioModsPathChannel.channelName, FactorioModsPathChannel.handle);
+    ipcMain.handle(FactorioDataExportChannel.channelName, FactorioDataExportChannel.handle);
 }
 
 function createWindow(): BrowserWindow
@@ -25,45 +27,42 @@ function createWindow(): BrowserWindow
 
     // Create the browser window.
     win = new BrowserWindow(
-    {
-        x: 150,
-        y: 150,
-        width: 1280,
-        height: 720,
-        minWidth: 1280,
-        minHeight: 720,
-        webPreferences:
         {
-            nodeIntegration: true,
-            nodeIntegrationInWorker: true,
-            backgroundThrottling: false,
-            allowRunningInsecureContent: (serve) ? true : false,
-            worldSafeExecuteJavaScript: true,
-            contextIsolation: false,  // false if you want to run 2e2 test with Spectron
-            enableRemoteModule: true // true if you want to run 2e2 test  with Spectron or use remote module in renderer context (ie. Angular)
-        },
-    });
+            x: 150,
+            y: 150,
+            width: 1280,
+            height: 720,
+            minWidth: 1280,
+            minHeight: 720,
+            webPreferences:
+            {
+                nodeIntegration: true,
+                nodeIntegrationInWorker: true,
+                backgroundThrottling: false,
+                allowRunningInsecureContent: (serve) ? true : false,
+                worldSafeExecuteJavaScript: true,
+                contextIsolation: false,  // false if you want to run 2e2 test with Spectron
+                enableRemoteModule: true // true if you want to run 2e2 test  with Spectron or use remote module in renderer context (ie. Angular)
+            },
+        });
 
     if (serve)
     {
 
         win.webContents.openDevTools();
 
-        require('electron-reload')(__dirname,
-        {
-            electron: require(`${__dirname}/node_modules/electron`)
-        });
+        require('electron-reload')(__dirname, { electron: require(`${__dirname}/node_modules/electron`) });
         win.loadURL('http://localhost:4200');
 
     }
     else
     {
         win.loadURL(url.format(
-        {
-            pathname: path.join(__dirname, 'dist/index.html'),
-            protocol: 'file:',
-            slashes: true
-        }));
+            {
+                pathname: path.join(__dirname, 'dist/index.html'),
+                protocol: 'file:',
+                slashes: true
+            }));
     }
 
     // Emitted when the window is closed.
@@ -82,7 +81,7 @@ try
 {
     const factorioIconScheme: CustomScheme = { scheme: IconFileProtocol.protocolName, privileges: { standard: true } };
     protocol.registerSchemesAsPrivileged([factorioIconScheme]);
-    
+
     // This method will be called when Electron has finished
     // initialization and is ready to create browser windows.
     // Some APIs can only be used after this event occurs.
