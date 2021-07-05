@@ -13,8 +13,7 @@ import { ModalResult } from './../../_models/modalResult';
 export class ModalContainerComponent implements OnInit
 {
     @ViewChild(ModalDirective, {}) modalContainer: ModalDirective;
-
-    protected componentRef: ComponentRef<ModalComponent>;
+    public componentRef: ComponentRef<ModalComponent>;
 
     constructor(private resolver: ComponentFactoryResolver,
                 public modalService: ModalService)

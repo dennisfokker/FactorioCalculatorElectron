@@ -14,9 +14,9 @@ export class FactorioPathSelectorComponent implements OnInit, ModalComponent
 {
     @Input() data: any;
     modalClosed: Observable<ModalResult>;
+    public factorioHelpText: string;
 
     protected modalClosedSource: Subject<ModalResult> = new Subject<ModalResult>();
-    protected factorioHelpText: string;
     protected factorioPath: string;
 
     constructor(public modalService: ModalService, private deviceService: DeviceDetectorService)

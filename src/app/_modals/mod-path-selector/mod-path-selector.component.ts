@@ -13,10 +13,10 @@ import { DeviceDetectorService } from 'ngx-device-detector';
 export class ModPathSelectorComponent implements OnInit, ModalComponent
 {
     @Input() data: any;
-    modalClosed: Observable<ModalResult>;
+    public modalClosed: Observable<ModalResult>;
+    public modHelpText: string;
 
     protected modalClosedSource: Subject<ModalResult> = new Subject<ModalResult>();
-    protected modHelpText: string;
     protected modsPath: string;
 
     constructor(public modalService: ModalService, private deviceService: DeviceDetectorService)
