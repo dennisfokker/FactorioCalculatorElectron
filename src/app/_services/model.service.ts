@@ -433,19 +433,19 @@ export class ModelService
 
     private registerCraftingMachineInRecipeCategory(machine: CraftingMachine)
     {
-        for (const filter of machine.recipeCategories)
+        for (const filter of machine.recipeCategoryReferences)
         {
             // Check if item already exists or not
-            if (!this.recipeCategories.has(filter.name))
+            if (!this.recipeCategories.has(filter))
             {
-                console.error('Recipe category "%s", which crafting machine "%s" uses as filter, doesn\'t exist yet, so crafting machine cannot be registered.', filter.name, machine.name);
+                console.error('Recipe category "%s", which crafting machine "%s" uses as filter, doesn\'t exist yet, so crafting machine cannot be registered.', filter, machine.name);
                 return;
             }
 
             // Already exists, so get it and update it in the two containers
-            const category: RecipeCategory = this.recipeCategories.get(filter.name);
+            const category: RecipeCategory = this.recipeCategories.get(filter);
             category.addCraftingMachine(machine);
-            this.recipeCategories.set(filter.name, category);
+            this.recipeCategories.set(filter, category);
         }
     }
 
