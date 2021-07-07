@@ -1,0 +1,4 @@
+[submodule "src-electron/ExporterMod"]
+	path = src-electron/ExporterMod
+	url = https://github.com/dennisfokker/Factorio-Json-Calculator-Exporter-mod.git
+	branch = main

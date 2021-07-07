@@ -69,11 +69,16 @@ export class FactorioDataExportChannel
         await writeFile(join(IconFileProtocol.modsPath, 'mod-list.json'), JSON.stringify(enabledMods));
 
         // Delete the actual mod itself
-        // First get what folder we need to delete
-        const modFolders: string[] = await readdir(join('src-electron', 'ExporterMod'));
+        // First get what folders/files we initially copied
+        const modItems: string[] = await readdir(join('src-electron', 'ExporterMod'));
         // Do the removal
-        // We know there should be only a single subfolder here, so hard-grab it
-        await remove(join(IconFileProtocol.modsPath, modFolders[0]));
+        const deletePromises: Promise<void>[] = [];
+        for (const modItem of modItems)
+        {
+            deletePromises.push(remove(join(IconFileProtocol.modsPath, modItem)));
+        }
+        // Wait for all the files to be deleted
+        await Promise.all(deletePromises);
     }
 
     private static async exportData(): Promise<Object>
