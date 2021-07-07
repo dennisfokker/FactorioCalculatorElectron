@@ -27,7 +27,7 @@ export class ItemGroupOptionsComponent implements OnInit, AfterViewInit
     ngAfterViewInit()
     {
         this.itemGroupContainer.nativeElement.style.height = this.getItemGroupContainerHeight();
-        this.itemGroupContainer.nativeElement.style.visibility = 'hidden';
+        this.itemGroupContainer.nativeElement.style.visibility = this.collapsed ? 'hidden' : 'visible';
     }
 
     getItemGroupContainerHeight(): string

@@ -29,7 +29,7 @@ export class CraftingCategoryOptionsComponent implements OnInit, AfterViewInit
     ngAfterViewInit(): void
     {
         this.categoryListContainer.nativeElement.style.height = this.getCategoryListContainerHeight();
-        this.categoryListContainer.nativeElement.style.visibility = 'hidden';
+        this.categoryListContainer.nativeElement.style.visibility = this.collapsed ? 'hidden' : 'visible';
     }
 
     getCategoryListContainerHeight(): string
