@@ -1,3 +1,4 @@
+import { Icon } from './../Helpers/icon';
 import { ModelService } from './../../_services/model.service';
 import { Result } from './result';
 import { RecipeCategory } from './recipeCategory';
@@ -7,6 +8,7 @@ import { Indexable } from '../../_interfaces/indexable';
 export class Recipe implements Indexable
 {
     constructor(private _name: string = 'Unknown',
+                private _icon: Icon | Icon[],
                 private _energyRequired: number = 0.5,
                 private _recipeCategory: string | RecipeCategory = 'crafting',
                 private _ingredients: Ingredient[] = [],
@@ -22,6 +24,11 @@ export class Recipe implements Indexable
     public get name(): string
     {
         return this._name;
+    }
+
+    public get icon(): Icon | Icon[]
+    {
+        return this._icon;
     }
 
     public get energyRequired(): number

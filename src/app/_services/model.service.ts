@@ -178,6 +178,16 @@ export class ModelService
         {
             const content: any = elem.hasOwnProperty('normal') ? elem.normal : elem;
 
+            let iconData: Icon | Icon[];
+            if (elem.hasOwnProperty('icon'))
+            {
+                iconData = this.parseIcon(elem.icon);
+            }
+            else
+            {
+                iconData = elem.icons.map(icon => this.parseIcon(icon));
+            }
+
             let ingredients: Ingredient[];
             if (content.ingredients instanceof Array)
             {
@@ -216,7 +226,7 @@ export class ModelService
                 });
             }
 
-            const recipe = new Recipe(elem.name, content.energy_required, elem.category, ingredients, results);
+            const recipe = new Recipe(elem.name, iconData, content.energy_required, elem.category, ingredients, results);
             return [elem.name, recipe];
         }));
     }
