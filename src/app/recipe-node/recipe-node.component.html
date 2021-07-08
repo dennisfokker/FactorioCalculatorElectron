@@ -1,6 +1,6 @@
 <div class="recipe-block">
-    <app-icon-renderer class="icon" [icon]="ingredient.item.icon"></app-icon-renderer>
-    <span>{{ingredient.amount}}/s</span>
+    <app-icon-renderer class="icon" [icon]="result.item.icon"></app-icon-renderer>
+    <span>{{result.amount}}/s</span>
 
     <div class="machines">
         <img src="assets/icons/stone-furnace.png" onerror="this.onerror=null; this.src='assets/icons/__Unknown__.png';" />
@@ -11,11 +11,11 @@
         ×25
     </div>
 
-    <div class="header" *ngIf="ingredient.recipe && ingredient.recipe.ingredients.length > 0">
+    <div class="header" *ngIf="result.recipe && ingredientResults.length > 0">
         <div class="fa fa-chevron-circle-down collapser" (click)="recipeListContainerCollapseClick()" [ngClass]="collapsed ? 'collapsed' : ''"></div>
     </div>
     <div class="fa fa-cog settings" (click)="settingsClick($event)"></div>
 </div>
-<div #ingredientListContainer class="ingredients-list collapsable" *ngIf="ingredient.recipe && ingredient.recipe.ingredients.length > 0" (transitionstart)="ingredientListContainer.style.visibility = 'visible'" (transitionend)="ingredientListContainer.style.visibility = collapsed ? 'hidden' : 'visible'">
-    <app-recipe-node class="ingredients-list-item" [parentNode]="this" [ingredient]="ing" *ngFor="let ing of ingredient.recipe.ingredients"></app-recipe-node>
+<div #ingredientListContainer class="ingredients-list collapsable" *ngIf="ingredientResults.length > 0" (transitionstart)="ingredientListContainer.style.visibility = 'visible'" (transitionend)="ingredientListContainer.style.visibility = collapsed ? 'hidden' : 'visible'">
+    <app-recipe-node class="ingredients-list-item" [parentNode]="this" [result]="res" *ngFor="let res of ingredientResults"></app-recipe-node>
 </div>

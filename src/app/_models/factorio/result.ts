@@ -1,12 +1,14 @@
 import { ModelService } from './../../_services/model.service';
 import { Item } from './item';
+import { Recipe } from './recipe';
 
 export class Result
 {
     constructor(private _item: string | Item = 'Unknown',
                 private _type: string = 'item',
                 private _amount: number = 1,
-                private _probability: number = 1)
+                private _probability: number = 1,
+                private _recipe?: string | Recipe)
     { }
 
     public toString(): string
@@ -56,6 +58,30 @@ export class Result
     public get probability(): number
     {
         return this._probability;
+    }
+
+    public get recipe(): Recipe
+    {
+        if (this._recipe instanceof Recipe)
+        {
+            return this._recipe;
+        }
+
+        return undefined;
+    }
+
+    public get recipeReference(): string
+    {
+        return this._recipe.toString();
+    }
+
+    public loadRecipe(modelService: ModelService)
+    {
+        if (this._recipe instanceof Recipe)
+        {
+            return;
+        }
+        this._recipe = modelService.recipes.get(this._recipe);
     }
     //#endregion
 }

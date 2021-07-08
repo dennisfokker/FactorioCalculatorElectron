@@ -1,4 +1,5 @@
-import { Ingredient } from './../_models/factorio/ingredient';
+import { Recipe } from './../_models/factorio/recipe';
+import { Result } from './../_models/factorio/result';
 import { ModelService } from './../_services/model.service';
 import { ModalService } from '../_services/modal.service';
 import { Component, OnInit, Input, ElementRef, ViewChild, AfterViewInit, Host, Optional } from '@angular/core';
@@ -12,12 +13,13 @@ import { NAComponent } from '../_modals/na/na.component';
 export class RecipeNodeComponent implements OnInit, AfterViewInit
 {
     @ViewChild('ingredientListContainer') ingredientListContainer: ElementRef;
-    @Input() ingredient: Ingredient;
+    @Input() result: Result;
     @Input() parentNode: RecipeNodeComponent;
 
     collapsed: boolean = false;
+    ingredientResults: Result[] = [];
 
-    protected listCalculatedHeight: string = undefined;
+    protected listCalculatedHeight: string;
 
     constructor(private modalService: ModalService,
                 private modelService: ModelService)
@@ -25,8 +27,9 @@ export class RecipeNodeComponent implements OnInit, AfterViewInit
 
     ngOnInit()
     {
-        this.ingredient.loadRecipe(this.modelService);
-        this.ingredient.loadItem(this.modelService);
+        this.result.loadRecipe(this.modelService);
+        this.result.loadItem(this.modelService);
+        this.updateIngredientResults();
     }
 
     ngAfterViewInit(): void
@@ -36,6 +39,59 @@ export class RecipeNodeComponent implements OnInit, AfterViewInit
             this.listCalculatedHeight = this.ingredientListContainer.nativeElement.scrollHeight + 5 + 'px';
             this.ingredientListContainer.nativeElement.style.height = this.getIngredientListContainerHeight();
             this.ingredientListContainer.nativeElement.style.visibility = this.collapsed ? 'hidden' : 'visible';
+        }
+    }
+
+    updateIngredientResults(): void
+    {
+        let sourceResult: Result;
+
+        for (const curRes of this.result.recipe.results)
+        {
+            if (curRes.itemReference === this.result.item.name)
+            {
+                sourceResult = curRes;
+                break;
+            }
+        }
+        if (!sourceResult)
+        {
+            console.error('Somehow found result who\'s item (%s) is not a result of the result\'s recipe (%s).', this.result.item.name, this.result.recipe.name);
+            return;
+        }
+
+        for (const ingredient of this.result.recipe.ingredients)
+        {
+            // Just use a random (first) recipe for now
+            ingredient.loadItem(this.modelService);
+            const ingredientRecipe: Recipe = this.modelService.recipes.get(ingredient.item.creationRecipeReferences[0]);
+
+            // No ingredient at the end of the line, so skip
+            if (ingredientRecipe)
+            {
+                // Find the actual result we need for this ingredient
+                let ingredientResult: Result;
+                for (const curIngResult of ingredientRecipe.results)
+                {
+                    if (curIngResult.itemReference === ingredient.item.name)
+                    {
+                        ingredientResult = curIngResult;
+                        break;
+                    }
+                }
+                if (!ingredientResult)
+                {
+                    console.error('Somehow found ingredient who\'s item (%s) has a recipe that doesn\'t have the ingredient as a result.', ingredient.item.name);
+                    continue;
+                }
+
+                // Store a copy of the result (prevent changing source) with some final contextual tweaks
+                this.ingredientResults.push(new Result(ingredientResult.itemReference,
+                                                       ingredientResult.type,
+                                                       ingredient.amount / sourceResult.amount * this.result.amount,
+                                                       ingredientResult.probability,
+                                                       ingredientRecipe));
+            }
         }
     }
 
@@ -68,7 +124,7 @@ export class RecipeNodeComponent implements OnInit, AfterViewInit
 
     recipeListContainerCollapseClick()
     {
-        if (this.ingredient.recipe.ingredients.length <= 0)
+        if (this.ingredientResults.length <= 0)
         {
             return;
         }
