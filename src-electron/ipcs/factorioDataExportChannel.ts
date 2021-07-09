@@ -88,6 +88,9 @@ export class FactorioDataExportChannel
             const factorioExePath: string = join(IconFileProtocol.basePath, 'bin', 'x64', 'factorio.exe');
             exec(factorioExePath + ' --create ' + join(app.getPath('temp'), app.getName(), 'DataExportMap') + ' --instrument-mod JsonCalculatorExporter', { maxBuffer: 1024 * 1024 * 100 }, (err: ExecException, stdout: string, stderr: string) =>
             {
+                // Save stdout as log for debugging purposes
+                writeFile(join(app.getPath('temp'), app.getName(), 'previousExport.log'), stdout);
+
                 // First extract the needed data:
                 const filterMatch: RegExpMatchArray = stdout.match(/\@__JsonCalculatorExporter__\/instrument-after-data\.lua\:\d+\: ({.+})\r?\n\s+\d+\.\d+ \w/s);
                 let rawData: string;
