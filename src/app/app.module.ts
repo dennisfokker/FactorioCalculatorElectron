@@ -24,6 +24,7 @@ import { NAComponent } from './_modals/na/na.component';
 import { IconRendererComponent } from './icon-renderer/icon-renderer.component';
 
 import { NgxElectronModule } from 'ngx-electron';
+import { SafePipeModule } from 'safe-pipe';
 
 
 @NgModule({
@@ -46,6 +47,7 @@ import { NgxElectronModule } from 'ngx-electron';
         IconRendererComponent
     ],
     imports: [
+        SafePipeModule,
         BrowserModule,
         AppRoutingModule,
         FormsModule,
