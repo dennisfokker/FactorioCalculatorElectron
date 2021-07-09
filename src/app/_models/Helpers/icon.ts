@@ -11,4 +11,9 @@ export class Icon
     {
         return this.iconPath;
     }
+
+    public toRgbaHtmlString(): string
+    {
+        return `rgba(${this.tint.r * 255}, ${this.tint.g * 255}, ${this.tint.b * 255}, ${this.tint.a})`;
+    }
 }

@@ -2,7 +2,7 @@
     <input type="checkbox" id="machine_option_displayed_{{id}}" [(ngModel)]="machineOption.displayedInRecipe" />
     <label for="machine_option_displayed_{{id}}"></label>
 </div>
-<app-icon-renderer class="icon" [icon]="machine.icon"></app-icon-renderer>
+<app-icon-renderer class="icon" [icon]="machine.icon" [componentSize]="32"></app-icon-renderer>
 <span>{{machine.name}}</span>
 <div class="statistics">
     Speed

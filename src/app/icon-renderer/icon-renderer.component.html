@@ -1,10 +1,19 @@
 <ng-container *ngIf="icons; then multiIcon; else singleIcon">
 </ng-container>
 <ng-template #multiIcon>
-    <ng-container *ngFor="let iconLayer of icons; let i = index">
-        <img [src]="sanitize('factorio-icon://' + iconLayer)" onerror="this.src = 'assets/icons/__Unknown__.png'" />
-    </ng-container>
+    <ng-container *ngFor="let iconLayer of icons" [ngTemplateOutlet]="iconLayerRenderer" [ngTemplateOutletContext]="{iconLayer: iconLayer}"></ng-container>
 </ng-template>
 <ng-template #singleIcon>
-    <img [src]="sanitize('factorio-icon://' + icon)" onerror="this.src = 'assets/icons/__Unknown__.png'" />
+    <ng-container [ngTemplateOutlet]="iconLayerRenderer" [ngTemplateOutletContext]="{iconLayer: icon}"></ng-container>
+</ng-template>
+
+<ng-template let-iconLayer="iconLayer" #iconLayerRenderer>
+    <div class="image-tinter"
+    [style.background-color]="iconLayer.toRgbaHtmlString()"
+    [style.-webkit-mask-image]="'url(' + sanitizeUrl('factorio-icon://' + iconLayer) + ')' | safe: 'style'"
+    [style.left.px]="iconLayer.shift.h"
+    [style.top.px]="iconLayer.shift.v"
+    [style.transform]="'scale(' + constructedScale(iconLayer) + ')' | safe: 'style'"  >
+        <img [src]="sanitizeUrl('factorio-icon://' + iconLayer) | safe: 'resourceUrl'" onerror="this.src = 'assets/icons/__Unknown__.png'; this.parentNode.style['-webkit-mask-image'] = 'url(assets/icons/__Unknown__.png)';"/>
+    </div>
 </ng-template>

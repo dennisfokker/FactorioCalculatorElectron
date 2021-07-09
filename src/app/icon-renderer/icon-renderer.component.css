@@ -1,11 +1,30 @@
+:host {
+    /* Default values, actual values defined in ts */
+    width: 64px;
+    height: 64px;
+}
+
 img {
     width: 100%;
     height: 100%;
     margin: 0px;
     padding: 0px;
-    /*position: absolute;*/
+    position: absolute;
 
     /* Crop image to the left, to make sure lower mipmaps are removes */
     object-fit: cover;
     object-position: 0 0;
+
+    /* Easy method of tinting */
+    mix-blend-mode: multiply;
+}
+
+.image-tinter {
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+    position: absolute;
+    
+    mask-size: cover;
 }
