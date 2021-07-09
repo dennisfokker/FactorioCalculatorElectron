@@ -80,6 +80,7 @@ export class ModelService
         this.addItemSubgroupsFromJSON(json['item-subgroup']);
         this.addItemsFromJSON(json['item']);
         this.addRecipesFromJSON(json['recipe']);
+        this.addRecipeCategoriesFromJSON(json['recipe-category']);
         this.addCraftingMachinesFromJSON({ ...json['assembling-machine'], ...json['furnace']}); // join the 2 parts of the JSON that create the full set of machine data
         this.addMiningDrillsFromJSON(json['mining-drill']);
         this.addOffshorePumpsFromJSON(json['offshore-pump']);
@@ -228,6 +229,15 @@ export class ModelService
 
             const recipe = new Recipe(elem.name, iconData, content.energy_required, elem.category, ingredients, results);
             return [elem.name, recipe];
+        }));
+    }
+
+    private addRecipeCategoriesFromJSON(recipeCategoriesJSON: any)
+    {
+        this.recipeCategories = new Map(Object.values<any>(recipeCategoriesJSON).map(elem =>
+        {
+            const recipyCategory = new RecipeCategory(elem.name);
+            return [elem.name, recipyCategory];
         }));
     }
 
