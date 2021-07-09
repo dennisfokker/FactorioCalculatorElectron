@@ -14,7 +14,8 @@ import { ModalService } from '../../_services/modal.service';
 export class FactorioDataLoaderComponent implements OnInit, ModalComponent
 {
     @Input() data: any;
-    public modalClosed: Observable<ModalResult>;
+    modalClosed: Observable<ModalResult>;
+    message: string;
 
     protected modalClosedSource: Subject<ModalResult> = new Subject<ModalResult>();
 
@@ -26,11 +27,17 @@ export class FactorioDataLoaderComponent implements OnInit, ModalComponent
 
     ngOnInit()
     {
+        this.message = 'This will only take a minute...';
         const request: IpcRequest = { };
         this.electron.ipcRenderer.invoke('data-export', request).then((factorioData) =>
         {
-            this.modalClosedSource.next(new ModalResult(false, factorioData));
-            this.modalService.close();
+            this.message = 'Almost done...';
+            // Give the new message a frame to actually render before freezing the UI
+            setTimeout(() =>
+            {
+                this.modalClosedSource.next(new ModalResult(false, factorioData));
+                this.modalService.close();
+            }, 0);
         });
     }
 }
