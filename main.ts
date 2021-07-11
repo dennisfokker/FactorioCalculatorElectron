@@ -1,3 +1,4 @@
+import { GetFactorioPathChannel } from './src-electron/ipcs/getFactorioPathsChannel';
 import { FactorioDataExportChannel } from './src-electron/ipcs/factorioDataExportChannel';
 import { FactorioModsPathChannel } from './src-electron/ipcs/factorioModsPathChannel';
 import { FactorioBasePathChannel } from './src-electron/ipcs/factorioBasePathChannel';
@@ -17,6 +18,7 @@ function registerIpcChannels()
     ipcMain.handle(FactorioBasePathChannel.channelName, FactorioBasePathChannel.handle);
     ipcMain.handle(FactorioModsPathChannel.channelName, FactorioModsPathChannel.handle);
     ipcMain.handle(FactorioDataExportChannel.channelName, FactorioDataExportChannel.handle);
+    ipcMain.handle(GetFactorioPathChannel.channelName, GetFactorioPathChannel.handle);
 }
 
 function createWindow(): BrowserWindow

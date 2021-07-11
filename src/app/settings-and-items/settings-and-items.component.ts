@@ -71,32 +71,6 @@ export class SettingsAndItemsComponent implements OnInit
         });
     }
 
-    setFactorioPath()
-    {
-        this.modalService.openModal(FactorioPathSelectorComponent, {}).subscribe((result) =>
-        {
-            if (result.canceled)
-            {
-                return;
-            }
-
-            this.modelService.updateFactorioPath(result.result);
-        });
-    }
-
-    setModPath()
-    {
-        this.modalService.openModal(ModPathSelectorComponent, {}).subscribe((result) =>
-        {
-            if (result.canceled)
-            {
-                return;
-            }
-
-            this.modelService.updateModsPath(result.result);
-        });
-    }
-
     importSettings()
     {
         this.modalService.openModal(NAComponent, {});

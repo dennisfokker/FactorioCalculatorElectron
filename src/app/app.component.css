@@ -16,7 +16,7 @@
 }
 
 .default-machine-usage-container {
-    max-height: 224px;
+    max-height: 300px;
 
     display: flex;
     flex-flow: column;

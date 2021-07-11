@@ -1,10 +1,45 @@
 <div class="header">
-    <h1>Loading Factorio data</h1>
+    <h1>Import Factorio data</h1>
 </div>
 
-<div class="content">
-    <svg class="spinner" viewBox="0 0 50 50">
-        <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
-    </svg>
-    <p>{{message}}</p>
-</div>
+<ng-template [ngIf]="!isLoadingData">
+    <div class="button-group">
+        <input type="text" class="path-preview" [value]="factorioPath" readonly>
+        <label class="input simple button">
+            <input #pathInput (change)="onFactorioPathChange($event)" type="file" webkitdirectory directory>
+            <div class="fa fa-upload"></div> Choose Factorio folder
+        </label>
+        <div class="fa fa-question-circle info">
+            <div class="tooltip">
+                <div class="tooltip-content" [innerHTML]="factorioPathHelpText"> </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="button-group">
+        <input type="text" class="path-preview" [value]="modsPath" readonly>
+        <label class="input simple button">
+            <input #pathInput (change)="onModPathChange($event)" type="file" webkitdirectory directory>
+            <div class="fa fa-upload"></div> Choose mods folder
+        </label>
+        <div class="fa fa-question-circle info">
+            <div class="tooltip">
+                <div class="tooltip-content" [innerHTML]="modHelpText"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="button-group modal-controls">
+        <div class="red button" (click)="onCancelClick()">Cancel</div>
+        <div class="green button" (click)="onImportClick()">Import</div>
+    </div>
+</ng-template>
+
+<ng-template [ngIf]="isLoadingData">
+    <div class="content">
+        <svg class="spinner" viewBox="0 0 50 50">
+            <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+        </svg>
+        <p>{{loadingMessage}}</p>
+    </div>
+</ng-template>

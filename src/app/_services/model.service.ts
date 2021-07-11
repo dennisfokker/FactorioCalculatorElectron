@@ -1,3 +1,4 @@
+import { DeviceDetectorService } from 'ngx-device-detector';
 import { CraftingMachine } from './../_models/factorio/craftingMachine';
 import { Resource } from './../_models/factorio/resource';
 import { OffshorePumpMachine } from './../_models/factorio/offshorePumpMachine';
@@ -18,6 +19,9 @@ import { ElectronService } from 'ngx-electron';
 @Injectable()
 export class ModelService
 {
+    public factorioPath: string;
+    public modsPath: string;
+
     public machinesChanged: Observable<CraftingMachine[]>;
     public itemsChanged: Observable<Item[]>;
     public itemGroupsChanged: Observable<ItemGroup[]>;
@@ -52,7 +56,8 @@ export class ModelService
     private resourceCategoriesToDrills: Map<string, MiningDrillMachine[]> = new Map<string, MiningDrillMachine[]>();
     private resourceCategoriesToResources: Map<string, Resource[]> = new Map<string, Resource[]>();
 
-    constructor(private electron: ElectronService)
+    constructor(private electron: ElectronService,
+                private deviceService: DeviceDetectorService)
     {
         this.machinesChanged = this.machinesChangedSource.asObservable();
         this.itemsChanged = this.itemsChangedSource.asObservable();
@@ -63,6 +68,13 @@ export class ModelService
         this.miningDrillsChanged = this.miningDrillsChangedSource.asObservable();
         this.offshorePumpsChanged = this.offshorePumpsChangedSource.asObservable();
         this.resourcesChanged = this.resourcesChangedSource.asObservable();
+
+        const request: IpcRequest = { };
+        this.electron.ipcRenderer.invoke('get-paths', request).then((paths) =>
+        {
+            this.factorioPath = paths.factorioPath;
+            this.modsPath = paths.modsPath;
+        });
     }
 
     public updateDataFromJSON(json: any): void
@@ -102,21 +114,19 @@ export class ModelService
         this.modelDataChanged();
     }
 
-    public updateFactorioPath(path: string)
+    public updatePaths(factorioPath: string, modsPath: string): Promise<void>
     {
-        const request: IpcRequest = { params: [path] };
-        this.electron.ipcRenderer.invoke('base-path', request).then(() =>
+        return new Promise<void>((resolve) =>
         {
-            this.modelDataChanged();
-        });
-    }
-
-    public updateModsPath(path: string)
-    {
-        const request: IpcRequest = { params: [path] };
-        this.electron.ipcRenderer.invoke('mods-path', request).then(() =>
-        {
-            this.modelDataChanged();
+            const pathPromises: Promise<void>[] = [];
+            const factorioRequest: IpcRequest = { params: [factorioPath] };
+            const modsRequest: IpcRequest = { params: [modsPath] };
+            pathPromises.push(this.electron.ipcRenderer.invoke('base-path', factorioRequest));
+            pathPromises.push(this.electron.ipcRenderer.invoke('mods-path', modsRequest));
+            Promise.all(pathPromises).then(() =>
+            {
+                resolve();
+            });
         });
     }
 

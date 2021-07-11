@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var getFactorioPathsChannel_1 = require("./src-electron/ipcs/getFactorioPathsChannel");
 var factorioDataExportChannel_1 = require("./src-electron/ipcs/factorioDataExportChannel");
 var factorioModsPathChannel_1 = require("./src-electron/ipcs/factorioModsPathChannel");
 var factorioBasePathChannel_1 = require("./src-electron/ipcs/factorioBasePathChannel");
@@ -13,6 +14,7 @@ function registerIpcChannels() {
     electron_1.ipcMain.handle(factorioBasePathChannel_1.FactorioBasePathChannel.channelName, factorioBasePathChannel_1.FactorioBasePathChannel.handle);
     electron_1.ipcMain.handle(factorioModsPathChannel_1.FactorioModsPathChannel.channelName, factorioModsPathChannel_1.FactorioModsPathChannel.handle);
     electron_1.ipcMain.handle(factorioDataExportChannel_1.FactorioDataExportChannel.channelName, factorioDataExportChannel_1.FactorioDataExportChannel.handle);
+    electron_1.ipcMain.handle(getFactorioPathsChannel_1.GetFactorioPathChannel.channelName, getFactorioPathsChannel_1.GetFactorioPathChannel.handle);
 }
 function createWindow() {
     var electronScreen = electron_1.screen;
