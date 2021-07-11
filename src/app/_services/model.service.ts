@@ -106,7 +106,6 @@ export class ModelService
         this.recipes.forEach(this.registerRecipeInCategory, this);
         this.items.forEach(this.registerItemInSubgroup, this);
         this.itemSubgroups.forEach(this.registerItemSubgroupInItemGroup, this);
-        this.itemSubgroups.forEach(this.registerItemSubgroupInItemGroup, this);
         this.machines.forEach(this.registerCraftingMachineInRecipeCategory, this);
         this.miningDrills.forEach(this.registerMiningDrillsInResources, this);
         this.resources.forEach(this.registerResourcesInMiningDrills, this);
