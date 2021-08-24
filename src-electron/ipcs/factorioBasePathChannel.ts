@@ -9,6 +9,7 @@ export class FactorioBasePathChannel
     public static async handle(event: IpcMainInvokeEvent, request: IpcRequest): Promise<void>
     {
         IconFileProtocol.basePath = request.params[0];
+        IconFileProtocol.updatePersistentPaths();
 
         return;
     }

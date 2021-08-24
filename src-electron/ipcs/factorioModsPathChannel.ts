@@ -12,6 +12,7 @@ export class FactorioModsPathChannel
     public static async handle(event: IpcMainInvokeEvent, request: IpcRequest): Promise<void>
     {
         IconFileProtocol.modsPath = request.params[0];
+        IconFileProtocol.updatePersistentPaths();
 
         // First make sure we're cleared
         await FactorioModsPathChannel.clearModsCache();

@@ -115,6 +115,8 @@ export class ModelService
 
     public updatePaths(factorioPath: string, modsPath: string): Promise<void>
     {
+        this.factorioPath = factorioPath;
+        this.modsPath = modsPath;
         return new Promise<void>((resolve) =>
         {
             const pathPromises: Promise<void>[] = [];
