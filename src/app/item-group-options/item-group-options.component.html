@@ -5,8 +5,6 @@
 
 <div #itemGroupContainer class="item-group-container collapsable" [style.visibility]="collapsed ? 'hidden' : 'visible'" ><!--(transitionstart)="itemGroupContainer.style.visibility = 'visible'" (transitionend)="itemGroupContainer.style.visibility = collapsed ? 'hidden' : 'visible'">--->
     <div class="item-group collapsable">
-        <div class="item-group-item" *ngFor="let item of itemGroupOption.items; let i = index">
-            <app-item-options [id]="itemGroupOption.itemGroup.name + id + i" [item]="item"></app-item-options>
-        </div>
+        <app-item-options #itemOptions class="item-group-item" *ngFor="let item of itemGroupOption.items; let i = index" [id]="itemGroupOption.itemGroup.name + id + i" [item]="item"></app-item-options>
     </div>
 </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ElementRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy, HostBinding, ChangeDetectorRef, SkipSelf } from '@angular/core';
 import { ItemOption } from 'app/_models/options/itemOption';
 
 @Component({
@@ -9,13 +9,32 @@ import { ItemOption } from 'app/_models/options/itemOption';
 })
 export class ItemOptionsComponent implements OnInit
 {
+    @HostBinding('hidden') failedSearchQuery: boolean = false;
     @Input() id: string;
     @Input() item: ItemOption;
 
-    constructor(private elRef: ElementRef)
+    private previousFailedSearchQuery: string = '';
+
+    constructor()
     { }
 
     ngOnInit()
     {
+    }
+
+    public applySearchQuery(searchQuery: string): boolean
+    {
+        // Early exit, if empty, we good
+        if (!searchQuery || searchQuery === '')
+        {
+            this.previousFailedSearchQuery = '';
+            this.failedSearchQuery = false;
+            return true;
+        }
+
+        //// TODO implement early filter based on previousFailedSearchQuery
+        this.failedSearchQuery = this.item.item.name.toLowerCase().indexOf(searchQuery) < 0;
+
+        return !this.failedSearchQuery;
     }
 }

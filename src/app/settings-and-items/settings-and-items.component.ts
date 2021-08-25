@@ -3,10 +3,8 @@ import { ItemGroupOption } from './../_models/options/itemGroupOption';
 import { ItemGroup } from './../_models/factorio/ItemGroup';
 import { Item } from './../_models/factorio/item';
 import { ModelService } from './../_services/model.service';
-import { ModPathSelectorComponent } from './../_modals/mod-path-selector/mod-path-selector.component';
 import { Component, OnInit } from '@angular/core';
 import { ModalService } from './../_services/modal.service';
-import { FactorioPathSelectorComponent } from '../_modals/factorio-path-selector/factorio-path-selector.component';
 import { NAComponent } from '../_modals/na/na.component';
 import { FactorioDataLoaderComponent } from 'app/_modals/factorio-data-loader/factorio-data-loader.component';
 import { Icon } from '../_models/Helpers/icon';
@@ -18,7 +16,10 @@ import { Icon } from '../_models/Helpers/icon';
 })
 export class SettingsAndItemsComponent implements OnInit
 {
+    //// TODO: https://github.com/nextapps-de/flexsearch possible flex search?
+
     itemGroupOptions: ItemGroupOption[] = [];
+    searchQuery: string;
 
     constructor(private modelService: ModelService,
                 private modalService: ModalService)

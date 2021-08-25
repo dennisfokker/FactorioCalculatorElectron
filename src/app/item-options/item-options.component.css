@@ -1,4 +1,4 @@
-:host {
+:host:not([hidden]) {
     padding: 5px 5px 0 5px;
 
     overflow-wrap: break-word;
