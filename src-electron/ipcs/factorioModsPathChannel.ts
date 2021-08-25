@@ -51,11 +51,34 @@ export class FactorioModsPathChannel
                     const modName: string = entry.substring(0, entry.lastIndexOf('_'));
                     const cachePath: string = path.join(app.getPath('userData'), IconFileProtocol.modsCacheFolder, modName.toLowerCase());
 
+                    // If mod name is empty, then something went wrong and we'll just ignore whatever happened
+                    if (!modName)
+                    {
+                        console.warn('Could not construct mod name for entr "%s"', entry);
+                        continue;
+                    }
+
+                    // It's possible for multiple mod versions to be present. Always asume latest in the list is most up to date and that's the entry we want
+                    // Thus, since we assume this one is better then whatever's already present, first purge whatever we cached first
+                    if (fs.pathExistsSync(cachePath))
+                    {
+                        try
+                        {
+                            console.log('Clearing potential older mod version cache for entry "%s"', entry);
+                            fs.emptyDirSync(cachePath);
+                        }
+                        catch (fsErr)
+                        {
+                            console.error('Hit error for entry "%s" with error "%s"', entry, fsErr);
+                        }
+                    }
+
                     if (fs.lstatSync(fileName).isDirectory())
                     {
                         try
                         {
-                            // Directory, just copy the whole thing.
+                            console.log('Copying mod entry "%s" as directory', entry);
+                            // Directory, just copy the whole thing
                             fs.copySync(fileName, cachePath);
                         }
                         catch (fsErr)
@@ -67,6 +90,7 @@ export class FactorioModsPathChannel
                     {
                         try
                         {
+                            console.log('Copying mod entry "%s" as zip', entry);
                             await extractZip(fileName, { dir: cachePath });
 
                             // Internal folder name of the mod is inconsistent, but always starts with a root folder. Find this folder (alongside potential clutter)
@@ -76,6 +100,7 @@ export class FactorioModsPathChannel
                                 if (fs.lstatSync(path.join(cachePath, folder)).isDirectory())
                                 {
                                     rawModFolder = folder;
+                                    console.log('Found entry "%s" their raw folder "%s"', entry, rawModFolder);
                                     break;
                                 }
                             }
