@@ -1,6 +1,6 @@
+import { MachineSubgroup } from './../_models/factorio/MachineSubgroup';
 import { MachineOptionsComponent } from './../machine-options/machine-options.component';
 import { ModelService } from '../_services/model.service';
-import { RecipeCategory } from '../_models/factorio/recipeCategory';
 import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit, ChangeDetectionStrategy, OnChanges, HostBinding, ViewChildren, QueryList, SimpleChanges } from '@angular/core';
 
 @Component({
@@ -16,7 +16,7 @@ export class CraftingCategoryOptionsComponent implements OnInit, AfterViewInit, 
     @ViewChildren('machineOptions') machineOptionComponents: QueryList<MachineOptionsComponent>;
     @ViewChildren('machineOptions', {read: ElementRef}) machineOptionElements: QueryList<ElementRef>;
     @Input() id: number;
-    @Input() craftingCategory: RecipeCategory;
+    @Input() machineSubgroup: MachineSubgroup;
     @Input() searchQuery: string;
 
     collapsed: boolean = true;
@@ -30,7 +30,7 @@ export class CraftingCategoryOptionsComponent implements OnInit, AfterViewInit, 
 
     ngOnInit(): void
     {
-        this.craftingCategory.loadCraftingMachines(this.modelService);
+        this.machineSubgroup.loadMachines(this.modelService);
     }
 
     ngAfterViewInit(): void

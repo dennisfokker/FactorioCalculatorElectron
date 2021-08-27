@@ -3,11 +3,13 @@ import { Icon } from '../Helpers/icon';
 import { EffectType } from '../../_types/effectType';
 import { Machine } from '../../_interfaces/machine';
 import { ModelService } from 'app/_services/model.service';
+import { MachineSubgroup } from './MachineSubgroup';
 
 export class MiningDrillMachine implements Machine
 {
     constructor(private _name: string,
                 private _icon: Icon | Icon[],
+                private _subgroup: string | MachineSubgroup = 'crafting',
                 private _speed: number = 1,
                 private _production: number = 0,
                 private _allowedEffects: EffectType[] = ['speed', 'productivity', 'consumption', 'pollution'],
@@ -41,6 +43,30 @@ export class MiningDrillMachine implements Machine
     public get icon(): Icon | Icon[]
     {
         return this._icon;
+    }
+
+    public get subgroup(): MachineSubgroup
+    {
+        if (this._subgroup instanceof MachineSubgroup)
+        {
+            return this._subgroup;
+        }
+
+        return undefined;
+    }
+
+    public get subgroupReference(): string
+    {
+        return this._subgroup.toString();
+    }
+
+    public loadSubgroup(modelService: ModelService)
+    {
+        if (this._subgroup instanceof MachineSubgroup)
+        {
+            return;
+        }
+        this._subgroup = modelService.machineSubgroups.get(this._subgroup);
     }
 
     public get speed(): number

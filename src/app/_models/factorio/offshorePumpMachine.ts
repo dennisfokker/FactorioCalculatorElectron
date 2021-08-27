@@ -2,11 +2,13 @@ import { ModelService } from './../../_services/model.service';
 import { Item } from './item';
 import { Icon } from '../Helpers/icon';
 import { Machine } from '../../_interfaces/machine';
+import { MachineSubgroup } from './MachineSubgroup';
 
 export class OffshorePumpMachine implements Machine
 {
     constructor(private _name: string,
                 private _icon: Icon | Icon[],
+                private _subgroup: string | MachineSubgroup = 'crafting',
                 private _speed: number = 1,
                 private _output: string | Item = 'Unknown')
     { }
@@ -25,6 +27,30 @@ export class OffshorePumpMachine implements Machine
     public get icon(): Icon | Icon[]
     {
         return this._icon;
+    }
+
+    public get subgroup(): MachineSubgroup
+    {
+        if (this._subgroup instanceof MachineSubgroup)
+        {
+            return this._subgroup;
+        }
+
+        return undefined;
+    }
+
+    public get subgroupReference(): string
+    {
+        return this._subgroup.toString();
+    }
+
+    public loadSubgroup(modelService: ModelService)
+    {
+        if (this._subgroup instanceof MachineSubgroup)
+        {
+            return;
+        }
+        this._subgroup = modelService.machineSubgroups.get(this._subgroup);
     }
 
     public get speed(): number

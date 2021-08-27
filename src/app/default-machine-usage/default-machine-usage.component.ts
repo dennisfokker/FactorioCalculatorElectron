@@ -1,6 +1,6 @@
+import { MachineSubgroup } from './../_models/factorio/MachineSubgroup';
 import { ModelService } from '../_services/model.service';
 import { CraftingMachine } from '../_models/factorio/craftingMachine';
-import { RecipeCategory } from '../_models/factorio/recipeCategory';
 import { Component, OnInit } from '@angular/core';
 import { Icon } from '../_models/Helpers/icon';
 
@@ -11,13 +11,13 @@ import { Icon } from '../_models/Helpers/icon';
 })
 export class DefaultMachineUsageComponent implements OnInit
 {
-    craftingCategories: RecipeCategory[] = [];
+    machineSubgroups: MachineSubgroup[] = [];
     collapsed = false;
     searchQuery: string;
 
     constructor(public modelService: ModelService)
     {
-        modelService.recipeCategoriesChanged.subscribe((craftingCategories) => this.craftingCategories = craftingCategories);
+        modelService.machineSubgroupsChanged.subscribe((machineSubgroups) => this.machineSubgroups = machineSubgroups);
     }
 
     ngOnInit()
@@ -32,7 +32,7 @@ export class DefaultMachineUsageComponent implements OnInit
         this.modelService.machines.set(electricmine.name, electricmine);
         this.modelService.machines.set(bobMachine.name, bobMachine);
 
-        this.craftingCategories.push(new RecipeCategory('Base Factorio', [machine1.name, machine2.name, electricmine.name]));
-        this.craftingCategories.push(new RecipeCategory('Bob\'s assembling machines', [bobMachine.name]));
+        this.machineSubgroups.push(new MachineSubgroup('Base Factorio', [machine1.name, machine2.name, electricmine.name]));
+        this.machineSubgroups.push(new MachineSubgroup('Bob\'s assembling machines', [bobMachine.name]));
     }
 }

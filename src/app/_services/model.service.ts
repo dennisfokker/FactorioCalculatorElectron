@@ -1,4 +1,4 @@
-import { DeviceDetectorService } from 'ngx-device-detector';
+import { MachineSubgroup } from './../_models/factorio/MachineSubgroup';
 import { CraftingMachine } from './../_models/factorio/craftingMachine';
 import { Resource } from './../_models/factorio/resource';
 import { OffshorePumpMachine } from './../_models/factorio/offshorePumpMachine';
@@ -28,6 +28,7 @@ export class ModelService
     public itemSubgroupsChanged: Observable<ItemSubgroup[]>;
     public recipesChanged: Observable<Recipe[]>;
     public recipeCategoriesChanged: Observable<RecipeCategory[]>;
+    public machineSubgroupsChanged: Observable<MachineSubgroup[]>;
     public miningDrillsChanged: Observable<MiningDrillMachine[]>;
     public offshorePumpsChanged: Observable<OffshorePumpMachine[]>;
     public resourcesChanged: Observable<Resource[]>;
@@ -38,6 +39,7 @@ export class ModelService
     public itemSubgroups: Map<string, ItemSubgroup> = new Map<string, ItemSubgroup>();
     public recipes: Map<string, Recipe> = new Map<string, Recipe>();
     public recipeCategories: Map<string, RecipeCategory> = new Map<string, RecipeCategory>();
+    public machineSubgroups: Map<string, MachineSubgroup> = new Map<string, MachineSubgroup>();
     public miningDrills: Map<string, MiningDrillMachine> = new Map<string, MiningDrillMachine>();
     public offshorePumps: Map<string, OffshorePumpMachine> = new Map<string, OffshorePumpMachine>();
     public resources: Map<string, Resource> = new Map<string, Resource>();
@@ -48,6 +50,7 @@ export class ModelService
     private itemSubgroupsChangedSource: Subject<ItemSubgroup[]> = new Subject<ItemSubgroup[]>();
     private recipesChangedSource: Subject<Recipe[]> = new Subject<Recipe[]>();
     private recipeCategoriesChangedSource: Subject<RecipeCategory[]> = new Subject<RecipeCategory[]>();
+    private machineSubgroupsChangedSource: Subject<MachineSubgroup[]> = new Subject<MachineSubgroup[]>();
     private miningDrillsChangedSource: Subject<MiningDrillMachine[]> = new Subject<MiningDrillMachine[]>();
     private offshorePumpsChangedSource: Subject<OffshorePumpMachine[]> = new Subject<OffshorePumpMachine[]>();
     private resourcesChangedSource: Subject<Resource[]> = new Subject<Resource[]>();
@@ -56,8 +59,7 @@ export class ModelService
     private resourceCategoriesToDrills: Map<string, MiningDrillMachine[]> = new Map<string, MiningDrillMachine[]>();
     private resourceCategoriesToResources: Map<string, Resource[]> = new Map<string, Resource[]>();
 
-    constructor(private electron: ElectronService,
-                private deviceService: DeviceDetectorService)
+    constructor(private electron: ElectronService)
     {
         this.machinesChanged = this.machinesChangedSource.asObservable();
         this.itemsChanged = this.itemsChangedSource.asObservable();
@@ -65,6 +67,7 @@ export class ModelService
         this.itemSubgroupsChanged = this.itemSubgroupsChangedSource.asObservable();
         this.recipesChanged = this.recipesChangedSource.asObservable();
         this.recipeCategoriesChanged = this.recipeCategoriesChangedSource.asObservable();
+        this.machineSubgroupsChanged = this.machineSubgroupsChangedSource.asObservable();
         this.miningDrillsChanged = this.miningDrillsChangedSource.asObservable();
         this.offshorePumpsChanged = this.offshorePumpsChangedSource.asObservable();
         this.resourcesChanged = this.resourcesChangedSource.asObservable();
@@ -86,6 +89,7 @@ export class ModelService
         this.itemSubgroups = new Map<string, ItemSubgroup>();
         this.recipes = new Map<string, Recipe>();
         this.recipeCategories = new Map<string, RecipeCategory>();
+        this.machineSubgroups = new Map<string, MachineSubgroup>();
 
         // Create and store object's given data
         this.addItemGroupsFromJSON(json['item-group']);
@@ -107,6 +111,7 @@ export class ModelService
         this.items.forEach(this.registerItemInSubgroup, this);
         this.itemSubgroups.forEach(this.registerItemSubgroupInItemGroup, this);
         this.machines.forEach(this.registerCraftingMachineInRecipeCategory, this);
+        this.machines.forEach(this.registerCraftingMachineInSubGroup, this);
         this.miningDrills.forEach(this.registerMiningDrillsInResources, this);
         this.resources.forEach(this.registerResourcesInMiningDrills, this);
 
@@ -480,6 +485,22 @@ export class ModelService
         }
     }
 
+    private registerCraftingMachineInSubGroup(machine: CraftingMachine)
+    {
+        // Check if category already exists or not
+        if (!this.machineSubgroups.has(machine.subgroupReference))
+        {
+            const machineSubgroup = new MachineSubgroup(machine.subgroupReference, [machine.name]);
+            this.machineSubgroups.set(machine.subgroupReference, machineSubgroup);
+            return;
+        }
+
+        // Already exists, so get it and update it in the two containers
+        const subgroup: MachineSubgroup = this.machineSubgroups.get(machine.subgroupReference);
+        subgroup.addMachine(machine);
+        this.machineSubgroups.set(machine.subgroupReference, subgroup);
+    }
+
     private registerMiningDrillsInResources(miningDrill: MiningDrillMachine)
     {
         for (const resourceCategory of miningDrill.resourceCategories)
@@ -579,6 +600,7 @@ export class ModelService
         this.itemSubgroupsChangedSource.next(Array.from(this.itemSubgroups.values()));
         this.recipesChangedSource.next(Array.from(this.recipes.values()));
         this.recipeCategoriesChangedSource.next(Array.from(this.recipeCategories.values()));
+        this.machineSubgroupsChangedSource.next(Array.from(this.machineSubgroups.values()));
     }
     //#endregion
 }
