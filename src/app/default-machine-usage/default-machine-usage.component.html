@@ -8,11 +8,11 @@
     <div class="search-container">
         <div class="input-container">
             <i class="fa fa-search"></i>
-            <input type="search" placeholder="Search machine by name, crafting categories or mod">
+            <input type="search" placeholder="Search machine by name, crafting categories or mod" [(ngModel)]="searchQuery">
         </div>
     </div>
 
     <div class="list-container">
-        <app-crafting-category-options *ngFor="let cc of craftingCategories; let i = index" [id]="i" [craftingCategory]="cc"></app-crafting-category-options>
+        <app-crafting-category-options *ngFor="let cc of craftingCategories; let i = index" [id]="i" [craftingCategory]="cc" [searchQuery]="searchQuery"></app-crafting-category-options>
     </div>
 </div>

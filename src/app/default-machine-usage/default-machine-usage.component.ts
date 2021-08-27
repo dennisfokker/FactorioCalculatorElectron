@@ -13,6 +13,7 @@ export class DefaultMachineUsageComponent implements OnInit
 {
     craftingCategories: RecipeCategory[] = [];
     collapsed = false;
+    searchQuery: string;
 
     constructor(public modelService: ModelService)
     {

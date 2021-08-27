@@ -1,6 +1,6 @@
 import { ItemOptionsComponent } from './../item-options/item-options.component';
 import { ItemGroupOption } from './../_models/options/itemGroupOption';
-import { Component, OnInit, ViewChild, Input, ElementRef, AfterViewInit, ChangeDetectionStrategy, OnChanges, SimpleChanges, Output, HostBinding, ViewChildren, QueryList, ChangeDetectorRef, SkipSelf } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, ElementRef, AfterViewInit, ChangeDetectionStrategy, OnChanges, SimpleChanges, HostBinding, ViewChildren, QueryList } from '@angular/core';
 
 @Component({
     selector: 'app-item-group-options',
