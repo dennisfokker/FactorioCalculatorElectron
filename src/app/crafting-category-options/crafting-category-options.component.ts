@@ -95,14 +95,7 @@ export class CraftingCategoryOptionsComponent implements OnInit, AfterViewInit, 
             }
         };
 
-        // Update calculated height
-        if (this.collapsed)
-        {
-            this.listCalculatedHeight = undefined;
-        }
-        else
-        {
-            this.listCalculatedHeight = this.categoryListContainer.nativeElement.scrollHeight + 5 + 'px';
-        }
+        this.listCalculatedHeight = undefined;
+        this.categoryListContainer.nativeElement.style.height = this.getCategoryListContainerHeight();
     }
 }
