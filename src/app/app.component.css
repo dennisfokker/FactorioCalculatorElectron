@@ -1,4 +1,4 @@
-.settings-and-items-container {
+.settings-and-item-list-container {
     position: absolute;
     width: 250px;
     height: 100%;
@@ -15,7 +15,7 @@
     color: white;
 }
 
-.default-machine-usage-container {
+.machine-list-container {
     max-height: 300px;
 
     display: flex;

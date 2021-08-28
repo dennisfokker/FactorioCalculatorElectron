@@ -1,0 +1,18 @@
+<div class="header" (click)="collapsed = !collapsed">
+    <h1>Default options for machine usage</h1>
+
+    <div class="fa fa-chevron-circle-down collapser" [ngClass]="collapsed ? 'collapsed' : ''"></div>
+</div>
+
+<div class="content collapsable" [ngClass]="collapsed ? 'collapsed' : ''">
+    <div class="search-container">
+        <div class="input-container">
+            <i class="fa fa-search"></i>
+            <input type="search" placeholder="Search machine by name, crafting categories or mod" [(ngModel)]="searchQuery">
+        </div>
+    </div>
+
+    <div class="list-container">
+        <app-machine-group-options *ngFor="let ms of machineSubgroups; let i = index" [id]="i" [machineSubgroup]="ms" [searchQuery]="searchQuery"></app-machine-group-options>
+    </div>
+</div>

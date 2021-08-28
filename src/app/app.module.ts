@@ -1,27 +1,27 @@
+import { MachineGroupOptionsComponent } from './components/machines/machine-group-options/machine-group-options.component';
+import { MachineListComponent } from './components/machines/machine-list/machine-list.component';
+import { ModelService } from './services/model.service';
+import { ModalService } from './services/modal.service';
+import { IconRendererComponent } from './components/utility/icon-renderer/icon-renderer.component';
+import { ModalDirective } from './directives/modal.directive';
+import { NAComponent } from './modals/na/na.component';
+import { ModalContainerComponent } from './modals/modal-container/modal-container.component';
+import { ModPathSelectorComponent } from './modals/mod-path-selector/mod-path-selector.component';
+import { FactorioDataLoaderComponent } from './modals/factorio-data-loader/factorio-data-loader.component';
+import { FactorioPathSelectorComponent } from './modals/factorio-path-selector/factorio-path-selector.component';
+import { RecipeNodeComponent } from './components/recipes/recipe-node/recipe-node.component';
+import { RecipeColumnComponent } from './components/recipes/recipe-column/recipe-column.component';
+import { ItemOptionsComponent } from './components/items-and-settings/item-options/item-options.component';
+import { ItemGroupOptionsComponent } from './components/items-and-settings/item-group-options/item-group-options.component';
+import { MachineOptionsComponent } from './components/machines/machine-options/machine-options.component';
+import { SettingsAndItemListComponent } from './components/items-and-settings/settings-and-item-list/settings-and-item-list.component';
+
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-
-import { RecipesComponent } from './recipes/recipes.component';
-import { DefaultMachineUsageComponent } from './default-machine-usage/default-machine-usage.component';
-import { SettingsAndItemsComponent } from './settings-and-items/settings-and-items.component';
-import { MachineOptionsComponent } from './machine-options/machine-options.component';
-import { CraftingCategoryOptionsComponent } from './crafting-category-options/crafting-category-options.component';
-import { ItemGroupOptionsComponent } from './item-group-options/item-group-options.component';
-import { ItemOptionsComponent } from './item-options/item-options.component';
-import { RecipeNodeComponent } from './recipe-node/recipe-node.component';
-import { ModelService } from './_services/model.service';
-import { FactorioDataLoaderComponent } from './_modals/factorio-data-loader/factorio-data-loader.component';
-import { FactorioPathSelectorComponent } from './_modals/factorio-path-selector/factorio-path-selector.component';
-import { ModalService } from './_services/modal.service';
-import { ModalContainerComponent } from './_modals/modal-container/modal-container.component';
-import { ModalDirective } from './_directives/modal.directive';
-import { ModPathSelectorComponent } from './_modals/mod-path-selector/mod-path-selector.component';
-import { NAComponent } from './_modals/na/na.component';
-import { IconRendererComponent } from './icon-renderer/icon-renderer.component';
 
 import { NgxElectronModule } from 'ngx-electron';
 import { SafePipeModule } from 'safe-pipe';
@@ -30,11 +30,11 @@ import { SafePipeModule } from 'safe-pipe';
 @NgModule({
     declarations: [
         AppComponent,
-        RecipesComponent,
-        DefaultMachineUsageComponent,
-        SettingsAndItemsComponent,
+        RecipeColumnComponent,
+        MachineListComponent,
+        SettingsAndItemListComponent,
         MachineOptionsComponent,
-        CraftingCategoryOptionsComponent,
+        MachineGroupOptionsComponent,
         ItemGroupOptionsComponent,
         ItemOptionsComponent,
         RecipeNodeComponent,
