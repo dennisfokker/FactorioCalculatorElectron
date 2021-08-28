@@ -22,7 +22,7 @@ export class SettingsAndItemListComponent implements OnInit
     constructor(private modelService: ModelService,
                 private modalService: ModalService)
     {
-        modelService.itemGroupsChanged.subscribe((itemGroups) =>
+        modelService.itemGroupsChanged$.subscribe((itemGroups) =>
         {
             this.itemGroupOptions = itemGroups.reduce((result: ItemGroupOption[], itemGroup) =>
             {

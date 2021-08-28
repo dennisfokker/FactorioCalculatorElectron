@@ -16,7 +16,7 @@ import { Observable, Subject } from 'rxjs';
 export class FactorioDataLoaderComponent implements OnInit, ModalComponent
 {
     @Input() data: any;
-    modalClosed: Observable<ModalResult>;
+    modalClosed$: Observable<ModalResult>;
     isLoadingData: boolean = false;
     factorioPathHelpText: string;
     modHelpText: string;
@@ -32,7 +32,7 @@ export class FactorioDataLoaderComponent implements OnInit, ModalComponent
                 private electron: ElectronService,
                 private deviceService: DeviceDetectorService)
     {
-        this.modalClosed = this.modalClosedSource.asObservable();
+        this.modalClosed$ = this.modalClosedSource.asObservable();
     }
 
     ngOnInit()

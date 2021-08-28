@@ -23,16 +23,16 @@ export class ModelService
     public factorioPath: string;
     public modsPath: string;
 
-    public machinesChanged: Observable<CraftingMachine[]>;
-    public itemsChanged: Observable<Item[]>;
-    public itemGroupsChanged: Observable<ItemGroup[]>;
-    public itemSubgroupsChanged: Observable<ItemSubgroup[]>;
-    public recipesChanged: Observable<Recipe[]>;
-    public recipeCategoriesChanged: Observable<RecipeCategory[]>;
-    public machineSubgroupsChanged: Observable<MachineSubgroup[]>;
-    public miningDrillsChanged: Observable<MiningDrillMachine[]>;
-    public offshorePumpsChanged: Observable<OffshorePumpMachine[]>;
-    public resourcesChanged: Observable<Resource[]>;
+    public machinesChanged$: Observable<CraftingMachine[]>;
+    public itemsChanged$: Observable<Item[]>;
+    public itemGroupsChanged$: Observable<ItemGroup[]>;
+    public itemSubgroupsChanged$: Observable<ItemSubgroup[]>;
+    public recipesChanged$: Observable<Recipe[]>;
+    public recipeCategoriesChanged$: Observable<RecipeCategory[]>;
+    public machineSubgroupsChanged$: Observable<MachineSubgroup[]>;
+    public miningDrillsChanged$: Observable<MiningDrillMachine[]>;
+    public offshorePumpsChanged$: Observable<OffshorePumpMachine[]>;
+    public resourcesChanged$: Observable<Resource[]>;
 
     public machines: Map<string, CraftingMachine> = new Map<string, CraftingMachine>();
     public items: Map<string, Item> = new Map<string, Item>();
@@ -62,16 +62,16 @@ export class ModelService
 
     constructor(private electron: ElectronService)
     {
-        this.machinesChanged = this.machinesChangedSource.asObservable();
-        this.itemsChanged = this.itemsChangedSource.asObservable();
-        this.itemGroupsChanged = this.itemGroupsChangedSource.asObservable();
-        this.itemSubgroupsChanged = this.itemSubgroupsChangedSource.asObservable();
-        this.recipesChanged = this.recipesChangedSource.asObservable();
-        this.recipeCategoriesChanged = this.recipeCategoriesChangedSource.asObservable();
-        this.machineSubgroupsChanged = this.machineSubgroupsChangedSource.asObservable();
-        this.miningDrillsChanged = this.miningDrillsChangedSource.asObservable();
-        this.offshorePumpsChanged = this.offshorePumpsChangedSource.asObservable();
-        this.resourcesChanged = this.resourcesChangedSource.asObservable();
+        this.machinesChanged$ = this.machinesChangedSource.asObservable();
+        this.itemsChanged$ = this.itemsChangedSource.asObservable();
+        this.itemGroupsChanged$ = this.itemGroupsChangedSource.asObservable();
+        this.itemSubgroupsChanged$ = this.itemSubgroupsChangedSource.asObservable();
+        this.recipesChanged$ = this.recipesChangedSource.asObservable();
+        this.recipeCategoriesChanged$ = this.recipeCategoriesChangedSource.asObservable();
+        this.machineSubgroupsChanged$ = this.machineSubgroupsChangedSource.asObservable();
+        this.miningDrillsChanged$ = this.miningDrillsChangedSource.asObservable();
+        this.offshorePumpsChanged$ = this.offshorePumpsChangedSource.asObservable();
+        this.resourcesChanged$ = this.resourcesChangedSource.asObservable();
 
         const request: IpcRequest = { };
         this.electron.ipcRenderer.invoke('get-paths', request).then((paths) =>

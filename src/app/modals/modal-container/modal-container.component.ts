@@ -29,7 +29,7 @@ export class ModalContainerComponent implements OnInit
         const factory = this.resolver.resolveComponentFactory(modal);
         this.componentRef = this.modalContainer.viewContainerRef.createComponent(factory);
         this.componentRef.instance.data = data;
-        return this.componentRef.instance.modalClosed;
+        return this.componentRef.instance.modalClosed$;
     }
 
     public close(): void

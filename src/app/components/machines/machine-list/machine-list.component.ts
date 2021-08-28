@@ -17,7 +17,7 @@ export class MachineListComponent implements OnInit
 
     constructor(public modelService: ModelService)
     {
-        modelService.machineSubgroupsChanged.subscribe((machineSubgroups) => this.machineSubgroups = machineSubgroups);
+        modelService.machineSubgroupsChanged$.subscribe((machineSubgroups) => this.machineSubgroups = machineSubgroups);
     }
 
     ngOnInit()

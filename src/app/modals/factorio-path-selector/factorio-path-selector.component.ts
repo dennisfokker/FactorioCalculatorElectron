@@ -13,7 +13,7 @@ import { DeviceDetectorService } from 'ngx-device-detector';
 export class FactorioPathSelectorComponent implements OnInit, ModalComponent
 {
     @Input() data: any;
-    modalClosed: Observable<ModalResult>;
+    modalClosed$: Observable<ModalResult>;
     public factorioHelpText: string;
 
     protected modalClosedSource: Subject<ModalResult> = new Subject<ModalResult>();
@@ -21,7 +21,7 @@ export class FactorioPathSelectorComponent implements OnInit, ModalComponent
 
     constructor(public modalService: ModalService, private deviceService: DeviceDetectorService)
     {
-        this.modalClosed = this.modalClosedSource.asObservable();
+        this.modalClosed$ = this.modalClosedSource.asObservable();
     }
 
     ngOnInit()
