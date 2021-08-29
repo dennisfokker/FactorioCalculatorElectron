@@ -1,3 +1,4 @@
+import { ItemOptionsService } from './services/item-options.service';
 import { MachineGroupOptionsComponent } from './components/machines/machine-group-options/machine-group-options.component';
 import { MachineListComponent } from './components/machines/machine-list/machine-list.component';
 import { ModelService } from './services/model.service';
@@ -55,7 +56,7 @@ import { SafePipeModule } from 'safe-pipe';
         NgxElectronModule
     ],
     entryComponents: [FactorioDataLoaderComponent, FactorioPathSelectorComponent, ModPathSelectorComponent, NAComponent],
-    providers: [ModelService, ModalService],
+    providers: [ModelService, ModalService, ItemOptionsService],
     bootstrap: [AppComponent]
 })
 export class AppModule
