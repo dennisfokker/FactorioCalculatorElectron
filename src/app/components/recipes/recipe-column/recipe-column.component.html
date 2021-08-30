@@ -1,20 +1,20 @@
 <div class="content">
-    <div class="tree-container" *ngIf="sharedRecipeResults.length > 0">
+    <div class="tree-container" *ngIf="sharedRecipeResults.size > 0">
         <div class="tree-header">
             Shared recipes
         </div>
 
         <div class="tree-content">
-            <app-recipe-node *ngFor="let res of sharedRecipeResults; let i = index" [result]="res"></app-recipe-node>
+            <app-recipe-node *ngFor="let res of sharedRecipeResults | keyvalue; trackBy: trackRecipeNode" [result]="res.value"></app-recipe-node>
         </div>
     </div>
-    <div class="tree-container" *ngFor="let res of recipeResults; let i = index">
+    <div class="tree-container" *ngFor="let res of recipeResults | keyvalue; trackBy: trackRecipeNode">
         <div class="tree-header">
-            {{res.itemReference}}
+            {{res.value.itemReference}}
         </div>
 
         <div class="tree-content">
-            <app-recipe-node [result]="res"></app-recipe-node>
+            <app-recipe-node [result]="res.value"></app-recipe-node>
         </div>
     </div>
 </div>

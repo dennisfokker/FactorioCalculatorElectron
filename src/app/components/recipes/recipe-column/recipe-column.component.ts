@@ -1,3 +1,4 @@
+import { ItemOptionsService } from './../../../services/item-options.service';
 import { Ingredient } from './../../../models/factorio/ingredient';
 import { Item } from './../../../models/factorio/item';
 import { Icon } from './../../../models/Helpers/icon';
@@ -5,6 +6,7 @@ import { Recipe } from './../../../models/factorio/recipe';
 import { ModelService } from './../../../services/model.service';
 import { Result } from './../../../models/factorio/result';
 import { Component, OnInit } from '@angular/core';
+import { KeyValue } from '@angular/common';
 
 @Component({
     selector: 'app-recipe-column',
@@ -13,13 +15,52 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RecipeColumnComponent implements OnInit
 {
-    recipeResults: Result[] = [];
-    sharedRecipeResults: Result[] = [];
+    recipeResults: Map<string, Result> = new Map<string, Result>();
+    sharedRecipeResults: Map<string, Result> = new Map<string, Result>();
 
-    constructor(private modelService: ModelService)
+    constructor(private modelService: ModelService,
+                private itemOptionsService: ItemOptionsService)
     { }
 
     ngOnInit()
+    {
+        this.loadInMockData();
+
+        this.itemOptionsService.nonSharedItemAdded$.subscribe((addedItemOption) =>
+        {
+            this.recipeResults.set(addedItemOption.item.name, new Result(addedItemOption.item, undefined, addedItemOption.amount));
+        });
+        this.itemOptionsService.nonSharedItemRemoved$.subscribe((addedItemOption) =>
+        {
+            this.recipeResults.delete(addedItemOption.item.name);
+        });
+        this.itemOptionsService.nonSharedItemUpdated$.subscribe((addedItemOption) =>
+        {
+            const currentResult: Result = this.recipeResults.get(addedItemOption.newItemOption.item.name);
+            this.recipeResults.set(addedItemOption.newItemOption.item.name, new Result(currentResult.item, currentResult.type, addedItemOption.newItemOption.amount, currentResult.probability, currentResult.recipe));
+        });
+
+        this.itemOptionsService.sharedItemAdded$.subscribe((addedItemOption) =>
+        {
+            this.sharedRecipeResults.set(addedItemOption.item.name, new Result(addedItemOption.item, undefined, addedItemOption.amount));
+        });
+        this.itemOptionsService.sharedItemRemoved$.subscribe((addedItemOption) =>
+        {
+            this.sharedRecipeResults.delete(addedItemOption.item.name);
+        });
+        this.itemOptionsService.sharedItemUpdated$.subscribe((addedItemOption) =>
+        {
+            const currentResult: Result = this.sharedRecipeResults.get(addedItemOption.newItemOption.item.name);
+            this.sharedRecipeResults.set(addedItemOption.newItemOption.item.name, new Result(currentResult.item, currentResult.type, addedItemOption.newItemOption.amount, currentResult.probability, currentResult.recipe));
+        });
+    }
+
+    public trackRecipeNode(index: number, item: KeyValue<string, Result>)
+    {
+        return item.key;
+    }
+
+    private loadInMockData(): void
     {
         const ironOreResult = new Result('Iron ore');
         const ironOreRecipe = new Recipe('Iron ore', new Icon('__internal__/iron-ore.png'), 1, undefined, [], [ironOreResult]);
@@ -86,14 +127,9 @@ export class RecipeColumnComponent implements OnInit
         circuitItem.addCreationRecipe(circuitRecipe);
         this.modelService.items.set(circuitItem.name, circuitItem);
 
-        this.recipeResults = [
-            new Result('Iron storage box', 'item', 1, 1, ironStorageBoxRecipe),
-            new Result('Iron storage box', 'item', 1, 1, ironStorageBoxRecipe)
-        ];
-        this.sharedRecipeResults = [
-            new Result('Iron storage box', 'item', 1, 1, ironStorageBoxRecipe),
-            new Result('Electronic circuit', 'item', 5, 1, circuitRecipe)
-        ];
+        this.recipeResults.set('Iron storage box', new Result('Iron storage box', 'item', 1, 1, ironStorageBoxRecipe));
+        this.recipeResults.set('Iron storage box-copy', new Result('Iron storage box', 'item', 1, 1, ironStorageBoxRecipe));
+        this.sharedRecipeResults.set('Iron storage box', new Result('Iron storage box', 'item', 1, 1, ironStorageBoxRecipe));
+        this.sharedRecipeResults.set('Electronic circuit', new Result('Electronic circuit', 'item', 5, 1, circuitRecipe));
     }
-
 }

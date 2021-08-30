@@ -44,6 +44,12 @@ export class RecipeNodeComponent implements OnInit, AfterViewInit
 
     updateIngredientResults(): void
     {
+        if (!this.result.recipe)
+        {
+            // If no recipe specified yet, nothing to do here
+            return;
+        }
+
         let sourceResult: Result;
 
         for (const curRes of this.result.recipe.results)

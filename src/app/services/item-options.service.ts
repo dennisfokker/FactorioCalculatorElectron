@@ -11,20 +11,20 @@ interface ChangedItemOption
 @Injectable()
 export class ItemOptionsService
 {
-    nonSharedItemAdded$: Observable<ChangedItemOption>;
-    nonSharedItemRemoved$: Observable<ChangedItemOption>;
+    nonSharedItemAdded$: Observable<ItemOption>;
+    nonSharedItemRemoved$: Observable<ItemOption>;
     nonSharedItemUpdated$: Observable<ChangedItemOption>;
-    sharedItemAdded$: Observable<ChangedItemOption>;
-    sharedItemRemoved$: Observable<ChangedItemOption>;
+    sharedItemAdded$: Observable<ItemOption>;
+    sharedItemRemoved$: Observable<ItemOption>;
     sharedItemUpdated$: Observable<ChangedItemOption>;
 
     protected previousItemOptions: Map<string, ItemOption> = new Map<string, ItemOption>();
 
-    private nonSharedItemAddedSource: Subject<ChangedItemOption> = new Subject<ChangedItemOption>();
-    private nonSharedItemRemovedSource: Subject<ChangedItemOption> = new Subject<ChangedItemOption>();
+    private nonSharedItemAddedSource: Subject<ItemOption> = new Subject<ItemOption>();
+    private nonSharedItemRemovedSource: Subject<ItemOption> = new Subject<ItemOption>();
     private nonSharedItemUpdatedSource: Subject<ChangedItemOption> = new Subject<ChangedItemOption>();
-    private sharedItemAddedSource: Subject<ChangedItemOption> = new Subject<ChangedItemOption>();
-    private sharedItemRemovedSource: Subject<ChangedItemOption> = new Subject<ChangedItemOption>();
+    private sharedItemAddedSource: Subject<ItemOption> = new Subject<ItemOption>();
+    private sharedItemRemovedSource: Subject<ItemOption> = new Subject<ItemOption>();
     private sharedItemUpdatedSource: Subject<ChangedItemOption> = new Subject<ChangedItemOption>();
 
     constructor()
@@ -45,64 +45,64 @@ export class ItemOptionsService
 
         if (!previousItemOption)
         {
-            this.publishNewItemOption(itemParam, payload);
+            this.publishNewItemOption(itemParam);
             return;
         }
 
         if (itemParam.amount <= 0)
         {
-            this.publishEmptyItemOption(itemParam, previousItemOption, payload);
+            this.publishEmptyItemOption(itemParam, previousItemOption);
             return;
         }
 
         if (itemParam.shared !== previousItemOption.shared)
         {
-            this.publishSwitchedSharedItemOption(itemParam, previousItemOption, payload);
+            this.publishSwitchedSharedItemOption(itemParam);
             return;
         }
 
         // Just regular value update
         if (itemParam.shared)
         {
-            this.sharedItemUpdatedSource.next(payload);
+            this.sharedItemUpdatedSource.next({ newItemOption: itemParam, oldItemOption: previousItemOption });
         }
         else
         {
-            this.nonSharedItemUpdatedSource.next(payload);
+            this.nonSharedItemUpdatedSource.next({ newItemOption: itemParam, oldItemOption: previousItemOption });
         }
         this.previousItemOptions.set(itemParam.item.name, itemParam);
     }
 
-    private publishNewItemOption(item: ItemOption, payload: ChangedItemOption): void
+    private publishNewItemOption(item: ItemOption): void
     {
         if (item.shared)
         {
             // Shared item added
-            this.sharedItemAddedSource.next(payload);
+            this.sharedItemAddedSource.next(item);
             this.previousItemOptions.set(item.item.name, item);
         }
         else if (item.amount > 0)
         {
             // Recipe column item added if it's actually got an amount
-            this.nonSharedItemAddedSource.next(payload);
+            this.nonSharedItemAddedSource.next(item);
             this.previousItemOptions.set(item.item.name, item);
         }
     }
 
-    private publishEmptyItemOption(item: ItemOption, previousItemOption: ItemOption, payload: ChangedItemOption): void
+    private publishEmptyItemOption(item: ItemOption, previousItemOption: ItemOption): void
     {
         if (item.shared)
         {
             if (previousItemOption.shared)
             {
                 // Just decreased additional shared amount
-                this.sharedItemUpdatedSource.next(payload);
+                this.sharedItemUpdatedSource.next({ newItemOption: item, oldItemOption: previousItemOption });
             }
             else
             {
                 // Became shared, but was nothing previously
-                this.sharedItemAddedSource.next(payload);
-                this.nonSharedItemRemovedSource.next(payload);
+                this.sharedItemAddedSource.next(item);
+                this.nonSharedItemRemovedSource.next(item);
             }
 
             // If it's shared, it's always "present"
@@ -113,31 +113,31 @@ export class ItemOptionsService
             if (previousItemOption.shared)
             {
                 // No longer shared
-                this.sharedItemRemovedSource.next(payload);
+                this.sharedItemRemovedSource.next(item);
                 this.previousItemOptions.delete(item.item.name);
             }
             else
             {
                 // Was a recipe column but now removed
-                this.nonSharedItemRemovedSource.next(payload);
+                this.nonSharedItemRemovedSource.next(item);
                 this.previousItemOptions.delete(item.item.name);
             }
         }
     }
 
-    private publishSwitchedSharedItemOption(item: ItemOption, previousItemOption: ItemOption, payload: ChangedItemOption): void
+    private publishSwitchedSharedItemOption(item: ItemOption): void
     {
         if (item.shared)
         {
             // Was not shared and is shared now
-            this.nonSharedItemRemovedSource.next(payload);
-            this.sharedItemAddedSource.next(payload);
+            this.nonSharedItemRemovedSource.next(item);
+            this.sharedItemAddedSource.next(item);
         }
         else
         {
             // Was shared and is not shared now
-            this.sharedItemRemovedSource.next(payload);
-            this.nonSharedItemAddedSource.next(payload);
+            this.sharedItemRemovedSource.next(item);
+            this.nonSharedItemAddedSource.next(item);
         }
 
         // Always update previous value
