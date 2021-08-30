@@ -24,7 +24,7 @@ export class ItemOptionsComponent implements OnInit
 
     ngOnInit()
     {
-        const numberValidRegex = /^\d*[.,]?\d{1,2}$/
+        const numberValidRegex = /^\d*[.,]?\d{1,2}$/;
 
         this.sharedInput = new FormControl(this.item.shared);
         this.sharedInput.valueChanges.subscribe((shared) => this.onSharedChanged(shared));
