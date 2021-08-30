@@ -17,7 +17,7 @@ export class NAComponent implements OnInit, ModalComponent
 
     protected modalClosedSource: Subject<ModalResult> = new Subject<ModalResult>();
 
-    constructor(public modalService: ModalService, private deviceService: DeviceDetectorService)
+    constructor(private modalService: ModalService, private deviceService: DeviceDetectorService)
     {
         this.modalClosed$ = this.modalClosedSource.asObservable();
     }

@@ -15,7 +15,7 @@ export class MachineListComponent implements OnInit
     collapsed = false;
     searchQuery: string;
 
-    constructor(public modelService: ModelService)
+    constructor(private modelService: ModelService)
     {
         modelService.machineSubgroupsChanged$.subscribe((machineSubgroups) => this.machineSubgroups = machineSubgroups);
     }

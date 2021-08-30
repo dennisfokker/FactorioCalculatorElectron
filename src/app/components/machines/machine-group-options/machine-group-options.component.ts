@@ -25,7 +25,7 @@ export class MachineGroupOptionsComponent implements OnInit, AfterViewInit, OnCh
 
     private configured: boolean = false;
 
-    constructor(public modelService: ModelService)
+    constructor(private modelService: ModelService)
     { }
 
     ngOnInit(): void

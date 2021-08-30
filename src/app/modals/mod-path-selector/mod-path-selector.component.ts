@@ -19,7 +19,7 @@ export class ModPathSelectorComponent implements OnInit, ModalComponent
     protected modalClosedSource: Subject<ModalResult> = new Subject<ModalResult>();
     protected modsPath: string;
 
-    constructor(public modalService: ModalService,
+    constructor(private modalService: ModalService,
                 private deviceService: DeviceDetectorService)
     {
         this.modalClosed$ = this.modalClosedSource.asObservable();

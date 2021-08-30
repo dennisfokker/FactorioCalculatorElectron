@@ -16,7 +16,7 @@ export class RecipeColumnComponent implements OnInit
     recipeResults: Result[] = [];
     sharedRecipeResults: Result[] = [];
 
-    constructor(public modelService: ModelService)
+    constructor(private modelService: ModelService)
     { }
 
     ngOnInit()
