@@ -1,0 +1,13 @@
+<div class="header">
+    <h1>Recipe node settings</h1>
+</div>
+
+<ng-select2 [data]="selectRecipeData"
+            width="300"
+            [options]="options">
+</ng-select2>
+
+<div class="button-group modal-controls">
+    <div class="red button" (click)="onCancelClick()">Cancel</div>
+    <div class="green button" (click)="onOKClick()">Ok</div>
+</div>

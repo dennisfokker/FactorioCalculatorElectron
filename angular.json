@@ -25,9 +25,13 @@
                             "src/_config.yml"
                         ],
                         "styles": [
-                            "src/styles.css"
+                            "src/styles.css",
+                            "node_modules/select2/dist/css/select2.css"
                         ],
-                        "scripts": []
+                        "scripts": [
+                            "node_modules/jquery/dist/jquery.js",
+                            "node_modules/select2/dist/js/select2.js"
+                        ]
                     },
                     "configurations": {
                         "dev": {
@@ -114,9 +118,13 @@
                         "karmaConfig": "./karma.conf.js",
                         "polyfills": "src/polyfills.ts",
                         "tsConfig": "src/tsconfig.spec.json",
-                        "scripts": [],
                         "styles": [
-                            "src/styles.css"
+                            "src/styles.css",
+                            "node_modules/select2/dist/css/select2.css"
+                        ],
+                        "scripts": [
+                            "node_modules/jquery/dist/jquery.js",
+                            "node_modules/select2/dist/js/select2.js"
                         ],
                         "assets": [
                             "src/assets",

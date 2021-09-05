@@ -1,3 +1,4 @@
+import { RecipeNodeSettingsComponent } from './modals/recipe-node-settings/recipe-node-settings.component';
 import { ItemOptionsService } from './services/item-options.service';
 import { MachineGroupOptionsComponent } from './components/machines/machine-group-options/machine-group-options.component';
 import { MachineListComponent } from './components/machines/machine-list/machine-list.component';
@@ -26,6 +27,7 @@ import { AppComponent } from './app.component';
 
 import { NgxElectronModule } from 'ngx-electron';
 import { SafePipeModule } from 'safe-pipe';
+import { NgSelect2Module } from 'ng-select2';
 
 
 @NgModule({
@@ -45,7 +47,8 @@ import { SafePipeModule } from 'safe-pipe';
         NAComponent,
         ModalContainerComponent,
         ModalDirective,
-        IconRendererComponent
+        IconRendererComponent,
+        RecipeNodeSettingsComponent
     ],
     imports: [
         SafePipeModule,
@@ -53,7 +56,8 @@ import { SafePipeModule } from 'safe-pipe';
         AppRoutingModule,
         FormsModule,
         ReactiveFormsModule,
-        NgxElectronModule
+        NgxElectronModule,
+        NgSelect2Module
     ],
     entryComponents: [FactorioDataLoaderComponent, FactorioPathSelectorComponent, ModPathSelectorComponent, NAComponent],
     providers: [ModelService, ModalService, ItemOptionsService],

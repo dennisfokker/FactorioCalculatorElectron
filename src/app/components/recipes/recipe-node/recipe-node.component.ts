@@ -1,9 +1,9 @@
+import { RecipeNodeSettingsComponent } from './../../../modals/recipe-node-settings/recipe-node-settings.component';
 import { Recipe } from './../../../models/factorio/recipe';
 import { ModelService } from './../../../services/model.service';
 import { ModalService } from './../../../services/modal.service';
 import { Result } from './../../../models/factorio/result';
-import { NAComponent } from './../../../modals/na/na.component';
-import { Component, OnInit, Input, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, AfterViewInit, EventEmitter, Output } from '@angular/core';
 
 @Component({
     selector: 'app-recipe-node',
@@ -14,6 +14,7 @@ export class RecipeNodeComponent implements OnInit, AfterViewInit
 {
     @ViewChild('ingredientListContainer') ingredientListContainer: ElementRef;
     @Input() result: Result;
+    @Output() resultChange: EventEmitter<Result> = new EventEmitter<Result>();
     @Input() parentNode: RecipeNodeComponent;
 
     collapsed: boolean = false;
@@ -30,6 +31,13 @@ export class RecipeNodeComponent implements OnInit, AfterViewInit
         this.result.loadRecipe(this.modelService);
         this.result.loadItem(this.modelService);
         this.updateIngredientResults();
+
+        this.resultChange.subscribe((result) =>
+        {
+            this.result.loadRecipe(this.modelService);
+            this.result.loadItem(this.modelService);
+            this.updateIngredientResults();
+        });
     }
 
     ngAfterViewInit(): void
@@ -42,7 +50,42 @@ export class RecipeNodeComponent implements OnInit, AfterViewInit
         }
     }
 
-    updateIngredientResults(): void
+    public trackRecipeNode(index: number, item: Result)
+    {
+        return item.itemReference;
+    }
+
+    public recipeListContainerCollapseClick()
+    {
+        if (this.ingredientResults.length <= 0)
+        {
+            return;
+        }
+
+        this.collapsed = !this.collapsed;
+
+        if (this.listCalculatedHeight === undefined && !this.collapsed)
+        {
+            this.listCalculatedHeight = this.ingredientListContainer.nativeElement.scrollHeight + 5 + 'px';
+        }
+
+        if (this.parentNode !== undefined)
+        {
+            const offset: number = Number(this.listCalculatedHeight.substring(0, this.listCalculatedHeight.length - 2));
+            this.parentNode.adjustCalculatedListHeight(this.collapsed ? -offset : offset);
+        }
+
+        this.ingredientListContainer.nativeElement.style.height = this.getIngredientListContainerHeight();
+
+    }
+
+    public settingsClick(event)
+    {
+        event.stopPropagation();
+        this.modalService.openModal(RecipeNodeSettingsComponent, this.result);
+    }
+
+    private updateIngredientResults(): void
     {
         if (!this.result.recipe)
         {
@@ -101,7 +144,7 @@ export class RecipeNodeComponent implements OnInit, AfterViewInit
         }
     }
 
-    getIngredientListContainerHeight(): string
+    private getIngredientListContainerHeight(): string
     {
         if (this.listCalculatedHeight === undefined && !this.collapsed)
         {
@@ -111,7 +154,7 @@ export class RecipeNodeComponent implements OnInit, AfterViewInit
         return this.collapsed ? '0px' : this.listCalculatedHeight;
     }
 
-    adjustCalculatedListHeight(offset: number): void
+    private adjustCalculatedListHeight(offset: number): void
     {
         if (this.listCalculatedHeight !== undefined)
         {
@@ -126,35 +169,5 @@ export class RecipeNodeComponent implements OnInit, AfterViewInit
         {
             this.parentNode.adjustCalculatedListHeight(offset);
         }
-    }
-
-    recipeListContainerCollapseClick()
-    {
-        if (this.ingredientResults.length <= 0)
-        {
-            return;
-        }
-
-        this.collapsed = !this.collapsed;
-
-        if (this.listCalculatedHeight === undefined && !this.collapsed)
-        {
-            this.listCalculatedHeight = this.ingredientListContainer.nativeElement.scrollHeight + 5 + 'px';
-        }
-
-        if (this.parentNode !== undefined)
-        {
-            const offset: number = Number(this.listCalculatedHeight.substring(0, this.listCalculatedHeight.length - 2));
-            this.parentNode.adjustCalculatedListHeight(this.collapsed ? -offset : offset);
-        }
-
-        this.ingredientListContainer.nativeElement.style.height = this.getIngredientListContainerHeight();
-
-    }
-
-    settingsClick(event)
-    {
-        event.stopPropagation();
-        this.modalService.openModal(NAComponent, {});
     }
 }
