@@ -17,5 +17,5 @@
     <div class="fa fa-cog settings" (click)="settingsClick($event)"></div>
 </div>
 <div #ingredientListContainer class="ingredients-list collapsable" *ngIf="ingredientResults.length > 0" (transitionstart)="ingredientListContainer.style.visibility = 'visible'" (transitionend)="ingredientListContainer.style.visibility = collapsed ? 'hidden' : 'visible'">
-    <app-recipe-node class="ingredients-list-item" [parentNode]="this" [result]="res" *ngFor="let res of ingredientResults"></app-recipe-node>
+    <app-recipe-node class="ingredients-list-item" [parentNode]="this" [(result)]="ingredientResults[i]" *ngFor="let res of ingredientResults; let i = index; trackBy: trackRecipeNode"></app-recipe-node>
 </div>
