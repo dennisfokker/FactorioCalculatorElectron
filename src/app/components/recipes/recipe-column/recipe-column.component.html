@@ -14,7 +14,7 @@
         </div>
 
         <div class="tree-content">
-            <app-recipe-node [(result)]="res.value"></app-recipe-node>
+            <app-recipe-node [result]="recipeResults.get(res.key)" (resultChange)="recipeResults.set(res.key, $event)"></app-recipe-node>
         </div>
     </div>
 </div>

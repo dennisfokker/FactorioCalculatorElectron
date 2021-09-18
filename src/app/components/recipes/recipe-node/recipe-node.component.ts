@@ -1,16 +1,15 @@
 import { RecipeNodeSettingsComponent } from './../../../modals/recipe-node-settings/recipe-node-settings.component';
-import { Recipe } from './../../../models/factorio/recipe';
 import { ModelService } from './../../../services/model.service';
 import { ModalService } from './../../../services/modal.service';
 import { Result } from './../../../models/factorio/result';
-import { Component, OnInit, Input, ElementRef, ViewChild, AfterViewInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, AfterViewInit, EventEmitter, Output, OnChanges, SimpleChanges } from '@angular/core';
 
 @Component({
     selector: 'app-recipe-node',
     templateUrl: './recipe-node.component.html',
     styleUrls: ['./recipe-node.component.css']
 })
-export class RecipeNodeComponent implements OnInit, AfterViewInit
+export class RecipeNodeComponent implements OnInit, AfterViewInit, OnChanges
 {
     @ViewChild('ingredientListContainer') ingredientListContainer: ElementRef;
     @Input() result: Result;
@@ -55,6 +54,18 @@ export class RecipeNodeComponent implements OnInit, AfterViewInit
             this.ingredientListContainer.nativeElement.style.height = this.getIngredientListContainerHeight();
             this.ingredientListContainer.nativeElement.style.visibility = this.collapsed ? 'hidden' : 'visible';
         }
+    }
+
+    ngOnChanges(changes: SimpleChanges): void
+    {
+        if (!changes.result || changes.result.firstChange)
+        {
+            // Only run if result changed (due to parent/column changes)
+            return;
+        }
+
+        // Make sure we keep the recipe set
+        this.updateIngredientResults();
     }
 
     public trackRecipeNode(index: number, item: Result)
@@ -109,6 +120,7 @@ export class RecipeNodeComponent implements OnInit, AfterViewInit
         }
 
         let sourceResult: Result;
+        const origIngredientResults = this.ingredientResults;
         this.ingredientResults = [];
 
         for (const curRes of this.result.recipe.results)
@@ -129,10 +141,32 @@ export class RecipeNodeComponent implements OnInit, AfterViewInit
         {
             ingredient.loadItem(this.modelService);
 
+            // Try to find original result to copy over values
+            let foundOrigResult: Result;
+            for (const origResult of origIngredientResults)
+            {
+                if (origResult.itemReference === ingredient.itemReference)
+                {
+                    foundOrigResult = origResult;
+                    break;
+                }
+            }
+
             // Store a copy of the result (prevent changing source) with some final contextual tweaks
-            this.ingredientResults.push(new Result(ingredient.item,
-                                                   ingredient.type,
-                                                   ingredient.amount / sourceResult.amount * this.result.amount));
+            if (foundOrigResult)
+            {
+                this.ingredientResults.push(new Result(ingredient.item,
+                                                       ingredient.type,
+                                                       ingredient.amount / sourceResult.amount * this.result.amount,
+                                                       foundOrigResult.probability,
+                                                       foundOrigResult.recipe));
+            }
+            else
+            {
+                this.ingredientResults.push(new Result(ingredient.item,
+                                                       ingredient.type,
+                                                       ingredient.amount / sourceResult.amount * this.result.amount));
+            }
         }
     }
 
