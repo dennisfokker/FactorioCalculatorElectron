@@ -234,10 +234,10 @@ export class ModelService
                     }
                     else
                     {
-                        let amount: number = content.amount;
-                        if (content.hasOwnProperty('amount_min') && content.hasOwnProperty('amount_max'))
+                        let amount: number = result.amount;
+                        if (result.hasOwnProperty('amount_min') && result.hasOwnProperty('amount_max'))
                         {
-                            amount = (content.amount_min + content.amount_max) / 2;
+                            amount = (result.amount_min + result.amount_max) / 2;
                         }
                         return new Result(result.name, result.type, amount, result.probability);
                     }
