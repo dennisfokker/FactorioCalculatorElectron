@@ -35,12 +35,12 @@ export class RecipeNodeSettingsComponent implements OnInit, ModalComponent
         // Always assume item is already loaded
         (this.data.result as Result).item.loadCreationRecipes(this.modelService);
         this.creationRecipes = (this.data.result as Result).item.creationRecipes;
-        this.selectedIndex = this.data.selectedIndex | -1;
+        this.selectItem(this.data.selectedIndex);
     }
 
     public onOKClick()
     {
-        this.modalClosedSource.next(new ModalResult(false, this.selectedRecipe));
+        this.modalClosedSource.next(new ModalResult(false, { recipe: this.selectedRecipe, index: this.selectedIndex }));
         this.modalService.close();
     }
 

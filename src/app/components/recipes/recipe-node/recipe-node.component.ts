@@ -21,6 +21,7 @@ export class RecipeNodeComponent implements OnInit, AfterViewInit
     ingredientResults: Result[] = [];
 
     protected listCalculatedHeight: string;
+    protected selectedRecipeIndex: number = -1;
 
     constructor(private modalService: ModalService,
                 private modelService: ModelService)
@@ -88,11 +89,12 @@ export class RecipeNodeComponent implements OnInit, AfterViewInit
     public settingsClick(event)
     {
         event.stopPropagation();
-        this.modalService.openModal(RecipeNodeSettingsComponent, { result: this.result }).subscribe((result) =>
+        this.modalService.openModal(RecipeNodeSettingsComponent, { result: this.result, selectedIndex: this.selectedRecipeIndex }).subscribe((result) =>
         {
             if (!result.canceled)
             {
-                this.result = new Result(this.result.item, this.result.type, this.result.amount, this.result.probability, result.result);
+                this.result = new Result(this.result.item, this.result.type, this.result.amount, this.result.probability, result.result.recipe);
+                this.selectedRecipeIndex = result.result.index;
                 this.resultChange.emit(this.result);
             }
         });
