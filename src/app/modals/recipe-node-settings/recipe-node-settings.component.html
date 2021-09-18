@@ -1,0 +1,28 @@
+<div class="header">
+    <h1>Recipe node settings</h1>
+</div>
+
+<div class="combobox" tabindex="-1" (keyup)="onKeyPress($event)" (focusin)="this.listHidden = false;" (focusout)="listHidden = true;">
+    <div class="combobox-input" (click)="this.listHidden = false;">
+        <ng-container *ngIf="selectedIndex >= 0; then selectedContent; else placeholder">
+        </ng-container>
+
+        <ng-template #selectedContent>
+            <app-icon-renderer class="icon" [icon]="selectedRecipe.icon" [componentSize]="32"></app-icon-renderer> <span>{{selectedRecipe.name}}</span>
+        </ng-template>
+
+        <ng-template #placeholder>
+            Select a recipe...
+        </ng-template>
+    </div>
+    <div class="combobox-options" [hidden]="listHidden">
+        <div class="list-item" *ngFor="let recipe of creationRecipes; let i = index" [ngClass]="{'selected': i===selectedIndex}" (click)="selectItem(i)">
+            <app-icon-renderer class="icon" [icon]="recipe.icon" [componentSize]="32"></app-icon-renderer> <span>{{recipe.name}}</span>
+        </div>
+    </div>
+</div>
+
+<div class="button-group modal-controls">
+    <div class="red button" (click)="onCancelClick()">Cancel</div>
+    <div class="green button" (click)="onOKClick()">Ok</div>
+</div>

@@ -84,9 +84,15 @@ export class RecipeColumnComponent implements OnInit
                                                     new Ingredient(this.modelService.items.get(ironResult.itemReference), 1),
                                                     new Ingredient(this.modelService.items.get(ironResult.itemReference), 3.5)
                                                 ], [ironStorageBoxResult]);
+        const ironStorageBoxRecipe2 = new Recipe('Iron storage box2', new Icon('__internal__/iron-storage-box.png'), 4, undefined,
+                                                 [
+                                                     new Ingredient(ironStorageBoxResult.itemReference, 2),
+                                                 ], [ironStorageBoxResult]);
         this.modelService.recipes.set(ironStorageBoxRecipe.name, ironStorageBoxRecipe);
+        this.modelService.recipes.set(ironStorageBoxRecipe2.name, ironStorageBoxRecipe2);
         const ironStorageBoxItem = new Item('Iron storage box', new Icon('__internal__/iron-storage-box.png'), undefined);
         ironStorageBoxItem.addCreationRecipe(ironStorageBoxRecipe);
+        ironStorageBoxItem.addCreationRecipe(ironStorageBoxRecipe2);
         this.modelService.items.set(ironStorageBoxItem.name, ironStorageBoxItem);
 
 
@@ -122,9 +128,15 @@ export class RecipeColumnComponent implements OnInit
                                              new Ingredient(this.modelService.items.get(ironResult.itemReference), 1),
                                              new Ingredient(this.modelService.items.get(copperCableResult.itemReference), 3)
                                          ], [circuitResult]);
+        const circuitRecipe2 = new Recipe('Electronic circuit2', new Icon('__internal__/electronic-circuit.png'), 0.5, undefined,
+                                          [
+                                              new Ingredient(this.modelService.items.get(ironStorageBoxResult.itemReference), 2)
+                                          ], [circuitResult]);
         this.modelService.recipes.set(circuitRecipe.name, circuitRecipe);
+        this.modelService.recipes.set(circuitRecipe2.name, circuitRecipe2);
         const circuitItem = new Item('Electronic circuit', new Icon('__internal__/electronic-circuit.png'), undefined);
         circuitItem.addCreationRecipe(circuitRecipe);
+        circuitItem.addCreationRecipe(circuitRecipe2);
         this.modelService.items.set(circuitItem.name, circuitItem);
 
         this.recipeResults.set('Iron storage box', new Result('Iron storage box', 'item', 1, 1, ironStorageBoxRecipe));
